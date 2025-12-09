@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1088897547340",
+    "project_id": "asp-chat-9c526",
+    "storage_bucket": "asp-chat-9c526.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088897547340:android:070330147d8d141c0688e9",
+        "android_client_info": {
+          "package_name": "com.asp.asp_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXru7oHHAdFAQM-RU8gZCC50YiDCuSDmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
