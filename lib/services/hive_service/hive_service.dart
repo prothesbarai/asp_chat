@@ -8,7 +8,8 @@ class HiveService {
 
     await Future.wait([
       Hive.openBox("onBoardingPage"),
-      Hive.openBox("storeUserId")
+      Hive.openBox("storeUserId"),
+      Hive.openBox('settings')
     ]);
   }
 }

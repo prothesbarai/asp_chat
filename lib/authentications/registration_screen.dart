@@ -46,7 +46,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: Container(
                 height: 300,
                 decoration: BoxDecoration(gradient: LinearGradient(colors: [AppColors.primaryColor, AppColors.secondaryColor], begin: Alignment.topLeft, end: Alignment.bottomRight,),),
-                child: Center(child: Text("Create Account", style: TextStyle(color: Colors.white.withValues(alpha: 0.3), fontSize: 32, fontWeight: FontWeight.bold,),),),
+                child: Center(child: Text("Create Account", style: TextStyle(color: Colors.white.withValues(alpha: 0.1), fontSize: 32, fontWeight: FontWeight.bold,),),),
               ),
             ),
             // <<< Wavy Header =================================================

@@ -2,6 +2,8 @@ import 'package:asp_chat/authentications/registration_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../services/font_theme/font_selector_widget.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
