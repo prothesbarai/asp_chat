@@ -185,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 200,
                       height: 48,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFFFC542), foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),),
+                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.buttonBgColor, foregroundColor: AppColors.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),),
                           onPressed: isLoading? null :() async{
                             FocusScope.of(context).unfocus();
                             if(_formKey.currentState!.validate()){

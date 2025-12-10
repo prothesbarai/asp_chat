@@ -71,23 +71,27 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: Center(
-        child: ScaleTransition(
-          scale: _animation,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 120,
-                width: 120,
-                decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 5),),],),
-                child: const Icon(Icons.chat, size: 80, color: Colors.blue,),
-              ),
-              const SizedBox(height: 20),
-              Text(_currentText, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1.2,),),
-              const SizedBox(height: 30),
-            ],
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: AppColors.splashGradient,),),
+        child: Center(
+          child: ScaleTransition(
+            scale: _animation,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 120,
+                  width: 120,
+                  decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 5),),],),
+                  child: const Icon(Icons.chat, size: 80, color: AppColors.primaryColor,),
+                ),
+                const SizedBox(height: 20),
+                Text(_currentText, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1.2,),),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
