@@ -1,4 +1,4 @@
-import 'package:asp_chat/screen/home_screen/home_screen.dart';
+import 'package:asp_chat/authentications/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../../utils/constant/app_colors.dart';
@@ -24,7 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 
   void navigateHomeScreen(){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
   }
 
   @override

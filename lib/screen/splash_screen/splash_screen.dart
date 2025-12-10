@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:asp_chat/authentications/login_screen.dart';
+import 'package:asp_chat/providers/user_info_provider.dart';
 import 'package:asp_chat/screen/home_screen/home_screen.dart';
 import 'package:asp_chat/services/onboarding/onboarding_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -37,13 +40,18 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         _textTimer.cancel();
         Future.microtask(() async {
           if(!mounted) return;
+          final userId = Provider.of<UserInfoProvider>(context,listen: false);
           final box = Hive.box("onBoardingPage");
           bool seen = await box.get("onboarding_seen",defaultValue: false);
           if(!mounted) return;
-          if(seen){
+          if(userId.userId != null && userId.userId!.isNotEmpty){
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
           }else{
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen(),));
+            if(seen){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
+            }else{
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen(),));
+            }
           }
         });
       }
