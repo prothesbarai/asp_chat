@@ -1,3 +1,4 @@
+import 'package:asp_chat/authentications/registration_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -63,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintStyle: TextStyle(color: Colors.white70),
                           prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.email_outlined, color: Colors.white, size: 20,),),
                           contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                          floatingLabelStyle: TextStyle(color: AppColors.appInputFieldActiveColor),
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
                           border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
                           focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         keyboardType: TextInputType.emailAddress,
                         maxLength: 50,
-                        cursorColor: AppColors.appInputFieldActiveColor,
+                        cursorColor: Colors.white,
                         controller: _emailController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value){
@@ -98,7 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintStyle: TextStyle(color: Colors.white70),
                           prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.lock, color: Colors.white, size: 20,),),
                           contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                          floatingLabelStyle: TextStyle(color: AppColors.appInputFieldActiveColor),
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
                           border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
                           focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
@@ -112,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         keyboardType: TextInputType.visiblePassword,
                         maxLength: 22,
-                        cursorColor: AppColors.appInputFieldActiveColor,
+                        cursorColor: Colors.white,
                         controller: _passwordController,
                         obscureText: _obscurePassword,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -169,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: (){
 
                               },
-                              child: Text("Forgot password?",style: TextStyle(color: Colors.yellowAccent),),
+                              child: Text("Forgot password?",style: TextStyle(color: AppColors.buttonBgColor),),
                             ),
                           ),
 
@@ -217,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 48,
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(side: BorderSide(color: Colors.white), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),),
-                        onPressed: () {},
+                        onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => RegistrationScreen()), (Route<dynamic> route) => false,),
                         child: Text("Create account", style: TextStyle(color: Colors.white),),
                       ),
                     ),

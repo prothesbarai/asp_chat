@@ -1,0 +1,273 @@
+import 'package:asp_chat/authentications/login_screen.dart';
+import 'package:flutter/material.dart';
+import '../utils/constant/app_colors.dart';
+
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
+
+  @override
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+  bool _obscurePassword = true;
+  int currentField = 1;
+
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: Stack(
+          children: [
+            // >>> Gradient Background =========================================
+            Container(decoration: BoxDecoration(gradient: LinearGradient(colors: AppColors.registrationGradient, begin: Alignment.topLeft, end: Alignment.bottomRight,),),),
+            // <<< Gradient Background =========================================
+
+            // >>> Wavy Header =================================================
+            ClipPath(
+              clipper: WaveClipper(),
+              child: Container(
+                height: 300,
+                decoration: BoxDecoration(gradient: LinearGradient(colors: [AppColors.primaryColor, AppColors.secondaryColor], begin: Alignment.topLeft, end: Alignment.bottomRight,),),
+                child: Center(child: Text("Create Account", style: TextStyle(color: Colors.white.withValues(alpha: 0.3), fontSize: 32, fontWeight: FontWeight.bold,),),),
+              ),
+            ),
+            // <<< Wavy Header =================================================
+
+
+            // >>> Registration Form ===========================================
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 60),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        // >>> NAME FIELD ======================================
+                        if (currentField >= 1)...[
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            child: TextFormField(
+                              style: TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                  hintText: "Name",
+                                  hintStyle: TextStyle(color: Colors.white70),
+                                  prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.person, color: Colors.white, size: 20,),),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  counterStyle: TextStyle(color: Colors.white)
+                              ),
+                              keyboardType: TextInputType.name,
+                              maxLength: 30,
+                              cursorColor: Colors.white,
+                              controller: _nameController,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              onChanged: (value) {setState(() {currentField = 2;});},
+                              validator: (value){
+                                if(value == null || value.trim().isEmpty){
+                                  return "Field is Empty";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                        ],
+                        // <<< NAME FIELD ======================================
+
+                        // >>> EMAIL FIELD =====================================
+                        if (currentField >= 2)...[
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            child: TextFormField(
+                              style: TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                  hintText: "Email",
+                                  hintStyle: TextStyle(color: Colors.white70),
+                                  prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.email_outlined, color: Colors.white, size: 20,),),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  counterStyle: TextStyle(color: Colors.white)
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              maxLength: 50,
+                              cursorColor: Colors.white,
+                              controller: _emailController,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)){
+                                    currentField = 3;
+                                  }
+                                });
+                              },
+                              validator: (value){
+                                if(value == null || value.trim().isEmpty){
+                                  return "Field is Empty";
+                                }
+                                if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)){
+                                  return "Invalid Email";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                        ],
+                        // <<< EMAIL FIELD =====================================
+
+                        // >>> PASSWORD FIELD ==================================
+                        if (currentField >= 3)...[
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            child: TextFormField(
+                              style: TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                  hintText: "Password",
+                                  hintStyle: TextStyle(color: Colors.white70),
+                                  prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.lock, color: Colors.white, size: 20,),),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  suffixIcon: Padding(padding: const EdgeInsets.only(right: 8.0),child: IconButton(
+                                    icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility, color: Colors.white,),
+                                    onPressed: () {
+                                      setState(() {_obscurePassword = !_obscurePassword;});
+                                    },
+                                  ),),
+                                  counterStyle: TextStyle(color: Colors.white)
+                              ),
+                              keyboardType: TextInputType.visiblePassword,
+                              maxLength: 22,
+                              cursorColor: Colors.white,
+                              controller: _passwordController,
+                              obscureText: _obscurePassword,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              onChanged: (value){
+                                setState(() {
+                                  if (value.length >= 8 && RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*{}()\\.+=?/_-]).{8,}$').hasMatch(value)){
+                                    currentField = 4;
+                                  }
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "Field is Empty";
+                                }
+                                if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                                  return "Must one uppercase (A-Z)";
+                                }
+                                if (!RegExp(r'[a-z]').hasMatch(value)) {
+                                  return "Must one lowercase (a-z)";
+                                }
+                                if (!RegExp(r'[0-9]').hasMatch(value)) {
+                                  return "Must one number (0-9)";
+                                }
+                                if (!RegExp(r'[!@#$%^&*{}()\\.+=?/_-]').hasMatch(value)) {
+                                  return "Must one Symbol";
+                                }
+                                if (value.length < 8) {
+                                  return "Password must 8 length";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                        // <<< PASSWORD FIELD ==================================
+
+                        // >>> Registration Button =============================
+                        SizedBox(
+                          width: 200,
+                          height: 48,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(backgroundColor: AppColors.buttonBgColor, foregroundColor: AppColors.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),),
+                            onPressed: isLoading || currentField != 4 ? null :() async{
+                              FocusScope.of(context).unfocus();
+                              if(currentField == 4 &&_formKey.currentState!.validate()){
+                                String name = _nameController.text.trim();
+                                String email = _emailController.text.trim();
+                                String password = _passwordController.text.trim();
+                                try{
+                                  setState(() {isLoading = true;});
+
+
+                                  setState(() => isLoading = false);
+                                }catch(err){
+                                  debugPrint("Error $err");
+                                }
+                              }
+                            },
+                            child: Text("Register", style: TextStyle(fontSize: 18),),
+                          ),
+                        ),
+                        // <<< Registration Button =============================
+
+
+                        /// >>> =============== IF Already His / Her Account Exists so Login Here =================
+                        SizedBox(height: 25),
+                        InkWell(
+                          onTap:()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false,),
+                          child: Text("Already have an account ? Login",style: TextStyle(color: AppColors.buttonBgColor),),
+                        ),
+                        /// <<< =============== IF Already His / Her Account Exists so Login Here =================
+
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // <<< Registration Form ===========================================
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// >>> Custom wave clipper =====================================================
+class WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, size.height - 50);
+    var firstControlPoint = Offset(size.width / 4, size.height);
+    var firstEndPoint = Offset(size.width / 2, size.height - 50);
+    var secondControlPoint = Offset(size.width * 3 / 4, size.height - 100);
+    var secondEndPoint = Offset(size.width, size.height - 50);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy);
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+// <<< Custom wave clipper =====================================================
