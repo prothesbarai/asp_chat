@@ -1,7 +1,9 @@
+import 'package:asp_chat/providers/user_info_provider.dart';
 import 'package:asp_chat/screen/splash_screen/splash_screen.dart';
 import 'package:asp_chat/services/hive_service/hive_service.dart';
 import 'package:asp_chat/services/network_connection_check/network_checker_provider.dart';
 import 'package:asp_chat/services/network_connection_check/network_checker_ui.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Future.wait([
     HiveService.initHive(),
+    Firebase.initializeApp(),
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown,]),
   ]);
@@ -20,6 +23,8 @@ void main() async{
         providers: [
           // >>> Connection Checker ============================================
           ChangeNotifierProvider(create: (_) => NetworkCheckerProvider()),
+          // >>> UserInfoProvider  =============================================
+          ChangeNotifierProvider(create: (_) => UserInfoProvider()),
         ],
       child: const AspChatApp(),
     )
