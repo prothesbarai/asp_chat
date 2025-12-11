@@ -1,8 +1,8 @@
 import 'package:asp_chat/widgets/custom_appbar.dart';
 import 'package:asp_chat/widgets/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-
 import '../menu_screens/settings_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           // Search Bar
-          Container(
+   /*       Container(
             margin: const EdgeInsets.all(12),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50),),
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(child: Text("Search....", style: TextStyle(color: Colors.grey.shade400, fontSize: 16,),),),
               ],
             ),
-          ),
+          ),*/
 
           // Body content
           Expanded(child: pages[_currentIndex],),
