@@ -14,11 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> pages = const [
-    Center(child: Text("Chats Page", style: TextStyle(fontSize: 20))),
-    Center(child: Text("Stories Page", style: TextStyle(fontSize: 20))),
-    Center(child: Text("Notifications Page", style: TextStyle(fontSize: 20))),
-    Center(child: Text("Menu Page", style: TextStyle(fontSize: 20))),
+  List<Widget> get pages => [
+    Center(child: Text("Chats Page", style: TextStyle(fontSize: 20,color: Theme.of(context).colorScheme.onSurface,))),
+    Center(child: Text("Stories Page", style: TextStyle(fontSize: 20,color: Theme.of(context).colorScheme.onSurface,))),
+    Center(child: Text("Notifications Page", style: TextStyle(fontSize: 20,color: Theme.of(context).colorScheme.onSurface,))),
+    Center(child: Text("Menu Page", style: TextStyle(fontSize: 20,color: Theme.of(context).colorScheme.onSurface,))),
   ];
 
 
