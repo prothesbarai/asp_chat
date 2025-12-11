@@ -25,26 +25,14 @@ class FontProvider with ChangeNotifier{
   }
 
 
-  TextStyle getTextStyle({double fontSize = 16, FontWeight fontWeight = FontWeight.normal, Color color = Colors.black}) {
+  TextStyle getTextStyle({double fontSize = 16, FontWeight fontWeight = FontWeight.normal,}) {
     switch (_selectedFont) {
       case AppFont.agbalumo:
-        return GoogleFonts.agbalumo(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          color: color,
-        );
+        return GoogleFonts.agbalumo(fontSize: fontSize, fontWeight: fontWeight,);
       case AppFont.poppins:
-        return GoogleFonts.poppins(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          color: color,
-        );
+        return GoogleFonts.poppins(fontSize: fontSize, fontWeight: fontWeight,);
       case AppFont.defaults:
-        return TextStyle(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          color: color,
-        );
+        return TextStyle(fontSize: fontSize, fontWeight: fontWeight,);
     }
   }
 

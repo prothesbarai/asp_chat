@@ -13,10 +13,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
   int currentField = 1;
 
 
@@ -24,7 +27,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -139,8 +144,59 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ],
                         // <<< EMAIL FIELD =====================================
 
-                        // >>> PASSWORD FIELD ==================================
+                        // >>> PHONE FIELD =====================================
                         if (currentField >= 3)...[
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            child: TextFormField(
+                              style: TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                  hintText: "Phone",
+                                  hintStyle: TextStyle(color: Colors.white70),
+                                  prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.phone, color: Colors.white, size: 20,),),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  counterStyle: TextStyle(color: Colors.white)
+                              ),
+                              keyboardType: TextInputType.phone,
+                              maxLength: 50,
+                              cursorColor: Colors.white,
+                              controller: _phoneController,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value.length == 11 && RegExp(r'^(01[3-9])[0-9]{8}$').hasMatch(value)){
+                                    currentField = 4;
+                                  }
+                                });
+                              },
+                              validator: (value){
+                                if(value == null || value.trim().isEmpty){
+                                  return "Field is Empty";
+                                }
+                                if (!RegExp(r'^[0-9]+$').hasMatch(value)){
+                                  return "Invalid Number";
+                                }
+                                value = value.trim().replaceAll('+', '');
+                                if (value.length != 11) {
+                                  return "Must 11 Digit";
+                                }
+                                final pattern = RegExp(r'^(01[3-9])[0-9]{8}$');
+                                if (!pattern.hasMatch(value)) {
+                                  return "Invalid Number";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                        ],
+                        // <<< PHONE FIELD =====================================
+
+                        // >>> PASSWORD FIELD ==================================
+                        if (currentField >= 4)...[
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 40),
                             child: TextFormField(
@@ -170,7 +226,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               onChanged: (value){
                                 setState(() {
                                   if (value.length >= 8 && RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*{}()\\.+=?/_-]).{8,}$').hasMatch(value)){
-                                    currentField = 4;
+                                    currentField = 5;
                                   }
                                 });
                               },
@@ -201,18 +257,69 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ],
                         // <<< PASSWORD FIELD ==================================
 
+                        // >>> CONFIRM PASSWORD FIELD ==========================
+                        if (currentField >= 5)...[
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            child: TextFormField(
+                              style: TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                  hintText: "Confirm Pass",
+                                  hintStyle: TextStyle(color: Colors.white70),
+                                  prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.lock, color: Colors.white, size: 20,),),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                  suffixIcon: Padding(padding: const EdgeInsets.only(right: 8.0),child: IconButton(
+                                    icon: Icon(_obscureConfirmPassword ? Icons.visibility_off : Icons.visibility, color: Colors.white,),
+                                    onPressed: () {
+                                      setState(() {_obscureConfirmPassword = !_obscureConfirmPassword;});
+                                    },
+                                  ),),
+                                  counterStyle: TextStyle(color: Colors.white)
+                              ),
+                              keyboardType: TextInputType.visiblePassword,
+                              maxLength: 22,
+                              cursorColor: Colors.white,
+                              controller: _confirmPasswordController,
+                              obscureText: _obscureConfirmPassword,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              onChanged: (value){
+                                setState(() {
+                                  if (value == _passwordController.text){
+                                    currentField = 6;
+                                  }
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "Field is Empty";
+                                }
+                                if (value != _passwordController.text) {
+                                  return "Pass Not match";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                        // <<< CONFIRM PASSWORD FIELD ==========================
+
                         // >>> Registration Button =============================
                         SizedBox(
                           width: 200,
                           height: 48,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(backgroundColor: AppColors.buttonBgColor, foregroundColor: AppColors.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),),
-                            onPressed: isLoading || currentField != 4 ? null :() async{
+                            onPressed: isLoading || currentField != 6 ? null :() async{
                               FocusScope.of(context).unfocus();
-                              if(currentField == 4 &&_formKey.currentState!.validate()){
-                                String name = _nameController.text.trim();
-                                String email = _emailController.text.trim();
-                                String password = _passwordController.text.trim();
+                              if(currentField == 6 &&_formKey.currentState!.validate()){
+                                //String name = _nameController.text.trim();
+                                //String email = _emailController.text.trim();
+                                //String phone = _phoneController.text.trim();
+                                //String password = _confirmPasswordController.text.trim();
                                 try{
                                   setState(() {isLoading = true;});
 

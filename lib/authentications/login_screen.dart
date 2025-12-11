@@ -2,8 +2,6 @@ import 'package:asp_chat/authentications/registration_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 
-import '../services/font_theme/font_selector_widget.dart';
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -52,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Icon(Icons.person, size: 60, color: Colors.white,),
                     ),
                     SizedBox(height: 20),
-                    Text("MEMBER LOGIN", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold,),),
+                    Text("USER LOGIN", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold,),),
                     SizedBox(height: 30),
                     // <<< USER ICON & TITLE ===================================
 
@@ -154,14 +152,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               Checkbox(
                                 value: isChecked,
-                                onChanged: (value) {
-                                  setState(() {isChecked = value ?? false;});
-                                },
+                                onChanged: (value) {setState(() {isChecked = value ?? false;});},
                                 side: BorderSide(color: Colors.white),
                                 checkColor: Colors.green,
                                 activeColor: Colors.white,
                               ),
-                              Text("Remember me", style: TextStyle(color: Colors.white)),
+                              Text("Remember me", style: TextStyle(color: Colors.white,fontSize: 13)),
                             ],
                           ),
 
@@ -170,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: (){
 
                               },
-                              child: Text("Forgot password?",style: TextStyle(color: AppColors.buttonBgColor),),
+                              child: Text("Forgot password?",style: TextStyle(color: AppColors.buttonBgColor,fontSize: 13),),
                             ),
                           ),
 
@@ -190,8 +186,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: isLoading? null :() async{
                             FocusScope.of(context).unfocus();
                             if(_formKey.currentState!.validate()){
-                              String email = _emailController.text.trim();
-                              String password = _passwordController.text.trim();
+                              //String email = _emailController.text.trim();
+                              //String password = _passwordController.text.trim();
                               try{
                                 setState(() {isLoading = true;});
 

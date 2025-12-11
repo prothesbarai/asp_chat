@@ -28,9 +28,9 @@
             android:hardwareAccelerated="false"
             android:windowSoftInputMode="adjustResize"
             >
-            <!-- Specifies an Android theme to apply to this Activity as soon as
-                 the Android process has started. This theme is visible to the user
-                 while the Flutter UI initializes. After that, this theme continues
+            <!-- Specifies an Android display_theme to apply to this Activity as soon as
+                 the Android process has started. This display_theme is visible to the user
+                 while the Flutter UI initializes. After that, this display_theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"

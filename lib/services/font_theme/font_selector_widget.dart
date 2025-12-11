@@ -4,9 +4,7 @@ import 'package:provider/provider.dart';
 
 
 class FontSelectorWidget extends StatelessWidget {
-  final String title;
-
-  const FontSelectorWidget({super.key, this.title = "Select Font"});
+  const FontSelectorWidget({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +13,6 @@ class FontSelectorWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: fontProvider.getTextStyle(fontSize: 20, fontWeight: FontWeight.bold,),),
         const SizedBox(height: 16),
         RadioListTile<AppFont>(
           value: AppFont.defaults,
