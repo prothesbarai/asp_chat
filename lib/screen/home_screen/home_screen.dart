@@ -18,8 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Center(child: Text("Chats Page", style: TextStyle(fontSize: 20))),
     Center(child: Text("Stories Page", style: TextStyle(fontSize: 20))),
     Center(child: Text("Notifications Page", style: TextStyle(fontSize: 20))),
-    //Center(child: Text("Menu Page", style: TextStyle(fontSize: 20))),
-    SettingsScreen()
+    Center(child: Text("Menu Page", style: TextStyle(fontSize: 20))),
   ];
 
 
