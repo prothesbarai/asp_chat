@@ -1,8 +1,7 @@
 import 'package:asp_chat/widgets/custom_appbar.dart';
 import 'package:asp_chat/widgets/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import '../menu_screens/settings_screen.dart';
-
+import '../demo.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,40 +13,73 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  List<Widget> get pages => [
-    Center(child: Text("Chats Page", style: TextStyle(fontSize: 20,color: Theme.of(context).colorScheme.onSurface,))),
-    Center(child: Text("Stories Page", style: TextStyle(fontSize: 20,color: Theme.of(context).colorScheme.onSurface,))),
-    Center(child: Text("Notifications Page", style: TextStyle(fontSize: 20,color: Theme.of(context).colorScheme.onSurface,))),
-    Center(child: Text("Menu Page", style: TextStyle(fontSize: 20,color: Theme.of(context).colorScheme.onSurface,))),
+  List<Widget> pages = [
+    Demo(title: "Chats",),
+    Demo(title: "Stories",),
+    Demo(title: "Notifications",),
+    Demo(title: "Menu",),
   ];
 
+  List<String> appBarTitles = ["Chats", "Stories", "Notifications", "Menu",];
+
+  List<List<Widget>> appBarActions = [
+    // Chats Page Actions
+    [
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: Icon(Icons.edit, color: Colors.black45),
+            onPressed: () {
+              print("Chat icon clicked");
+            },
+          ),
+          const SizedBox(width: 16),
+          CircleAvatar(
+            radius: 14,
+            backgroundColor: Colors.grey.shade700,
+            child: Icon(Icons.person, color: Colors.white),
+          ),
+          const SizedBox(width: 14),
+        ],
+      ),
+    ],
+    // Stories Page Actions
+    [
+      IconButton(
+        icon: Icon(Icons.camera_alt, color: Colors.black45),
+        onPressed: () {
+          print("Camera clicked");
+        },
+      ),
+    ],
+    // Notifications Page Actions
+    [
+      IconButton(
+        icon: Icon(Icons.notifications, color: Colors.black45),
+        onPressed: () {
+          print("Notifications clicked");
+        },
+      ),
+    ],
+    // Menu Page Actions
+    [
+      IconButton(
+        icon: Icon(Icons.settings, color: Colors.black45),
+        onPressed: () {
+          print("Settings clicked");
+        },
+      ),
+    ],
+  ];
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(title: "ASPChat"),
+      appBar: CustomAppbar(title: appBarTitles[_currentIndex], actions: appBarActions[_currentIndex],),
       bottomNavigationBar: CustomBottomNavigationBar(currentIndex: _currentIndex, onTap: (index) {setState(() {_currentIndex = index;});},),
-      body: Column(
-        children: [
-          // Search Bar
-   /*       Container(
-            margin: const EdgeInsets.all(12),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50),),
-            child: Row(
-              children: [
-                Icon(Icons.search, color: Colors.blueAccent, size: 20),
-                const SizedBox(width: 10),
-                Expanded(child: Text("Search....", style: TextStyle(color: Colors.grey.shade400, fontSize: 16,),),),
-              ],
-            ),
-          ),*/
-
-          // Body content
-          Expanded(child: pages[_currentIndex],),
-        ],
-      ),
+      body: pages[_currentIndex],
     );
   }
 }
