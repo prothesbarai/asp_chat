@@ -3,8 +3,6 @@ import 'package:asp_chat/widgets/custom_appbar.dart';
 import 'package:asp_chat/widgets/custom_bottom_navigation_bar.dart';
 import 'package:asp_chat/widgets/qr_code_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../services/set_user_image/user_image_provider/user_image_provider.dart';
 import '../demo.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,16 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-
-  List<Widget> pages = [
-    Demo(title: "Chats",),
-    Demo(title: "Stories",),
-    Demo(title: "Notifications",),
-    MenuScreen()
-  ];
-
+  List<Widget> pages = [Demo(title: "Chats",), Demo(title: "Stories",), Demo(title: "Notifications",), MenuScreen()];
   List<String> appBarTitles = ["Chats", "Stories", "Notifications", "Menu",];
-
   List<List<Widget>> get appBarActions => [
 
     // Chats Page Actions
@@ -33,18 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          IconButton(
-            icon: Icon(Icons.edit,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
-            onPressed: () {
-              print("Chat icon clicked");
-            },
-          ),
-          const SizedBox(width: 16),
-          CircleAvatar(
-            radius: 14,
-            backgroundColor: Colors.grey.shade700,
-            child: Icon(Icons.person,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
-          ),
+          CircleAvatar(radius: 14, backgroundImage: AssetImage("assets/icon/icon.png"),),
           const SizedBox(width: 14),
         ],
       ),
@@ -53,18 +32,14 @@ class _HomeScreenState extends State<HomeScreen> {
     [
       IconButton(
         icon: Icon(Icons.camera_alt,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
-        onPressed: () {
-          print("Camera clicked");
-        },
+        onPressed: () {},
       ),
     ],
     // Notifications Page Actions
     [
       IconButton(
         icon: Icon(Icons.notifications,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
-        onPressed: () {
-          print("Notifications clicked");
-        },
+        onPressed: () {},
       ),
     ],
     // >>> QR Code Generator ===================================================
