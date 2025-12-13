@@ -1,3 +1,4 @@
+import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
@@ -10,8 +11,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       elevation: 0,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.black45,
+      selectedItemColor: AppColors.secondaryColor,
+      unselectedItemColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
       onTap: onTap,

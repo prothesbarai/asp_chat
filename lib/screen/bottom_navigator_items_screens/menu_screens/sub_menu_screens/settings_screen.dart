@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../services/display_theme/theme_provider/theme_provider.dart';
-import '../../services/display_theme/theme_selected_model/theme_selected_model.dart';
-import '../../services/font_theme/font_selector_widget.dart';
-import '../../services/font_theme/provider/font_provider.dart';
+import '../../../../services/display_theme/theme_provider/theme_provider.dart';
+import '../../../../services/display_theme/theme_selected_model/theme_selected_model.dart';
+import '../../../../services/font_theme/font_selector_widget.dart';
+import '../../../../services/font_theme/provider/font_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -38,8 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final fontProvider = Provider.of<FontProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(elevation: 0, title: Text("Settings",),),
-
+      appBar: AppBar(elevation: 0, title: Text("Settings",style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),),),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

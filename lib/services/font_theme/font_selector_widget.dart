@@ -2,7 +2,6 @@ import 'package:asp_chat/services/font_theme/provider/font_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class FontSelectorWidget extends StatelessWidget {
   const FontSelectorWidget({super.key,});
 
@@ -14,31 +13,20 @@ class FontSelectorWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        RadioListTile<AppFont>(
-          value: AppFont.defaults,
+        RadioGroup<AppFont>(
           groupValue: fontProvider.selectedFont,
-          title: Text("Default", style: fontProvider.getTextStyle()),
-          onChanged: (AppFont? value) {
+          onChanged: (value) {
             if (value != null) fontProvider.setFont(value);
           },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<AppFont>(value: AppFont.defaults,title: const Text("Default"), activeColor: Colors.blue,),
+              RadioListTile<AppFont>(value: AppFont.agbalumo,title: const Text("Agbalumo"), activeColor: Colors.blue,),
+              RadioListTile<AppFont>(value: AppFont.poppins,title: const Text("Poppins"), activeColor: Colors.blue,)
+            ],
+          ),
         ),
-        RadioListTile<AppFont>(
-          value: AppFont.agbalumo,
-          groupValue: fontProvider.selectedFont,
-          title: Text("Agbalumo", style: fontProvider.getTextStyle()),
-          onChanged: (AppFont? value) {
-            if (value != null) fontProvider.setFont(value);
-          },
-        ),
-        RadioListTile<AppFont>(
-          value: AppFont.poppins,
-          groupValue: fontProvider.selectedFont,
-          title: Text("Poppins", style: fontProvider.getTextStyle()),
-          onChanged: (AppFont? value) {
-            if (value != null) fontProvider.setFont(value);
-          },
-        ),
-
       ],
     );
   }

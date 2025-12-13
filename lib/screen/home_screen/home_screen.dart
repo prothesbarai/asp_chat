@@ -1,5 +1,7 @@
+import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/menu_screen.dart';
 import 'package:asp_chat/widgets/custom_appbar.dart';
 import 'package:asp_chat/widgets/custom_bottom_navigation_bar.dart';
+import 'package:asp_chat/widgets/qr_code_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import '../demo.dart';
 
@@ -17,19 +19,19 @@ class _HomeScreenState extends State<HomeScreen> {
     Demo(title: "Chats",),
     Demo(title: "Stories",),
     Demo(title: "Notifications",),
-    Demo(title: "Menu",),
+    MenuScreen()
   ];
 
   List<String> appBarTitles = ["Chats", "Stories", "Notifications", "Menu",];
 
-  List<List<Widget>> appBarActions = [
+  List<List<Widget>> get appBarActions => [
     // Chats Page Actions
     [
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: Icon(Icons.edit, color: Colors.black45),
+            icon: Icon(Icons.edit,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
             onPressed: () {
               print("Chat icon clicked");
             },
@@ -38,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           CircleAvatar(
             radius: 14,
             backgroundColor: Colors.grey.shade700,
-            child: Icon(Icons.person, color: Colors.white),
+            child: Icon(Icons.person,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
           ),
           const SizedBox(width: 14),
         ],
@@ -47,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Stories Page Actions
     [
       IconButton(
-        icon: Icon(Icons.camera_alt, color: Colors.black45),
+        icon: Icon(Icons.camera_alt,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
         onPressed: () {
           print("Camera clicked");
         },
@@ -56,21 +58,28 @@ class _HomeScreenState extends State<HomeScreen> {
     // Notifications Page Actions
     [
       IconButton(
-        icon: Icon(Icons.notifications, color: Colors.black45),
+        icon: Icon(Icons.notifications,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
         onPressed: () {
           print("Notifications clicked");
         },
       ),
     ],
-    // Menu Page Actions
+    // >>> QR Code Generator ===================================================
     [
       IconButton(
-        icon: Icon(Icons.settings, color: Colors.black45),
+        icon: Icon(Icons.qr_code, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
         onPressed: () {
-          print("Settings clicked");
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24)),),
+            builder: (context) {return QrCodeBottomSheet(qrData: "qrData", userName: "userName", userHandle: "userHandle",);},
+          );
         },
       ),
+
     ],
+    // <<< QR Code Generator ===================================================
   ];
 
 
