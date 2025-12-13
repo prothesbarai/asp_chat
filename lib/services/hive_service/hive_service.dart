@@ -13,6 +13,7 @@ class HiveService {
       Hive.openBox("storeUserId"),
       Hive.openBox('settings'),
       Hive.openBox('AppThemeEnumFlag'), // For Light & Dark mode
+      Hive.openBox("StoreUserImages"), // Store User Profile Image
     ]);
   }
 }

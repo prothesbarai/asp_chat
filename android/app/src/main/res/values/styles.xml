@@ -15,4 +15,14 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+
+
+
+    <!--UCrop Image Full Screen Disabled-->
+    <style name="AppTheme.UCrop" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+
 </resources>

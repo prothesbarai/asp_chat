@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:asp_chat/services/set_user_image/user_image_picker.dart';
+import 'package:asp_chat/services/set_user_image/user_image_provider/user_image_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../../services/display_theme/theme_provider/theme_provider.dart';
 import '../../../../services/display_theme/theme_selected_model/theme_selected_model.dart';
 import '../../../../services/font_theme/font_selector_widget.dart';
 import '../../../../services/font_theme/provider/font_provider.dart';
+import '../../../../services/set_user_image/dialogue/show_camera_gallery_dialogue.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -31,11 +37,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
   /// <<< Need For Theme Changes Data ==========================================
 
+
+  /// >>> Call ImagePicker  ====================================================
+  File? profileImages;
+  Future<void> pickImage(ImageSource source) async {
+    await userProfilePickImage(context, source);
+  }
+  /// <<< Call ImagePicker  ====================================================
+
+
+
+
   @override
   Widget build(BuildContext context) {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
     final fontProvider = Provider.of<FontProvider>(context);
+    final imageProvider = Provider.of<UserImageProvider>(context);
 
     return Scaffold(
       appBar: AppBar(elevation: 0, title: Text("Settings",style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),),),
@@ -44,14 +62,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            // PROFILE PHOTO + NAME + USERNAME
+            // >>> PROFILE PHOTO + NAME + USERNAME =============================
             Column(
               children: [
                 Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    CircleAvatar(radius: 55, backgroundColor: Colors.red,),
-                    CircleAvatar(radius: 18, child: Icon(Icons.camera_alt, size: 18),)
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: (imageProvider.profileImage == null && profileImages == null) ? Color(0xff1f2b3b) : null,
+                      backgroundImage: (imageProvider.profileImage != null) ? FileImage(imageProvider.profileImage!) : (profileImages != null) ? FileImage(profileImages!) : null,
+                      child: (imageProvider.profileImage == null && profileImages == null) ? Icon(Icons.person, size: 60,) : null,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: -10,
+                      child: IconButton(
+                        onPressed: () async{
+                          await showCameraGalleryDialogue(context,pickImage);
+                        },
+                        icon: Icon(Icons.camera_alt_outlined),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -61,12 +93,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               ],
             ),
+            // <<< PROFILE PHOTO + NAME + USERNAME =============================
 
             const SizedBox(height: 30),
-            // SECTION: Home icon + name
+            // >>> SECTION: Home icon + name
             _menuItem(icon: Icons.home, title: "View security alerts",),
             const SizedBox(height: 10),
-            // SECTION TITLE
+            // >>> SECTION TITLE
             _sectionTitle("Accounts"),
             _menuItem(icon: Icons.switch_account, title: "Switch account",),
             const SizedBox(height: 20),
@@ -152,7 +185,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  // SECTION TITLE WIDGET
+  // >>> SECTION TITLE WIDGET
   Widget _sectionTitle(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -160,7 +193,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  // MENU ITEM WIDGET
+  // >>> MENU ITEM WIDGET
   Widget _menuItem({required IconData icon, required String title, String? subtitle, int? notificationCount,VoidCallback? onTap,}) {
     return ListTile(
       leading: Icon(icon,size: 28),

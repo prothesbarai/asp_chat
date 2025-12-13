@@ -7,6 +7,7 @@ import 'package:asp_chat/services/font_theme/provider/font_provider.dart';
 import 'package:asp_chat/services/hive_service/hive_service.dart';
 import 'package:asp_chat/services/network_connection_check/network_checker_provider.dart';
 import 'package:asp_chat/services/network_connection_check/network_checker_ui.dart';
+import 'package:asp_chat/services/set_user_image/user_image_provider/user_image_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +34,8 @@ void main() async{
           ChangeNotifierProvider(create: (_) => FontProvider()),
           // >>> Font Provider  ================================================
           ChangeNotifierProvider(create: (context) => ThemeProvider()),
+          // >>> User Profile Image Provider  ==================================
+          ChangeNotifierProvider(create: (context) => UserImageProvider()),
         ],
       child: const AspChatApp(),
     )

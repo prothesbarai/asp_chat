@@ -4,6 +4,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" tools:ignore="UnusedAttribute" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage"/>
+
     <!--  THIS LINE IS CRITICAL FOR 16KB FIX
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
@@ -51,6 +57,14 @@
         <meta-data
             android:name="io.flutter.embedding.android.EnableImpeller"
             android:value="false"/>
+
+
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:theme="@style/AppTheme.UCrop"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity,MissingClass"/>
 
     </application>
     <!-- Required to query activities that can process text, see:

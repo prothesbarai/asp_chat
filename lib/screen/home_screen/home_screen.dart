@@ -3,6 +3,8 @@ import 'package:asp_chat/widgets/custom_appbar.dart';
 import 'package:asp_chat/widgets/custom_bottom_navigation_bar.dart';
 import 'package:asp_chat/widgets/qr_code_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../services/set_user_image/user_image_provider/user_image_provider.dart';
 import '../demo.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> appBarTitles = ["Chats", "Stories", "Notifications", "Menu",];
 
   List<List<Widget>> get appBarActions => [
+
     // Chats Page Actions
     [
       Row(

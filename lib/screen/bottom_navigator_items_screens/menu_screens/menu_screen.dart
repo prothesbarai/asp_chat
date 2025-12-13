@@ -1,17 +1,26 @@
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../services/set_user_image/user_image_provider/user_image_provider.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final imageProvider = Provider.of<UserImageProvider>(context);
     return Scaffold(
       body: ListView(
         children: [
           // >>> Profile Section ===============================================
           ListTile(
-            leading: const CircleAvatar(radius: 24, backgroundColor: Colors.pinkAccent,),
+            leading: CircleAvatar(
+              radius: 24,
+              backgroundColor: (imageProvider.profileImage == null) ? Color(0xff1f2b3b) : null,
+              backgroundImage: (imageProvider.profileImage != null) ? FileImage(imageProvider.profileImage!) : null,
+              child: (imageProvider.profileImage == null) ? Icon(Icons.person, size: 34,) : null,
+            ),
             title: const Text("Prothes Barai", style: TextStyle(fontWeight: FontWeight.bold),),
             subtitle: const Text("username"),
             onTap: () {},
