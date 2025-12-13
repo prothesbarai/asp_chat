@@ -16,8 +16,8 @@ import 'package:provider/provider.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Future.wait([
-    HiveService.initHive(),
     Firebase.initializeApp(),
+    HiveService.initHive(),
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown,]),
   ]);

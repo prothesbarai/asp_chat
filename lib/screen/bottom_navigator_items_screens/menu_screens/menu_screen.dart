@@ -1,7 +1,7 @@
+import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../services/set_user_image/user_image_provider/user_image_provider.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -30,7 +30,7 @@ class MenuScreen extends StatelessWidget {
           const Divider(),
           menuItem(icon: Icons.settings, title: "Settings",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen(),));}),
           const Divider(thickness: 6),
-          menuItem(icon: Icons.storefront, title: "Marketplace",onTap: (){}),
+          menuItem(icon: Icons.movie_filter_outlined, title: "Entertainment",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => EntertainmentScreen(),));}),
           menuItem(icon: Icons.message, title: "Message requests",onTap: (){}),
           menuItem(icon: Icons.archive, title: "Archive",onTap: (){}),
           const SizedBox(height: 16),
