@@ -340,7 +340,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     "name": name,
                                     "email": email,
                                     "phone": phone,
-                                    "status": "Available",
+                                    "status": "Unavalible",
                                     "entertainment": {
                                       "video1" : { // video Id auto-generated
                                         "thumbnail": "https://example.com/video.jpg",
@@ -348,6 +348,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         "url" : ""
                                       }
                                     },
+                                    "uid": userCrendetial.user!.uid,
                                     "createdAt": FieldValue.serverTimestamp(),
                                   });
 
