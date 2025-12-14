@@ -60,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: TextFormField(
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
+                          filled: false,
                           hintText: "Email",
                           hintStyle: TextStyle(color: Colors.white70),
                           prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.email_outlined, color: Colors.white, size: 20,),),
@@ -95,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: "Password",
+                          filled: false,
                           hintStyle: TextStyle(color: Colors.white70),
                           prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.lock, color: Colors.white, size: 20,),),
                           contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),

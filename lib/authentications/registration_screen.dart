@@ -75,6 +75,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   hintText: "Name",
+                                  filled: false,
                                   hintStyle: TextStyle(color: Colors.white70),
                                   prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.person, color: Colors.white, size: 20,),),
                                   contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
@@ -109,6 +110,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   hintText: "Email",
+                                  filled: false,
                                   hintStyle: TextStyle(color: Colors.white70),
                                   prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.email_outlined, color: Colors.white, size: 20,),),
                                   contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
@@ -152,6 +154,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   hintText: "Phone",
+                                  filled: false,
                                   hintStyle: TextStyle(color: Colors.white70),
                                   prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.phone, color: Colors.white, size: 20,),),
                                   contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
@@ -203,6 +206,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   hintText: "Password",
+                                  filled: false,
                                   hintStyle: TextStyle(color: Colors.white70),
                                   prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.lock, color: Colors.white, size: 20,),),
                                   contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
@@ -265,6 +269,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   hintText: "Confirm Pass",
+                                  filled: false,
                                   hintStyle: TextStyle(color: Colors.white70),
                                   prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.lock, color: Colors.white, size: 20,),),
                                   contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
