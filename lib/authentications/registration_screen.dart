@@ -1,4 +1,6 @@
 import 'package:asp_chat/authentications/login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../utils/constant/app_colors.dart';
 
@@ -321,13 +323,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             onPressed: isLoading || currentField != 6 ? null :() async{
                               FocusScope.of(context).unfocus();
                               if(currentField == 6 &&_formKey.currentState!.validate()){
-                                //String name = _nameController.text.trim();
-                                //String email = _emailController.text.trim();
-                                //String phone = _phoneController.text.trim();
-                                //String password = _confirmPasswordController.text.trim();
+                                String name = _nameController.text.trim();
+                                String email = _emailController.text.trim();
+                                String phone = _phoneController.text.trim();
+                                String password = _confirmPasswordController.text.trim();
+
+                                FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
                                 try{
                                   setState(() {isLoading = true;});
+                                  // >>> Create user
+                                  UserCredential userCrendetial = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+                                  // >>> Update display name
+                                  await userCrendetial.user!.updateDisplayName(name);
 
+                                  // >>> Save phone & other info in Firestore
+                                  await FirebaseFirestore.instance.collection("users").doc(userCrendetial.user!.uid).set({
+                                    "name": name,
+                                    "email": email,
+                                    "phone": phone,
+                                    "createdAt": FieldValue.serverTimestamp(),
+                                  });
 
                                   setState(() => isLoading = false);
                                 }catch(err){
