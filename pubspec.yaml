@@ -71,6 +71,10 @@ dependencies:
   youtube_player_flutter: ^9.1.3
   video_player: ^2.10.1
   webview_flutter: ^4.13.0
+  # Cached Network Image For Cached Internet Image
+  cached_network_image: ^3.4.1
+  # For Loading Animation
+  loading_animation_widget:
 
 dev_dependencies:
   flutter_test:
@@ -95,6 +99,7 @@ flutter:
   uses-material-design: true
   assets:
     - 'assets/icon/icon.png'
+    - 'assets/images/placeholder.png'
 
 flutter_icons:
   android: true

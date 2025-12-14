@@ -1,4 +1,4 @@
-import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment_screen.dart';
+import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment/entertainment_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

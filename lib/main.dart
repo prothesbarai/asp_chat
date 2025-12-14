@@ -1,5 +1,5 @@
 import 'package:asp_chat/providers/user_info_provider.dart';
-import 'package:asp_chat/screen/home_screen/home_screen.dart';
+import 'package:asp_chat/screen/splash_screen/splash_screen.dart';
 import 'package:asp_chat/services/display_theme/custom_app_theme.dart';
 import 'package:asp_chat/services/display_theme/theme_provider/theme_provider.dart';
 import 'package:asp_chat/services/font_theme/build_font_text_theme.dart';
@@ -64,7 +64,7 @@ class AspChatApp extends StatelessWidget {
             return NetworkCheckerUi(child: child);
           },
           // <<< Connection Checker ============================================
-          home: const HomeScreen(),
+          home: const SplashScreen(),
         );
       },
     );
