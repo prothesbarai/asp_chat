@@ -328,8 +328,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 String phone = _phoneController.text.trim();
                                 String password = _confirmPasswordController.text.trim();
 
-                                FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
                                 try{
                                   setState(() {isLoading = true;});
                                   // >>> Create user
@@ -342,6 +340,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     "name": name,
                                     "email": email,
                                     "phone": phone,
+                                    "status": "Available",
+                                    "entertainment": {
+                                      "video1" : { // video Id auto-generated
+                                        "thumbnail": "https://example.com/video.jpg",
+                                        "title": "New Video",
+                                        "url" : ""
+                                      }
+                                    },
                                     "createdAt": FieldValue.serverTimestamp(),
                                   });
 
