@@ -1,6 +1,7 @@
 import 'package:asp_chat/authentications/registration_screen.dart';
 import 'package:asp_chat/screen/home_screen/home_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -30,6 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 
+  /// >>> Navigate Home Page ===================================================
+  void _navigateHomePage(){
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen()), (Route<dynamic> route) => false,);
+  }
+  /// <<< Navigate Home Page ===================================================
+
+
   /// >>> Login Successfully Popup Dialogue ====================================
   void showSuccessDialog(String message, bool flag) {
     showDialog(
@@ -41,15 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
           title: Text(flag ? "Success 🎉" : "Failed", textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor),),
           content: Text(message, textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor)),
           actionsAlignment: MainAxisAlignment.center,
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                flag ? Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen()), (Route<dynamic> route) => false,) : null;
-              },
-              child: const Text("OK"),
-            )
-          ],
+          actions: [ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK"))],
         );
       },
     );
@@ -230,10 +230,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                 setState(() {isLoading = true;});
                                 try{
 
+                                  final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                                  final uid = userCredential.user!.uid;
+                                  final getUserData = await FirebaseFirestore.instance.collection("users").doc(uid).get();
+                                  if (getUserData.exists) {
+                                    final data = getUserData.data()!;
+                                    String name = data["name"] ?? "";
+                                    String phone = data["phone"] ?? "";
+                                    String emailFromDB = data["email"] ?? email;
 
-
-
-
+                                  }
+                                  if(!mounted) return;
+                                  _navigateHomePage();
+                                  showSuccessDialog("Successfully Login", true);
 
                                 }on FirebaseAuthException catch(err){
                                   String message = err.message ?? "Login failed!";
