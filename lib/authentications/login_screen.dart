@@ -1,5 +1,7 @@
 import 'package:asp_chat/authentications/registration_screen.dart';
+import 'package:asp_chat/screen/home_screen/home_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -26,6 +28,34 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+
+
+  /// >>> Login Successfully Popup Dialogue ====================================
+  void showSuccessDialog(String message, bool flag) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+          title: Text(flag ? "Success 🎉" : "Failed", textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor),),
+          content: Text(message, textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor)),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                flag ? Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen()), (Route<dynamic> route) => false,) : null;
+              },
+              child: const Text("OK"),
+            )
+          ],
+        );
+      },
+    );
+  }
+  /// <<< Login Successfully Popup Dialogue ====================================
+
 
   @override
   Widget build(BuildContext context) {
@@ -197,15 +227,24 @@ class _LoginScreenState extends State<LoginScreen> {
                               if(_formKey.currentState!.validate()){
                                 String email = _emailController.text.trim();
                                 String password = _passwordController.text.trim();
+                                setState(() {isLoading = true;});
                                 try{
-                                  setState(() {isLoading = true;});
 
 
 
 
-                                  setState(() => isLoading = false);
-                                }catch(err){
-                                  debugPrint("Error $err");
+
+
+                                }on FirebaseAuthException catch(err){
+                                  String message = err.message ?? "Login failed!";
+                                  if (err.code == 'user-not-found') {
+                                    message = "Email not registered!";
+                                  } else if (err.code == 'wrong-password' || err.code == 'invalid-credential') {
+                                    message = "Incorrect Email or Password!";
+                                  }
+                                  showSuccessDialog(message, false);
+                                }finally{
+                                  if (mounted) setState(() { isLoading = false;});
                                 }
                               }
                             },
