@@ -37,21 +37,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   /// >>> Registration Successfully Popup Dialogue =============================
-  void showSuccessDialog() {
+  void showSuccessDialog(String message, bool flag) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
-          title: Text("Success 🎉", textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor),),
-          content: Text("Registration completed successfully!", textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor)),
+          title: Text(flag ? "Success 🎉" : "Failed", textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor),),
+          content: Text(message, textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor)),
           actionsAlignment: MainAxisAlignment.center,
           actions: [
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false,);
+                flag ? Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false,) : null;
               },
               child: const Text("OK"),
             )
@@ -354,8 +354,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 String email = _emailController.text.trim();
                                 String phone = _phoneController.text.trim();
                                 String password = _confirmPasswordController.text.trim();
+                                setState(() {isLoading = true;});
                                 try{
-                                  setState(() {isLoading = true;});
                                   // >>> Create user
                                   UserCredential userCrendetial = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
                                   // >>> Update display name
@@ -377,7 +377,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     "createdAt": FieldValue.serverTimestamp(),
                                   });
 
-                                  setState(() {isLoading = false;currentField == 1;});
+
                                   // >>> Clear Fields
                                   _nameController.clear();
                                   _emailController.clear();
@@ -386,9 +386,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   _confirmPasswordController.clear();
                                   if(!mounted) return;
                                   // >>> Show Popup
-                                  showSuccessDialog();
-                                }catch(err){
-                                  debugPrint("Error $err");
+                                  showSuccessDialog("Registration completed successfully!", true);
+                                }on FirebaseAuthException catch(err){
+                                  String message = "Registration failed!";
+                                  if (err.code == 'email-already-in-use') message = "Email already registered";
+                                  _nameController.clear();
+                                  _emailController.clear();
+                                  _phoneController.clear();
+                                  _passwordController.clear();
+                                  _confirmPasswordController.clear();
+                                  showSuccessDialog(message, false);
+                                }finally{
+                                  if (mounted) setState(() { isLoading = false; });
                                 }
                               }
                             },
