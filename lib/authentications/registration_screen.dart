@@ -378,12 +378,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   });
 
                                   setState(() {isLoading = false;currentField == 1;});
+                                  // >>> Clear Fields
                                   _nameController.clear();
                                   _emailController.clear();
                                   _phoneController.clear();
                                   _passwordController.clear();
                                   _confirmPasswordController.clear();
                                   if(!mounted) return;
+                                  // >>> Show Popup
                                   showSuccessDialog();
                                 }catch(err){
                                   debugPrint("Error $err");
@@ -394,13 +396,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
                         // <<< Registration Button =============================
-
-                        ElevatedButton(
-                            onPressed: (){
-                              showSuccessDialog();
-                            },
-                            child: Text("OKK")
-                        ),
 
                         /// >>> =============== IF Already His / Her Account Exists so Login Here =================
                         SizedBox(height: 25),
