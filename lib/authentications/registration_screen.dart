@@ -36,7 +36,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     super.dispose();
   }
 
-
+  /// >>> Registration Successfully Popup Dialogue =============================
   void showSuccessDialog() {
     showDialog(
       context: context,
@@ -60,7 +60,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       },
     );
   }
-
+  /// <<< Registration Successfully Popup Dialogue =============================
 
 
   @override
@@ -418,6 +418,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             // <<< Registration Form ===========================================
 
+            // >>> Show Loader When Update Database ============================
             if (isLoading) ...[
               Positioned.fill(
                 child: Stack(
@@ -448,6 +449,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
             ]
+            // <<< Show Loader When Update Database ============================
 
           ],
         ),
