@@ -2,6 +2,7 @@ import 'package:asp_chat/authentications/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../utils/constant/app_colors.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -35,6 +36,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     super.dispose();
   }
 
+
+  void showSuccessDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+          title: Text("Success 🎉", textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor),),
+          content: Text("Registration completed successfully!", textAlign: TextAlign.center,style: TextStyle(color: AppColors.primaryColor)),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false,);
+              },
+              child: const Text("OK"),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +85,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
             // <<< Wavy Header =================================================
-
 
             // >>> Registration Form ===========================================
             Align(
@@ -327,24 +354,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 String email = _emailController.text.trim();
                                 String phone = _phoneController.text.trim();
                                 String password = _confirmPasswordController.text.trim();
-
                                 try{
                                   setState(() {isLoading = true;});
                                   // >>> Create user
                                   UserCredential userCrendetial = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
                                   // >>> Update display name
                                   await userCrendetial.user!.updateDisplayName(name);
-
                                   // >>> Save phone & other info in Firestore
                                   await FirebaseFirestore.instance.collection("users").doc(userCrendetial.user!.uid).set({
                                     "name": name,
                                     "email": email,
                                     "phone": phone,
-                                    "status": "Unavalible",
+                                    "status": "Unavailable",
                                     "entertainment": {
-                                      "video1" : { // video Id auto-generated
-                                        "thumbnail": "https://example.com/video.jpg",
-                                        "title": "New Video",
+                                      "video1" : {
+                                        "thumbnail": "",
+                                        "title": "",
                                         "url" : ""
                                       }
                                     },
@@ -352,7 +377,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     "createdAt": FieldValue.serverTimestamp(),
                                   });
 
-                                  setState(() => isLoading = false);
+                                  setState(() {isLoading = false;currentField == 1;});
+                                  _nameController.clear();
+                                  _emailController.clear();
+                                  _phoneController.clear();
+                                  _passwordController.clear();
+                                  _confirmPasswordController.clear();
+                                  if(!mounted) return;
+                                  showSuccessDialog();
                                 }catch(err){
                                   debugPrint("Error $err");
                                 }
@@ -363,6 +395,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         // <<< Registration Button =============================
 
+                        ElevatedButton(
+                            onPressed: (){
+                              showSuccessDialog();
+                            },
+                            child: Text("OKK")
+                        ),
 
                         /// >>> =============== IF Already His / Her Account Exists so Login Here =================
                         SizedBox(height: 25),
@@ -379,6 +417,38 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
             // <<< Registration Form ===========================================
+
+            if (isLoading) ...[
+              Positioned.fill(
+                child: Stack(
+                  children: [
+                    // Dark transparent background
+                    Container(color: Colors.black.withValues(alpha: 0.35),),
+
+                    // Center loading card
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20,),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 12, offset: const Offset(0, 6),),],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,),
+                            SizedBox(height: 10),
+                            Text("Please wait...", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 1)),),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ]
+
           ],
         ),
       ),
