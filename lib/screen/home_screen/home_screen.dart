@@ -48,23 +48,32 @@ class _HomeScreenState extends State<HomeScreen> {
     [
       IconButton(
         icon: Icon(Icons.qr_code, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
-        onPressed: () {
-          final userData = Provider.of<UserInfoProvider>(context,listen: false);
-          String? email = userData.userInfo?["email"];
-          String? name = userData.userInfo?["name"];
-          String username = email != null ? email.split('@').first : 'prothesbarai';
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24)),),
-            builder: (context) {return QrCodeBottomSheet(qrData: " $email", userName: " $name", userHandle: " $username",);},
-          );
-        },
+        onPressed: _openQrBottomSheet,
       ),
 
     ],
     // <<< QR Code Generator ===================================================
   ];
+
+
+
+  Future<void> _openQrBottomSheet() async {
+    final userProvider = context.read<UserInfoProvider>();
+    Map<String, dynamic>? userData = userProvider.userInfo;
+    if (userData == null || userData.isEmpty) {userData = await userProvider.getUserData();}
+    if (!mounted || userData == null) return;
+    String? email = userData["email"];
+    String? name = userData["name"];
+    String username = email != null ? email.split('@').first : 'prothesbarai';
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24)),),
+      builder: (_) {return QrCodeBottomSheet(qrData: email ?? "", userName: name ?? "", userHandle: username,);},
+    );
+  }
+
+
 
 
   @override
