@@ -2,6 +2,7 @@ import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment/full_screen_web_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -33,10 +34,12 @@ class _EntertainmentScreenState extends State<EntertainmentScreen> {
 
 
   /// >>> Fetch Entertainment Video List Based On Specific User Id =============
-  String uid = "qSRgDkA5JeYbziW4k8apXssN1dC2";
   Future<void> _fetchVideo() async{
     setState(() {isLoading = true;});
     try{
+      final user = FirebaseAuth.instance.currentUser;
+      if(user == null) return;
+      final uid = user.uid;
       final document = await firebaseFirestore.collection("users").doc(uid).get();
       if(!document.exists) return;
       final data = document.data();
