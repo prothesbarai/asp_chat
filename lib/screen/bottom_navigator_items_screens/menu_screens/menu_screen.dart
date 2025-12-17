@@ -1,6 +1,7 @@
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment/entertainment_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -67,11 +68,22 @@ class _MenuScreenState extends State<MenuScreen> {
                   icon: Icons.logout,
                   title: "Log out",
                   onTap: () async {
-                    final userProvider = Provider.of<UserInfoProvider>(context, listen: false);
-                    await userProvider.clearUser();
-                    if (!mounted) return;
-                    _navigateLoginPage();
+                    final userProvider =
+                    Provider.of<UserInfoProvider>(context, listen: false);
+                    final FirebaseAuth auth = FirebaseAuth.instance;
+                    try {
+                      // >>> sign out from Firebase
+                      await auth.signOut();
+                      // >>> user data clear From Hive / Provider
+                      await userProvider.clearUser();
+                      if (!mounted) return;
+                      // >>> Login page এ navigate
+                      _navigateLoginPage();
+                    } catch (e) {
+                      debugPrint("Logout error: $e");
+                    }
                   },
+
                 ),
 
               ],
