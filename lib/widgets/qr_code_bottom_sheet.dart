@@ -3,9 +3,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../services/set_user_image/user_image_provider/user_image_provider.dart';
 
 class QrCodeBottomSheet extends StatefulWidget {
   final String qrData;
@@ -22,7 +25,7 @@ class _QrCodeBottomSheetState extends State<QrCodeBottomSheet> {
   final ScreenshotController screenshotController = ScreenshotController();
 
   // >>> Generate vCard string =================================================
-  String get vCardData => "BEGIN:VCARD\nVERSION:3.0\nN:${widget.userName};;;\nFN:${widget.userName}\nUID:${widget.userHandle}\nURL:${widget.qrData}\nEND:VCARD";
+  String get vCardData => "BEGIN:VCARD\nVERSION:3.0\nN:${widget.userName};;;\nFN:${widget.userName}\nUID:${widget.userHandle}\nEMAIL:${widget.qrData}\nEND:VCARD";
   // <<< Generate vCard string =================================================
 
 
@@ -54,6 +57,9 @@ class _QrCodeBottomSheetState extends State<QrCodeBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+
+    final imageProvider = Provider.of<UserImageProvider>(context);
+
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor, borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),),
@@ -83,11 +89,13 @@ class _QrCodeBottomSheetState extends State<QrCodeBottomSheet> {
                   children: [
                     Column(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 28,
-                          backgroundColor: Colors.pinkAccent,
-                          child: Icon(Icons.person, size: 28, color: Colors.white),
+                          backgroundColor: (imageProvider.profileImage == null) ? Color(0xff1f2b3b) : null,
+                          backgroundImage: (imageProvider.profileImage != null) ? FileImage(imageProvider.profileImage!) : null,
+                          child: (imageProvider.profileImage == null) ? Icon(Icons.person, size: 28,) : null,
                         ),
+
                         const SizedBox(height: 8),
                         Text(widget.userName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6)),),
                         Text(widget.userHandle, style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),),

@@ -28,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    final userData = Provider.of<UserInfoProvider>(context,listen: false);
     _animationController = AnimationController(vsync: this,duration: Duration(seconds: 2))..repeat(reverse: true);
     _animation = Tween<double>(begin: 0.8,end: 1.2).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
     _textTimer = Timer.periodic(Duration(milliseconds: 150), (timer){
@@ -40,11 +41,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         _textTimer.cancel();
         Future.microtask(() async {
           if(!mounted) return;
-          final userData = Provider.of<UserInfoProvider>(context,listen: false);
           final box = Hive.box("onBoardingPage");
           bool seen = await box.get("onboarding_seen",defaultValue: false);
           if(!mounted) return;
-          if(userData.uid != null && userData.uid!.isNotEmpty){
+          if(userData.isLoggedIn){
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
           }else{
             if(seen){

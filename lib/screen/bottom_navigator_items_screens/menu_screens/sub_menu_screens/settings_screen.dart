@@ -5,6 +5,7 @@ import 'package:asp_chat/services/set_user_image/user_image_provider/user_image_
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import '../../../../providers/user_info_provider.dart';
 import '../../../../services/display_theme/theme_provider/theme_provider.dart';
 import '../../../../services/display_theme/theme_selected_model/theme_selected_model.dart';
 import '../../../../services/font_theme/font_selector_widget.dart';
@@ -54,6 +55,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final fontProvider = Provider.of<FontProvider>(context);
     final imageProvider = Provider.of<UserImageProvider>(context);
+    final userData = Provider.of<UserInfoProvider>(context);
+    String? email = userData.userInfo?["email"];
+    String username = email != null ? email.split('@').first : 'prothesbarai';
 
     return Scaffold(
       appBar: AppBar(elevation: 0, title: Text("Settings",style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),),),
@@ -87,9 +91,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                Text("Prothes Barai", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface,),),
+                Text(userData.userInfo?["name"] ?? "Prothes Barai", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface,),),
                 const SizedBox(height: 4),
-                Text("@prothesbarai16", style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface,),),
+                Text("@$username", style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface,),),
 
               ],
             ),
@@ -175,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
             _menuItem(icon: Icons.circle, title: "Active Status", subtitle: "On",),
-            _menuItem(icon: Icons.alternate_email, title: "Username", subtitle: "m.me/prothesbarai16",),
+            _menuItem(icon: Icons.alternate_email, title: "Username", subtitle: "a.sp/$username",),
             const SizedBox(height: 20),
             _sectionTitle("For families"),
             _menuItem(icon: Icons.family_restroom, title: "Family Centre",),

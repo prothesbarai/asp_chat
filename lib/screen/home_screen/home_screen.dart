@@ -3,6 +3,8 @@ import 'package:asp_chat/widgets/custom_appbar.dart';
 import 'package:asp_chat/widgets/custom_bottom_navigation_bar.dart';
 import 'package:asp_chat/widgets/qr_code_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/user_info_provider.dart';
 import '../demo.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -47,11 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
       IconButton(
         icon: Icon(Icons.qr_code, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),
         onPressed: () {
+          final userData = Provider.of<UserInfoProvider>(context,listen: false);
+          String? email = userData.userInfo?["email"];
+          String? name = userData.userInfo?["name"];
+          String username = email != null ? email.split('@').first : 'prothesbarai';
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24)),),
-            builder: (context) {return QrCodeBottomSheet(qrData: "qrData", userName: "userName", userHandle: "userHandle",);},
+            builder: (context) {return QrCodeBottomSheet(qrData: " $email", userName: " $name", userHandle: " $username",);},
           );
         },
       ),

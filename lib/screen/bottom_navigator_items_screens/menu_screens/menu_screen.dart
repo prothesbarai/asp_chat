@@ -2,14 +2,30 @@ import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../authentications/login_screen.dart';
+import '../../../providers/user_info_provider.dart';
 import '../../../services/set_user_image/user_image_provider/user_image_provider.dart';
 
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
+
+  @override
+  State<MenuScreen> createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+
+
+  void _navigateLoginPage(){
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false,);
+  }
 
   @override
   Widget build(BuildContext context) {
     final imageProvider = Provider.of<UserImageProvider>(context);
+    final userData = Provider.of<UserInfoProvider>(context);
+    String? email = userData.userInfo?["email"];
+    String username = email != null ? email.split('@').first : 'prothesbarai';
     return Scaffold(
       body: ListView(
         children: [
@@ -21,8 +37,8 @@ class MenuScreen extends StatelessWidget {
               backgroundImage: (imageProvider.profileImage != null) ? FileImage(imageProvider.profileImage!) : null,
               child: (imageProvider.profileImage == null) ? Icon(Icons.person, size: 34,) : null,
             ),
-            title: const Text("Prothes Barai", style: TextStyle(fontWeight: FontWeight.bold),),
-            subtitle: const Text("username"),
+            title: Text(userData.userInfo?["name"] ?? "Prothes Barai", style: TextStyle(fontWeight: FontWeight.bold),),
+            subtitle: Text("@$username"),
             onTap: () {},
           ),
           // <<< Profile Section ===============================================
@@ -38,12 +54,11 @@ class MenuScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text("More", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey,),),
           ),
-          menuItem(icon: Icons.group, title: "Friend requests",onTap: (){}),
+          menuItem(icon: Icons.logout, title: "Log out",onTap: () async{await userData.clearUser();if(!mounted) return;_navigateLoginPage();}),
         ],
       ),
     );
   }
-
 
   /// >>> Menu Items Builder ===================================================
   Widget menuItem({required IconData icon, required String title, required VoidCallback onTap}) {
@@ -54,5 +69,4 @@ class MenuScreen extends StatelessWidget {
       onTap: onTap,
     );
   }
-  /// <<< Menu Items Builder ===================================================
 }
