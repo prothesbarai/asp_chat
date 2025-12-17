@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-
 class UserInfoProvider with ChangeNotifier{
 
-  String? _userId;
-  String? get userId => _userId;
-  final _box = Hive.box("storeUserId");
+  Map<String,dynamic>? _userInfo;
+  Map<String,dynamic>? get userInfo => _userInfo;
+  final _box = Hive.box("storeUserInfo");
 
 
   UserInfoProvider(){
@@ -15,14 +14,16 @@ class UserInfoProvider with ChangeNotifier{
 
 
   Future<void> _loadFromHive() async {
-    _userId = await _box.get("userId");
+    _userInfo = await _box.get("userData");
+    notifyListeners();
   }
 
-  Future<void> loadUserInfo(String uid) async{
-    await _box.put("userId", uid);
-    _userId = uid;
+  Future<void> storeHive(Map<String,dynamic> userData) async{
+    await _box.put("userData", userData);
+    _userInfo = userData;
     notifyListeners();
   }
 
 
+  String? get uid => _userInfo?["uid"];
 }

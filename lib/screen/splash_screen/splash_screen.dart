@@ -40,11 +40,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         _textTimer.cancel();
         Future.microtask(() async {
           if(!mounted) return;
-          final userId = Provider.of<UserInfoProvider>(context,listen: false);
+          final userData = Provider.of<UserInfoProvider>(context,listen: false);
           final box = Hive.box("onBoardingPage");
           bool seen = await box.get("onboarding_seen",defaultValue: false);
           if(!mounted) return;
-          if(userId.userId != null && userId.userId!.isNotEmpty){
+          if(userData.uid != null && userData.uid!.isNotEmpty){
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
           }else{
             if(seen){

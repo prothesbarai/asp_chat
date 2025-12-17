@@ -5,6 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/user_info_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -225,6 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: isLoading? null :() async{
                               FocusScope.of(context).unfocus();
                               if(_formKey.currentState!.validate()){
+                                final userData = Provider.of<UserInfoProvider>(context,listen: false);
                                 String email = _emailController.text.trim();
                                 String password = _passwordController.text.trim();
                                 setState(() {isLoading = true;});
@@ -238,7 +242,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     String name = data["name"] ?? "";
                                     String phone = data["phone"] ?? "";
                                     String emailFromDB = data["email"] ?? email;
-
+                                    if(isChecked){
+                                      await userData.storeHive({"uid" : uid, "name" : name, "phone" : phone, "email" : emailFromDB,});
+                                    }
                                   }
                                   if(!mounted) return;
                                   _navigateHomePage();

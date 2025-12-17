@@ -10,7 +10,7 @@ class HiveService {
 
     await Future.wait([
       Hive.openBox("onBoardingPage"),
-      Hive.openBox("storeUserId"),
+      Hive.openBox("storeUserInfo"),
       Hive.openBox('settings'),
       Hive.openBox('AppThemeEnumFlag'), // For Light & Dark mode
       Hive.openBox("StoreUserImages"), // Store User Profile Image
