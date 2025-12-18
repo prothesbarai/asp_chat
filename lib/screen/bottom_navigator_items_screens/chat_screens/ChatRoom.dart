@@ -76,6 +76,7 @@ class ChatRoom extends StatelessWidget {
 
   void onSendMessage() async {
     if (_message.text.isNotEmpty) {
+
       Map<String, dynamic> messages = {
         "sendby": _auth.currentUser!.displayName,
         "message": _message.text,
@@ -84,11 +85,10 @@ class ChatRoom extends StatelessWidget {
       };
 
       _message.clear();
-      await _firestore
-          .collection('chatroom')
-          .doc(chatRoomId)
-          .collection('chats')
-          .add(messages);
+      await _firestore.collection('chatroom').doc(chatRoomId).collection('chats').add(messages);
+
+      await _firestore.collection('chatroom').doc(chatRoomId).update({"lastMessage": _message.text, "updatedAt": FieldValue.serverTimestamp(),});
+
     } else {
       print("Enter Some Text");
     }

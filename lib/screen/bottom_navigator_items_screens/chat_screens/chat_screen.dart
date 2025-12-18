@@ -144,24 +144,83 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver{ //
             onPressed: onSearch,
             child: Text("Search"),
           ),
-          SizedBox(
-            height: size.height / 30,
+          SizedBox(height: size.height / 30,),
+
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('chatroom')
+                  .where("users", arrayContains: _auth.currentUser!.uid)
+                  .orderBy("updatedAt", descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    var room = snapshot.data!.docs[index];
+                    List users = room['users'];
+                    String otherUserId =
+                    users.firstWhere((u) => u != _auth.currentUser!.uid);
+
+                    return FutureBuilder<DocumentSnapshot>(
+                      future: FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(otherUserId)
+                          .get(),
+                      builder: (context, userSnap) {
+                        if (!userSnap.hasData) return SizedBox();
+
+                        var user = userSnap.data!;
+                        return ListTile(
+                          leading: Icon(Icons.account_circle),
+                          title: Text(user['name']),
+                          subtitle: Text(user['email']),
+                          trailing: Icon(Icons.chat),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChatRoom(
+                                  chatRoomId: room.id,
+                                  userMap: user.data() as Map<String, dynamic>,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           ),
+
+
+          SizedBox(height: size.height / 30,),
           userMap != null
               ? ListTile(
-            onTap: () {
-              String roomId = chatRoomId(
-                  _auth.currentUser!.displayName!,
-                  userMap!['name']);
+            onTap: () async {
+              String roomId = chatRoomId(_auth.currentUser!.displayName!, userMap!['name']);
 
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => ChatRoom(
-                    chatRoomId: roomId,
-                    userMap: userMap!,
-                  ),
-                ),
-              );
+              // 🔹 CREATE / UPDATE CHATROOM
+              await _firebaseFirestore
+                  .collection('chatroom')
+                  .doc(roomId)
+                  .set({
+                "users": [
+                  _auth.currentUser!.uid,
+                  userMap!['uid'],
+                ],
+                "lastMessage": "",
+                "updatedAt": FieldValue.serverTimestamp(),
+              }, SetOptions(merge: true));
+              if(!mounted) return;
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => ChatRoom(chatRoomId: roomId, userMap: userMap!,),),);
             },
             leading: Icon(Icons.account_box, color: Colors.black),
             title: Text(
