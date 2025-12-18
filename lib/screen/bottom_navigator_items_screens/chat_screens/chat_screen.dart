@@ -64,21 +64,46 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver{ //
   void onSearch() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+    if (textEditingController.text.isEmpty) return;
+
     setState(() {
       isLoading = true;
     });
 
-    await firestore
+    var result = await firestore
         .collection('users')
         .where("email", isEqualTo: textEditingController.text)
-        .get()
-        .then((value) {
+        .get();
+
+    if (result.docs.isEmpty) {
       setState(() {
-        userMap = value.docs[0].data();
         isLoading = false;
+        userMap = null;
       });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User not found")),);
+      return;
+    }
+
+    var searchedUser = result.docs.first.data();
+
+    /// 🚫 PREVENT SELF CHAT
+    if (searchedUser['uid'] == _auth.currentUser!.uid) {
+      setState(() {
+        isLoading = false;
+        userMap = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("You can't chat with yourself")),
+      );
+      return;
+    }
+
+    setState(() {
+      userMap = searchedUser;
+      isLoading = false;
     });
   }
+
 
 
 
@@ -163,8 +188,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver{ //
                   itemBuilder: (context, index) {
                     var room = snapshot.data!.docs[index];
                     List users = room['users'];
-                    String otherUserId =
-                    users.firstWhere((u) => u != _auth.currentUser!.uid);
+                    String? otherUserId = users.firstWhere((u) => u != _auth.currentUser!.uid, orElse: () => null,);
+
+                    if (otherUserId == null) {
+                      return const SizedBox(); // skip invalid room
+                    }
 
                     return FutureBuilder<DocumentSnapshot>(
                       future: FirebaseFirestore.instance
