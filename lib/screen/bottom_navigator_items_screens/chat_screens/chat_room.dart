@@ -2,9 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:provider/provider.dart';
-import '../../../providers/user_info_provider.dart';
-import '../../../services/set_user_image/user_image_provider/user_image_provider.dart';
 import '../../../utils/constant/app_colors.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -48,8 +45,9 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   Widget build(BuildContext context) {
-    final imageProvider = Provider.of<UserImageProvider>(context,listen: false);
-    final userProvider = Provider.of<UserInfoProvider>(context,);
+
+    final username = widget.userMap['email'].split('@').first;
+
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder<DocumentSnapshot>(
@@ -77,52 +75,21 @@ class _ChatRoomState extends State<ChatRoom> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: _firestore.collection('chatroom').doc(widget.chatRoomId).collection('chats').orderBy("time", descending: true).snapshots(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {return Center(child: CircularProgressIndicator());}
+                  if (!snapshot.hasData) {return Center(child: LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,),);}
                   return ListView.builder(
                     reverse: true,
                     itemCount: snapshot.data!.docs.length + 1,
                     itemBuilder: (context, index) {
                       if (index == snapshot.data!.docs.length) {
-                        return FutureBuilder<Map<String,dynamic>?>(
-                          future: userProvider.getUserData(),
-                          builder: (context, snapshot) {
-
-                            if(snapshot.connectionState == ConnectionState.waiting) {return  Center(child: LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,),);}
-                            if(!snapshot.hasData || snapshot.data == null){return const Center(child: Text("User data not found"),);}
-
-                            final userData = snapshot.data!;
-                            final name = userData['name'];
-                            final email = userData['email'];
-                            final username = email != null ? email.split('@').first : 'prothesbarai';
-
-                            return SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const SizedBox(height: 20),
-                                  // >>> PROFILE PHOTO + NAME + USERNAME =============================
-                                  Column(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 24,
-                                        backgroundColor: (imageProvider.profileImage == null) ? Color(0xff1f2b3b) : null,
-                                        backgroundImage: (imageProvider.profileImage != null) ? FileImage(imageProvider.profileImage!) : null,
-                                        child: (imageProvider.profileImage == null) ? Icon(Icons.person, size: 34,) : null,
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Text(name ?? "Prothes Barai", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface,),),
-                                      const SizedBox(height: 4),
-                                      Text("@$username", style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface,),),
-
-                                    ],
-                                  ),
-                                  // <<< PROFILE PHOTO + NAME + USERNAME =============================
-
-
-                                ],
-                              ),
-                            );
-                          },
+                        return Column(
+                          children: [
+                            SizedBox(height: 20,),
+                            CircleAvatar(radius: 34, backgroundColor: Color(0xff1f2b3b), child:Icon(Icons.person, size: 50,),),
+                            const SizedBox(height: 12),
+                            Text(widget.userMap['name'], style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface,),),
+                            Text("@$username", style: TextStyle(fontSize: 17, color: Theme.of(context).colorScheme.onSurface,),),
+                            const SizedBox(height: 12),
+                          ],
                         );
                       }
                       Map<String, dynamic> map = snapshot.data!.docs[index].data() as Map<String, dynamic>;
