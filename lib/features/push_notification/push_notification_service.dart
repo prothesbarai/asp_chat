@@ -1,8 +1,10 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class PushNotificationService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   /// >>> Set Notification Permission ==========================================
   void requestNotificationPermission() async{
@@ -27,8 +29,21 @@ class PushNotificationService {
   /// <<< FCM Token / Device Token =============================================
 
 
-  /// >>> Show Notification Foreground Background Or Terminated State ==========
 
+  /// >>> Local Notification Initialization ====================================
+  void initLocalNotification(){
+    
+  }
+  /// <<< Local Notification Initialization ====================================
+
+
+
+  /// >>> Show Notification Foreground Background Or Terminated State ==========
+  void showFirebaseNotification(){
+    FirebaseMessaging.onMessage.listen((message){
+
+    });
+  }
   /// <<< Show Notification Foreground Background Or Terminated State ==========
 
 
