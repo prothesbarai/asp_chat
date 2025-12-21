@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:asp_chat/authentications/login_screen.dart';
 import 'package:asp_chat/providers/user_info_provider.dart';
 import 'package:asp_chat/screen/home_screen/home_screen.dart';
-import 'package:asp_chat/services/onboarding/onboarding_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import '../../features/onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

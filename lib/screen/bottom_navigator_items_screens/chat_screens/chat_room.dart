@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:uuid/uuid.dart';
 import '../../../utils/constant/app_colors.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatRoom extends StatefulWidget {
   final Map<String, dynamic> userMap;
@@ -17,7 +21,7 @@ class _ChatRoomState extends State<ChatRoom> {
   final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  File? imageFile;
 
   /// >>> On send text sms =====================================================
   void onSendMessage() async{
@@ -36,6 +40,44 @@ class _ChatRoomState extends State<ChatRoom> {
   /// <<< On send text sms =====================================================
 
 
+  /// >>> On Image Send sms ====================================================
+  Future getImage() async {
+    ImagePicker picker = ImagePicker();
+
+    await picker.pickImage(source: ImageSource.gallery).then((xFile) {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        uploadImage();
+      }
+    });
+  }
+  Future uploadImage() async {
+    String fileName = Uuid().v1();
+    // >>> empty image message create
+    await _firestore.collection('chatroom').doc(widget.chatRoomId).collection('chats').doc(fileName).set({
+      "sendby": _auth.currentUser!.displayName,
+      "message": "",
+      "type": "img",
+      "time": FieldValue.serverTimestamp(),
+    });
+
+    try {
+      // >>> Firebase Storage upload
+      var ref = FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
+      TaskSnapshot uploadTask = await ref.putFile(imageFile!);
+      // >>> Upload success → get image URL
+      String imageUrl = await uploadTask.ref.getDownloadURL();
+      // >>> Firestore update with image URL
+      await _firestore.collection('chatroom').doc(widget.chatRoomId).collection('chats').doc(fileName).update({"message": imageUrl});
+    } catch (error) {
+      // >>> Upload fail → Firestore cleanup
+      await _firestore.collection('chatroom').doc(widget.chatRoomId).collection('chats').doc(fileName).delete();
+      debugPrint("Image upload failed: $error");
+    }
+  }
+
+
+  /// <<< On Image Send sms ====================================================
 
   @override
   void dispose() {
@@ -118,6 +160,10 @@ class _ChatRoomState extends State<ChatRoom> {
                             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.primaryColor),borderRadius: BorderRadius.circular(10)),
                             border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.primaryColor),borderRadius: BorderRadius.circular(10)),
                             focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.primaryColor),borderRadius: BorderRadius.circular(10)),
+                            suffixIcon: IconButton(
+                              onPressed: () => getImage(),
+                              icon: Icon(Icons.photo),
+                            ),
                           ),
                           keyboardType: TextInputType.text,
                           cursorColor: AppColors.primaryColor,
@@ -141,7 +187,8 @@ class _ChatRoomState extends State<ChatRoom> {
 
 
   Widget messages(Size size, Map<String, dynamic> map, BuildContext context) {
-   return Container(
+   return map['type'] == "text" ?
+   Container(
       width: size.width,
       alignment: map['sendby'] == _auth.currentUser!.displayName ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -150,7 +197,13 @@ class _ChatRoomState extends State<ChatRoom> {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: map['sendby'] == _auth.currentUser!.displayName ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary),
         child: Text(map['message'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.surface,),),
       ),
-    );
+    ) :
+   Container(
+     height: size.height / 2.5,
+     width: size.width,
+     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+     alignment: map['sendby'] == _auth.currentUser!.displayName ? Alignment.centerRight : Alignment.centerLeft,
+   );
   }
 
 }

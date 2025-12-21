@@ -49,11 +49,15 @@ dependencies:
   # State Management & Route Management (Navigation) & Dependency Injection
   get: ^4.7.3
   # For Firebase
-  firebase_core: ^4.2.1
-  firebase_auth: ^6.1.2
+  firebase_core: ^4.2.1 # For Global
+  firebase_auth: ^6.1.2 # For Authentication
   cloud_firestore: ^6.1.0
   firebase_database: ^12.1.0
   firebase_storage: ^13.0.5
+  # Push Notification From Firebase
+  firebase_messaging: ^16.1.0
+  flutter_local_notifications: ^19.5.0
+  app_settings: ^7.0.0
   # For Google Fonts
   google_fonts: ^6.3.3
   # For Unique ID Generator

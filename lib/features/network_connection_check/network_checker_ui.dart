@@ -1,6 +1,6 @@
-import 'package:asp_chat/services/network_connection_check/network_checker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'network_checker_provider.dart';
 
 class NetworkCheckerUi extends StatelessWidget {
   final Widget child;

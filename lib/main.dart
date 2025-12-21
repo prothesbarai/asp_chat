@@ -1,17 +1,17 @@
 import 'package:asp_chat/providers/user_info_provider.dart';
 import 'package:asp_chat/screen/splash_screen/splash_screen.dart';
-import 'package:asp_chat/services/display_theme/custom_app_theme.dart';
-import 'package:asp_chat/services/display_theme/theme_provider/theme_provider.dart';
-import 'package:asp_chat/services/font_theme/build_font_text_theme.dart';
-import 'package:asp_chat/services/font_theme/provider/font_provider.dart';
-import 'package:asp_chat/services/hive_service/hive_service.dart';
-import 'package:asp_chat/services/network_connection_check/network_checker_provider.dart';
-import 'package:asp_chat/services/network_connection_check/network_checker_ui.dart';
-import 'package:asp_chat/services/set_user_image/user_image_provider/user_image_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'features/display_theme/custom_app_theme.dart';
+import 'features/display_theme/theme_provider/theme_provider.dart';
+import 'features/font_theme/build_font_text_theme.dart';
+import 'features/font_theme/provider/font_provider.dart';
+import 'features/hive_service/hive_service.dart';
+import 'features/network_connection_check/network_checker_provider.dart';
+import 'features/network_connection_check/network_checker_ui.dart';
+import 'features/set_user_image/user_image_provider/user_image_provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

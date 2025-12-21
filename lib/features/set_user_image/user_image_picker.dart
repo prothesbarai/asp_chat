@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:asp_chat/services/set_user_image/user_image_provider/user_image_provider.dart';
+import 'package:asp_chat/features/set_user_image/user_image_provider/user_image_provider.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

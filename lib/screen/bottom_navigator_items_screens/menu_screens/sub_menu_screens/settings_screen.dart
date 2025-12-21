@@ -1,17 +1,16 @@
 import 'dart:io';
-
-import 'package:asp_chat/services/set_user_image/user_image_picker.dart';
-import 'package:asp_chat/services/set_user_image/user_image_provider/user_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import '../../../../features/display_theme/theme_provider/theme_provider.dart';
+import '../../../../features/display_theme/theme_selected_model/theme_selected_model.dart';
+import '../../../../features/font_theme/font_selector_widget.dart';
+import '../../../../features/font_theme/provider/font_provider.dart';
+import '../../../../features/set_user_image/dialogue/show_camera_gallery_dialogue.dart';
+import '../../../../features/set_user_image/user_image_picker.dart';
+import '../../../../features/set_user_image/user_image_provider/user_image_provider.dart';
 import '../../../../providers/user_info_provider.dart';
-import '../../../../services/display_theme/theme_provider/theme_provider.dart';
-import '../../../../services/display_theme/theme_selected_model/theme_selected_model.dart';
-import '../../../../services/font_theme/font_selector_widget.dart';
-import '../../../../services/font_theme/provider/font_provider.dart';
-import '../../../../services/set_user_image/dialogue/show_camera_gallery_dialogue.dart';
 import '../../../../utils/constant/app_colors.dart';
 
 class SettingsScreen extends StatefulWidget {

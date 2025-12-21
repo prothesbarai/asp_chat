@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../authentications/login_screen.dart';
+import '../../../features/set_user_image/user_image_provider/user_image_provider.dart';
 import '../../../providers/user_info_provider.dart';
-import '../../../services/set_user_image/user_image_provider/user_image_provider.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});

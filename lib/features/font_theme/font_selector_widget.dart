@@ -1,4 +1,4 @@
-import 'package:asp_chat/services/font_theme/provider/font_provider.dart';
+import 'package:asp_chat/features/font_theme/provider/font_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,14 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import '../features/set_user_image/user_image_provider/user_image_provider.dart';
 
-import '../services/set_user_image/user_image_provider/user_image_provider.dart';
 
 class QrCodeBottomSheet extends StatefulWidget {
   final String qrData;
