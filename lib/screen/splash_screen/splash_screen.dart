@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:asp_chat/authentications/login_screen.dart';
+import 'package:asp_chat/features/push_notification/push_notification_service.dart';
 import 'package:asp_chat/providers/user_info_provider.dart';
 import 'package:asp_chat/screen/home_screen/home_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
@@ -24,10 +25,19 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   String _currentText = "";
   int _charIndex = 0;
 
+  PushNotificationService pushNotificationService = PushNotificationService();
 
   @override
   void initState() {
     super.initState();
+    // >>> For Push Notification ===============================================
+    pushNotificationService.requestNotificationPermission();
+    pushNotificationService.getDeviceToken().then((value){
+      debugPrint("Device Token");
+      debugPrint(value);
+      debugPrint("<<<>>>");
+    });
+    // <<< For Push Notification ===============================================
     final userData = Provider.of<UserInfoProvider>(context,listen: false);
     _animationController = AnimationController(vsync: this,duration: Duration(seconds: 2))..repeat(reverse: true);
     _animation = Tween<double>(begin: 0.8,end: 1.2).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
