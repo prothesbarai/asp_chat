@@ -67,7 +67,7 @@ class PushNotificationService {
 
     // >>> For Android ==========
     AndroidNotificationChannel channel = AndroidNotificationChannel(
-      message.notification!.android!.channelId.toString(),  // ID
+      'high_importance_channel',  // ID
       'High Importance Notifications', // title
       description: "This channel is used for important notifications.",
       importance: Importance.max, // Very Very Important this Notification
