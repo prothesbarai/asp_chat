@@ -40,7 +40,7 @@ void main() async{
 
 
   runApp(
-    MultiProvider(
+      MultiProvider(
         providers: [
           // >>> Connection Checker ============================================
           ChangeNotifierProvider(create: (_) => NetworkCheckerProvider()),
@@ -53,8 +53,8 @@ void main() async{
           // >>> User Profile Image Provider  ==================================
           ChangeNotifierProvider(create: (context) => UserImageProvider()),
         ],
-      child: const AspChatApp(),
-    )
+        child: const AspChatApp(),
+      )
   );
 }
 
@@ -87,4 +87,3 @@ class AspChatApp extends StatelessWidget {
     );
   }
 }
-
