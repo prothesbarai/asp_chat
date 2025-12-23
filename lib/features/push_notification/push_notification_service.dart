@@ -1,7 +1,9 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../../screen/global_screen/global_screen.dart';
 class PushNotificationService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -86,8 +88,32 @@ class PushNotificationService {
   /// <<< Show Notification Foreground Background Or Terminated State ==========
 
 
+  /// >>>  Notification Click Handle (terminated + background) =================
+  Future<void> setupInteractMessage(BuildContext context) async {
+    // App terminated state
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (!context.mounted) return;
+    if (initialMessage != null) {handleMessage(context, initialMessage);}
+    // App background → opened by clicking notification
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {if (!context.mounted) return;handleMessage(context, message);});
+  }
+  /// <<<  Notification Click Handle (terminated + background) =================
 
 
-  
+  /// >>> Navigate to Target Page ==============================================
+  void handleMessage(BuildContext context, RemoteMessage message) {
+    if(message.data['type'] =='msj'){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => GlobalScreen()));
+    }else{
+      Navigator.push(context, MaterialPageRoute(builder: (context) => GlobalScreen()));
+    }
+  }
+  /// <<< Navigate to Target Page ==============================================
+
+
+  /// >>> iOS Foreground Notification Enable Function ==========================
+  Future foregroundMessage() async {await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true,);}
+  /// <<< iOS Foreground Notification Enable Function ==========================
+
 
 }

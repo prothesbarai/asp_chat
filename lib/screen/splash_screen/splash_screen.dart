@@ -34,6 +34,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     pushNotificationService.requestNotificationPermission();
     pushNotificationService.initLocalNotifications();
     pushNotificationService.firebaseInit(context);
+    pushNotificationService.setupInteractMessage(context);
+    // >>> iOS Foreground Notification Enable
+    pushNotificationService.foregroundMessage();
+    // >>>  Notification Click Handle (terminated + background)
+    pushNotificationService.setupInteractMessage(context);
+
     pushNotificationService.isTokenRefresh();
     pushNotificationService.getDeviceToken().then((value){
       debugPrint("Device Token");
