@@ -32,17 +32,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.initState();
     // >>> For Push Notification ===============================================
     pushNotificationService.requestNotificationPermission();
-    //pushNotificationService.isTokenRefresh();
+    pushNotificationService.initLocalNotifications();
+    pushNotificationService.firebaseInit(context);
+    pushNotificationService.isTokenRefresh();
     pushNotificationService.getDeviceToken().then((value){
       debugPrint("Device Token");
       debugPrint(value);
       debugPrint("<<<Device Token>>>");
     });
 
-    // pushNotificationService.firebaseInit(context);
-
-
-    // pushNotificationService.initLocalNotification();
     // <<< For Push Notification ===============================================
     final userData = Provider.of<UserInfoProvider>(context,listen: false);
     _animationController = AnimationController(vsync: this,duration: Duration(seconds: 2))..repeat(reverse: true);
