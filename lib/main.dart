@@ -19,15 +19,8 @@ import 'features/set_user_image/user_image_provider/user_image_provider.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
   await Firebase.initializeApp();
-  if (message.notification != null) {
-    debugPrint("Title Main : ${message.notification!.title}");
-    debugPrint("${message.notification!.body}");
-  } else {
-    debugPrint("Background DATA message: ${message.data}");
-  }
 }
 /// <<< Firebase Background Message Purpose ====================================
-
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

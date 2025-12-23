@@ -32,16 +32,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.initState();
     // >>> For Push Notification ===============================================
     pushNotificationService.requestNotificationPermission();
-    pushNotificationService.initLocalNotifications();
     pushNotificationService.firebaseInit(context);
-    // >>>  Notification Click Handle (terminated + background)
     pushNotificationService.setupInteractMessage(context);
-    // >>> iOS Foreground Notification Enable
     pushNotificationService.foregroundMessage();
-
-
-
-    pushNotificationService.isTokenRefresh();
     pushNotificationService.getDeviceToken().then((value){
       debugPrint("Device Token");
       debugPrint(value);
@@ -69,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
           }else{
             if(seen){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
             }else{
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen(),));
             }
