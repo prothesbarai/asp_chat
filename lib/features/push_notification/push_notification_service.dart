@@ -22,4 +22,14 @@ class PushNotificationService {
   }
   /// <<< Set Notification Permission ==========================================
 
+
+  /// >>> FCM Token / Device Token Get & Refresh Two Functions =================
+  Future<String?> getDeviceToken() async{
+    final token = await messaging.getToken();
+    return token;
+  }
+  // >>> Refresh Token
+  void isTokenRefresh() async{messaging.onTokenRefresh.listen((event){event.toString();});}
+  /// <<< FCM Token / Device Token Get & Refresh Two Functions =================
+
 }
