@@ -14,6 +14,9 @@ import 'features/network_connection_check/network_checker_provider.dart';
 import 'features/network_connection_check/network_checker_ui.dart';
 import 'features/set_user_image/user_image_provider/user_image_provider.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+bool isOpenedFromNotification = false;
+
 
 /// >>> Firebase Background Message Purpose ====================================
 @pragma('vm:entry-point')
@@ -67,6 +70,7 @@ class AspChatApp extends StatelessWidget {
       builder: (context, themeProvider, child) {
         return MaterialApp(
           title: 'ASPChat',
+          navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
           // >>> Font With Light Dark Mode =====================================
           theme: CustomAppTheme.lightTheme.copyWith(textTheme: buildFontTextTheme(fontProvider),),

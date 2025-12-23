@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import '../../features/onboarding/onboarding_screen.dart';
+import '../../main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -58,11 +59,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           final box = Hive.box("onBoardingPage");
           bool seen = await box.get("onboarding_seen",defaultValue: false);
           if(!mounted) return;
+          if (isOpenedFromNotification) return;
           if(userData.isLoggedIn){
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
           }else{
             if(seen){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
             }else{
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen(),));
             }

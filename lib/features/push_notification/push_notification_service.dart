@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../main.dart';
+
 
 
 class PushNotificationService {
@@ -17,7 +19,7 @@ class PushNotificationService {
 
 
   /// >>> Show notifications for android when app is active ====================
-  void initLocalNotifications(BuildContext context, RemoteMessage message)async{
+  void initLocalNotifications(RemoteMessage message)async{
     var androidInitializationSettings = const AndroidInitializationSettings('@mipmap/ic_launcher');
     var iosInitializationSettings = const DarwinInitializationSettings();
     var initializationSetting = InitializationSettings(android: androidInitializationSettings , iOS: iosInitializationSettings);
@@ -25,7 +27,7 @@ class PushNotificationService {
         initializationSetting,
         onDidReceiveNotificationResponse: (payload){
           // >>> handle interaction when app is active for android
-          handleMessage(context, message);
+          handleMessage(message);
         }
     );
   }
@@ -42,12 +44,11 @@ class PushNotificationService {
         print('count:${android!.count}');
         print('data:${message.data.toString()}');
       }
-      if(!context.mounted) return;
       if(Platform.isIOS){
         foregroundMessage();
       }
       if(Platform.isAndroid){
-        initLocalNotifications(context, message);
+        initLocalNotifications(message);
         showNotification(message);
       }
     });
@@ -113,16 +114,17 @@ class PushNotificationService {
   Future<void> setupInteractMessage(BuildContext context)async{
     // >>> when app is terminated
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-    if(!context.mounted) return;
-    if(initialMessage != null){handleMessage(context, initialMessage);}
+    if(initialMessage != null){handleMessage(initialMessage);}
     // >>> when app ins background
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {if(!context.mounted) return;handleMessage(context, event);});
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {handleMessage(event);});
   }
   /// <<< Handle tap on notification when app is in background or terminated ===
 
-  void handleMessage(BuildContext context, RemoteMessage message) {
+  void handleMessage(RemoteMessage message) {
+    isOpenedFromNotification = true;
     if(message.data['type'] =='msj'){}
-    Navigator.push(context, MaterialPageRoute(builder: (context) => GlobalScreen(),));
+    navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreen()),);
+
   }
 
 
