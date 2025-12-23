@@ -2,7 +2,6 @@ import 'package:app_settings/app_settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import '../../screen/global_screen/global_screen.dart';
 class PushNotificationService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -113,7 +112,7 @@ class PushNotificationService {
 
   /// >>> iOS Foreground Notification Enable Function ==========================
   Future foregroundMessage() async {await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true,);}
-  /// <<< iOS Foreground Notification Enable Function ==========================
+/// <<< iOS Foreground Notification Enable Function ==========================
 
 
 }
