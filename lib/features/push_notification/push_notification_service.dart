@@ -36,7 +36,8 @@ class PushNotificationService {
   /// <<< Show notifications for android when app is active ====================
 
 
-  void firebaseInit(BuildContext context){
+  /// >>> Notification Initialization ==========================================
+  void notificationInitialization(BuildContext context){
     FirebaseMessaging.onMessage.listen((message) {
       RemoteNotification? notification = message.notification ;
       AndroidNotification? android = message.notification!.android ;
@@ -64,6 +65,7 @@ class PushNotificationService {
 
     });
   }
+  /// <<< Notification Initialization ==========================================
 
 
   /// >>> Set Notification Permission ==========================================
@@ -131,7 +133,7 @@ class PushNotificationService {
   /// <<< Handle tap on notification when app is in background or terminated ===
 
 
-
+  /// >>> Navigate Page Handled Function =======================================
   void handleMessage(RemoteMessage message) {
     isOpenedFromNotification = true;
     final data = anyMapEmptySpaceRemover(message.data);
@@ -141,10 +143,10 @@ class PushNotificationService {
     final type4 = data['click_action_v2'];
     final type5 = data['click_action'];
     if (kDebugMode) {print('FCM Data: $data');print('Type: $type1 $type2 $type3 $type4 $type5');}
-    if (type1 == 'title') {
+    if (type1 == 'shreyasi') {
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenThree(),),);
     }
-    else if (type2 == 'profile') {
+    else if (type2 == 'prothes') {
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenTwo(),),);
     }
     else {
@@ -152,12 +154,12 @@ class PushNotificationService {
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenOne()),);
     }
   }
+  /// <<< Navigate Page Handled Function =======================================
 
 
   /// >>> For Only IOS Foreground Navigate Purpose =============================
   Future foregroundMessage() async {await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true,);}
   /// <<< For Only IOS Foreground Navigate Purpose =============================
-
   
   
   /// >>> For Empty Space Remover Method For Multipage Navigate ================

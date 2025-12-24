@@ -14,21 +14,23 @@ import 'features/network_connection_check/network_checker_provider.dart';
 import 'features/network_connection_check/network_checker_ui.dart';
 import 'features/set_user_image/user_image_provider/user_image_provider.dart';
 
+
+/// >>> Push Notification Background Message Purpose ===========================
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 bool isOpenedFromNotification = false;
 
-
-/// >>> Firebase Background Message Purpose ====================================
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
   await Firebase.initializeApp();
 }
-/// <<< Firebase Background Message Purpose ====================================
+/// <<< Push Notification Background Message Purpose ===========================
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  /// >>> For Only Terminate Push Notification =================================
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  /// <<< For Only Terminate Push Notification =================================
   await Future.wait([
     HiveService.initHive(),
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
