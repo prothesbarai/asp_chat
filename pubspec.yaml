@@ -48,6 +48,10 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   # State Management & Route Management (Navigation) & Dependency Injection
   get: ^4.7.3
+  # For Lottie
+  lottie: ^3.3.2
+  # For Lock
+  pinput: ^6.0.1
   # For Firebase
   firebase_core: ^4.2.1 # For Global
   firebase_auth: ^6.1.2 # For Authentication
@@ -105,6 +109,8 @@ flutter:
   assets:
     - 'assets/icon/icon.png'
     - 'assets/images/placeholder.png'
+    - assets/lottie/bird.json
+    - assets/lottie/no_internet.json
 
 flutter_icons:
   android: true
