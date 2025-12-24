@@ -6,8 +6,13 @@ Map<String, dynamic> sequentialAnniversaryHelper() {
 
   // >>> fixed anniversary days (sequential order)
   final List<Map<String, dynamic>> dates = [
+    {"title": "Birthday 💖", "day": 15, "month": 1},
     {"title": "Anniversary 💖", "day": 20, "month": 1},
+    {"title": "Kiss Day 💖", "day": 30, "month": 3},
+    {"title": "Kiss Day 💖", "day": 31, "month": 3},
     {"title": "Anniversary ❤️", "day": 15, "month": 5},
+    {"title": "Relationship ❤️", "day": 16, "month": 10},
+    {"title": "Romance Day ❤️", "day": 23, "month": 10},
     {"title": "Anniversary 💕", "day": 20, "month": 11},
   ];
   const months = ["Jan","Feb","Mar","Apr","May","Jun", "Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -36,7 +41,7 @@ Map<String, dynamic> sequentialAnniversaryHelper() {
     final d = dates.first;
     nextDate = DateTime(now.year + 1, d["month"], d["day"]);
   }
-  String status = isToday ? "🎉 Happy Anniversary" : "⏳ After ${nextDate.difference(today).inDays} days";
+  String status = isToday ? "Happy $title" : "⏳ After ${nextDate.difference(today).inDays} days";
   return {
     "title": title,
     "icon": icon,
