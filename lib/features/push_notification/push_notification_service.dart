@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../main.dart';
+import 'in_app_dialogue.dart';
 
 
 
@@ -43,13 +44,22 @@ class PushNotificationService {
         print('count:${android!.count}');
         print('data:${message.data.toString()}');
       }
-      if(Platform.isIOS){
-        foregroundMessage();
-      }
+
       if(Platform.isAndroid){
         initLocalNotifications(message);
         showNotification(message);
       }
+
+      if(Platform.isIOS){
+        foregroundMessage();
+      }
+
+      // >>> Only When App is Open then Show a Dialogue
+      if (navigatorKey.currentState != null) {
+        inAppDialogue(navigatorKey.currentState!, message, () {navigatorKey.currentState!.push(MaterialPageRoute(builder: (_) => GlobalScreen(),),);},);
+      }
+      // <<< Only When App is Open then Show a Dialogue
+
     });
   }
 
@@ -123,7 +133,6 @@ class PushNotificationService {
     isOpenedFromNotification = true;
     if(message.data['type'] =='msj'){}
     navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreen()),);
-
   }
 
 
