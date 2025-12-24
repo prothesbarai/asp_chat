@@ -82,7 +82,7 @@ class _CoupleDailyLoveState extends State<CoupleDailyLove> {
                       children: [
                         Text(_messageBoxTitle, style: GoogleFonts.pacifico(fontSize: 28, color: Colors.white,),),
                         SizedBox(height: 15),
-                        Text("You are my sunshine, my love. Every day with you is my favorite day. 💕", style: GoogleFonts.lato(fontSize: 20, color: Colors.white70,), textAlign: TextAlign.center,),
+                        Text(_messageBoxMessage, style: GoogleFonts.lato(fontSize: 20, color: Colors.white70,), textAlign: TextAlign.center,),
                         SizedBox(height: 20),
                         Text(_messageBoxDate, style: GoogleFonts.lato(fontSize: 16, color: Colors.white54, fontStyle: FontStyle.italic,),),
                         SizedBox(height: 20),
