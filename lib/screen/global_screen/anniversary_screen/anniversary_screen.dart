@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
-
-import '../../utils/constant/app_colors.dart';
+import '../../../utils/constant/app_colors.dart';
+import 'anniversary_date_helper.dart';
 
 class AnniversaryScreen extends StatefulWidget {
   const AnniversaryScreen({super.key});
@@ -18,6 +18,7 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
   bool _showHistory = false;
   String _password = "";
   String _anniversaryMessage = "";
+  String _anniversaryTitle = "";
   String _anniversaryYears = "";
   bool isLoading = false;
   final TextEditingController _pinController = TextEditingController();
@@ -38,6 +39,7 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
       setState(() {
         _password = doc['password'].toString();
         _anniversaryMessage = doc['anniversary_message'] ?? '';
+        _anniversaryTitle = doc['anniversary_title'] ?? '';
         _anniversaryYears = doc['anniversary_years'] ?? '';
         isLoading = false;
       });
@@ -54,6 +56,8 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final data = sequentialAnniversaryHelper();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -70,54 +74,70 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
                   Lottie.asset('assets/lottie/bird.json', width: double.infinity, height: 200,),
                   const SizedBox(height: 20),
                   // >>> Anniversary Date Card
-                  _buildAnniversaryDateCard("16 October 2016"),
-                  // >>> Title
-                  Text('Happy Anniversary', textAlign: TextAlign.center, style: GoogleFonts.pacifico(fontSize: 36, color: Colors.white, fontWeight: FontWeight.bold,),),
-                  const SizedBox(height: 10),
-                  // >>> Subtitle
-                  Text('$_anniversaryYears Years Together ❤️', textAlign: TextAlign.center, style: GoogleFonts.lato(fontSize: 22, color: Colors.white70,),),
-                  const SizedBox(height: 30),
-
-                  SizedBox(
-                    child: isLoading ? LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,) :
-                    Text(_anniversaryMessage,textAlign: TextAlign.center, style: GoogleFonts.lato(fontSize: 22, color: Colors.white70,),),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), gradient: LinearGradient(colors: data["isToday"] ? [Colors.pinkAccent, Colors.purple] : [Colors.white.withValues(alpha : 0.25), Colors.white.withValues(alpha : 0.08),],), border: Border.all(color: Colors.white24),),
+                    child: Row(
+                      children: [
+                        Icon(data["icon"], color: Colors.white, size: 24),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(data["title"], style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white,),),
+                            const SizedBox(height: 4),
+                            Text("${data["date"]} • ${data["status"]}", style: GoogleFonts.lato(fontSize: 14, color: Colors.white70,),),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-
-
-                  const SizedBox(height: 30),
-
-                  // >>> History Content (shows only if password is correct)
-                  if (_showHistory) _buildHistoryContent(),
-
                   const SizedBox(height: 20),
-
-                  Row(
-                    children: [
-                      // Protected History Section
-                      Expanded(
-                        flex: 1,
-                        child: GestureDetector(
-                          onTap: () {_showPasswordDialog();},
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                            decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(30),),
-                            alignment: Alignment.center,
-                            child: Text('💌 Love Story', style: GoogleFonts.pacifico(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,),),
+                  if(data['title'] != "Upcoming Anniversary")...[
+                    // >>> Title
+                    Text('Happy $_anniversaryTitle', textAlign: TextAlign.center, style: GoogleFonts.pacifico(fontSize: 36, color: Colors.white, fontWeight: FontWeight.bold,),),
+                    const SizedBox(height: 10),
+                    // >>> Subtitle
+                    Text(_anniversaryYears, textAlign: TextAlign.center, style: GoogleFonts.lato(fontSize: 22, color: Colors.white70,),),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      child: isLoading ? LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,) :
+                      Text(_anniversaryMessage,textAlign: TextAlign.center, style: GoogleFonts.lato(fontSize: 22, color: Colors.white70,),),
+                    ),
+                    const SizedBox(height: 30),
+                    // >>> History Content (shows only if password is correct)
+                    if (_showHistory) _buildHistoryContent(),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        // Protected History Section
+                        Expanded(
+                          flex: 1,
+                          child: GestureDetector(
+                            onTap: () {_showPasswordDialog();},
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                              decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(30),),
+                              alignment: Alignment.center,
+                              child: Text('💌 Love Story', style: GoogleFonts.pacifico(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,),),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 10,),
-                      // >>> Send Wishes Button
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),), backgroundColor: Colors.pinkAccent,),
-                          onPressed: () {},
-                          child: const Text('Send Wishes', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                        SizedBox(width: 10,),
+                        // >>> Send Wishes Button
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),), backgroundColor: Colors.pinkAccent,),
+                            onPressed: () {},
+                            child: const Text('Send Wishes', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
+
+
 
                   const SizedBox(height: 20),
 
@@ -131,25 +151,27 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
   }
 
   /// >>> Build Anniversary Date Card ==========================================
-  Widget _buildAnniversaryDateCard(String dateText) {
+/*  Widget _buildSequentialAnniversaryCard() {
+    final data = sequentialAnniversaryHelper();
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        gradient: LinearGradient(colors: [Colors.white.withValues(alpha: 0.25), Colors.white.withValues(alpha: 0.08),], begin: Alignment.topLeft, end: Alignment.bottomRight,),
-        border: Border.all(color: Colors.white24),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 12, offset: const Offset(0, 6),),],
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), gradient: LinearGradient(colors: data["isToday"] ? [Colors.pinkAccent, Colors.purple] : [Colors.white.withValues(alpha : 0.25), Colors.white.withValues(alpha : 0.08),],), border: Border.all(color: Colors.white24),),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.calendar_month, color: Colors.white, size: 22),
-          const SizedBox(width: 10),
-          Text(dateText, style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white, letterSpacing: 1,),),
+          Icon(data["icon"], color: Colors.white, size: 24),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(data["title"], style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white,),),
+              const SizedBox(height: 4),
+              Text("${data["date"]} • ${data["status"]}", style: GoogleFonts.lato(fontSize: 14, color: Colors.white70,),),
+            ],
+          ),
         ],
       ),
     );
-  }
+  }*/
   /// <<< Build Anniversary Date Card ==========================================
 
   /// >>> Memory Card Widget Build =============================================

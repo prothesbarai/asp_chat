@@ -1,5 +1,5 @@
 import 'package:asp_chat/authentications/registration_screen.dart';
-import 'package:asp_chat/screen/global_screen/anniversary_screen.dart';
+import 'package:asp_chat/screen/global_screen/anniversary_screen/anniversary_screen.dart';
 import 'package:asp_chat/screen/home_screen/home_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

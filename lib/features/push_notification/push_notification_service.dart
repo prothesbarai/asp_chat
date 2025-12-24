@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
-import 'package:asp_chat/screen/global_screen/anniversary_screen.dart';
+import 'package:asp_chat/screen/global_screen/anniversary_screen/anniversary_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
