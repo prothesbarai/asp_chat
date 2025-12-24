@@ -137,21 +137,21 @@ class PushNotificationService {
   void handleMessage(RemoteMessage message) {
     isOpenedFromNotification = true;
     final data = anyMapEmptySpaceRemover(message.data);
-    final type1 = data['click_action_title'];
+    final anniversary = data['anniversary'];
     final type2 = data['click_action_id'];
     final type3 = data['click_action_v1'];
     final type4 = data['click_action_v2'];
     final type5 = data['click_action'];
-    if (kDebugMode) {print('FCM Data: $data');print('Type: $type1 $type2 $type3 $type4 $type5');}
-    if (type1 == 'shreyasi') {
-      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenThree(),),);
+    if (kDebugMode) {print('FCM Data: $data');print('Type: $anniversary $type2 $type3 $type4 $type5');}
+    if (anniversary == 'anniversary') {
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => AnniversaryScreen(),),);
     }
     else if (type2 == 'prothes') {
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenTwo(),),);
     }
     else {
       // >>> default
-      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => AnniversaryScreen()),);
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenThree()),);
     }
   }
   /// <<< Navigate Page Handled Function =======================================
