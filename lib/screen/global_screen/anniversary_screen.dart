@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
+
+import '../../utils/constant/app_colors.dart';
 
 class AnniversaryScreen extends StatefulWidget {
   const AnniversaryScreen({super.key});
@@ -12,8 +16,34 @@ class AnniversaryScreen extends StatefulWidget {
 
 class _AnniversaryScreenState extends State<AnniversaryScreen> {
   bool _showHistory = false;
-  final String _password = "1916";
+  String _password = "";
+  String _anniversaryMessage = "";
+  String _anniversaryYears = "";
+  bool isLoading = false;
   final TextEditingController _pinController = TextEditingController();
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAnniversaryData();
+  }
+
+  /// >>> Get Data From Firebase ===============================================
+  Future<void> _fetchAnniversaryData() async {
+    setState(() {isLoading = true;});
+    final doc = await FirebaseFirestore.instance.collection('anniversary').doc('sp').get();
+    if (doc.exists) {
+      setState(() {
+        _password = doc['password'].toString();
+        _anniversaryMessage = doc['anniversary_message'] ?? '';
+        _anniversaryYears = doc['anniversary_years'] ?? '';
+        isLoading = false;
+      });
+    }
+  }
+  /// <<< Get Data From Firebase ===============================================
 
 
   @override
@@ -39,13 +69,20 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
                   // >>> Lottie Animation
                   Lottie.asset('assets/lottie/bird.json', width: double.infinity, height: 200,),
                   const SizedBox(height: 20),
+                  // >>> Anniversary Date Card
+                  _buildAnniversaryDateCard("16 October 2016"),
                   // >>> Title
                   Text('Happy Anniversary', textAlign: TextAlign.center, style: GoogleFonts.pacifico(fontSize: 36, color: Colors.white, fontWeight: FontWeight.bold,),),
                   const SizedBox(height: 10),
                   // >>> Subtitle
-                  Text('5 Years Together ❤️', textAlign: TextAlign.center, style: GoogleFonts.lato(fontSize: 22, color: Colors.white70,),),
+                  Text('$_anniversaryYears Years Together ❤️', textAlign: TextAlign.center, style: GoogleFonts.lato(fontSize: 22, color: Colors.white70,),),
                   const SizedBox(height: 30),
-                  // >>> Memory Timeline Cards
+
+                  SizedBox(
+                    child: isLoading ? LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,) :
+                    Text(_anniversaryMessage,textAlign: TextAlign.center, style: GoogleFonts.lato(fontSize: 22, color: Colors.white70,),),
+                  ),
+
 
                   const SizedBox(height: 30),
 
@@ -92,6 +129,28 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
       ),
     );
   }
+
+  /// >>> Build Anniversary Date Card ==========================================
+  Widget _buildAnniversaryDateCard(String dateText) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        gradient: LinearGradient(colors: [Colors.white.withValues(alpha: 0.25), Colors.white.withValues(alpha: 0.08),], begin: Alignment.topLeft, end: Alignment.bottomRight,),
+        border: Border.all(color: Colors.white24),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 12, offset: const Offset(0, 6),),],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.calendar_month, color: Colors.white, size: 22),
+          const SizedBox(width: 10),
+          Text(dateText, style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white, letterSpacing: 1,),),
+        ],
+      ),
+    );
+  }
+  /// <<< Build Anniversary Date Card ==========================================
 
   /// >>> Memory Card Widget Build =============================================
   Widget _buildMemoryCard({required String title, required String date, required String description, required IconData icon,}) {
@@ -176,5 +235,5 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
       },
     );
   }
-/// >>> Password Dialog ======================================================
+  /// >>> Password Dialog ======================================================
 }
