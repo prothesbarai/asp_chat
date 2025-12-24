@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../main.dart';
-import '../../screen/global_screen/global_screen_three.dart';
+import '../../screen/global_screen/couple_daily_love/couple_daily_love.dart';
 import '../../screen/global_screen/global_screen_two.dart';
 import 'in_app_dialogue.dart';
 
@@ -138,20 +138,20 @@ class PushNotificationService {
     isOpenedFromNotification = true;
     final data = anyMapEmptySpaceRemover(message.data);
     final anniversary = data['anniversary'];
-    final type2 = data['click_action_id'];
+    final coupleDailyLove = data['coupleDailyLove'];
     final type3 = data['click_action_v1'];
     final type4 = data['click_action_v2'];
     final type5 = data['click_action'];
-    if (kDebugMode) {print('FCM Data: $data');print('Type: $anniversary $type2 $type3 $type4 $type5');}
+    if (kDebugMode) {print('FCM Data: $data');print('Type: $anniversary $coupleDailyLove $type3 $type4 $type5');}
     if (anniversary == 'anniversary') {
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => AnniversaryScreen(),),);
     }
-    else if (type2 == 'prothes') {
-      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenTwo(),),);
+    else if (coupleDailyLove == 'coupleDailyLove') {
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => CoupleDailyLove(),),);
     }
     else {
       // >>> default
-      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenThree()),);
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenTwo()),);
     }
   }
   /// <<< Navigate Page Handled Function =======================================

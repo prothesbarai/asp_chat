@@ -1,5 +1,4 @@
 import 'package:asp_chat/authentications/registration_screen.dart';
-import 'package:asp_chat/screen/global_screen/anniversary_screen/anniversary_screen.dart';
 import 'package:asp_chat/screen/home_screen/home_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_info_provider.dart';
+import '../screen/global_screen/couple_daily_love/couple_daily_love.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -289,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         ElevatedButton(
                             onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => AnniversaryScreen(),));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => CoupleDailyLove(),));
                             },
                             child: Text("Temp Test Page")
                         )
