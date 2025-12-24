@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
-import 'package:asp_chat/screen/global_screen/global_screen.dart';
+import 'package:asp_chat/screen/global_screen/global_screen_one.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../main.dart';
+import '../../screen/global_screen/global_screen_three.dart';
+import '../../screen/global_screen/global_screen_two.dart';
 import 'in_app_dialogue.dart';
 
 
@@ -56,7 +58,7 @@ class PushNotificationService {
 
       // >>> Only When App is Open then Show a Dialogue
       if (navigatorKey.currentState != null) {
-        inAppDialogue(navigatorKey.currentState!, message, () {navigatorKey.currentState!.push(MaterialPageRoute(builder: (_) => GlobalScreen(),),);},);
+        inAppDialogue(navigatorKey.currentState!, message, () {handleMessage(message);},);
       }
       // <<< Only When App is Open then Show a Dialogue
 
@@ -98,10 +100,9 @@ class PushNotificationService {
         priority: Priority.high ,
         ticker: 'ticker' ,
         //playSound: true,
-
         //sound: channel.sound
-      //     sound: RawResourceAndroidNotificationSound('jetsons_doorbell')
-      //  icon: largeIconPath
+        //sound: RawResourceAndroidNotificationSound('jetsons_doorbell')
+        //icon: largeIconPath
     );
     const DarwinNotificationDetails darwinNotificationDetails = DarwinNotificationDetails(presentAlert: true , presentBadge: true , presentSound: true);
     NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: darwinNotificationDetails);
@@ -129,14 +130,43 @@ class PushNotificationService {
   }
   /// <<< Handle tap on notification when app is in background or terminated ===
 
+
+
   void handleMessage(RemoteMessage message) {
     isOpenedFromNotification = true;
-    if(message.data['type'] =='msj'){}
-    navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreen()),);
+    final data = anyMapEmptySpaceRemover(message.data);
+    final type1 = data['click_action_title'];
+    final type2 = data['click_action_id'];
+    final type3 = data['click_action_v1'];
+    final type4 = data['click_action_v2'];
+    final type5 = data['click_action'];
+    if (kDebugMode) {print('FCM Data: $data');print('Type: $type1 $type2 $type3 $type4 $type5');}
+    if (type1 == 'title') {
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenThree(),),);
+    }
+    else if (type2 == 'profile') {
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenTwo(),),);
+    }
+    else {
+      // >>> default
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenOne()),);
+    }
   }
 
 
+  /// >>> For Only IOS Foreground Navigate Purpose =============================
   Future foregroundMessage() async {await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true,);}
+  /// <<< For Only IOS Foreground Navigate Purpose =============================
 
-
+  
+  
+  /// >>> For Empty Space Remover Method For Multipage Navigate ================
+  Map<String,dynamic> anyMapEmptySpaceRemover(Map<String, dynamic> data){
+    final cleanMap = <String,dynamic>{};
+    data.forEach((key,value){
+      cleanMap[key.trim()] = value is String ? value.trim() : value;
+    });
+    return cleanMap;
+  }
+  /// <<< For Empty Space Remover Method For Multipage Navigate ================
 }
