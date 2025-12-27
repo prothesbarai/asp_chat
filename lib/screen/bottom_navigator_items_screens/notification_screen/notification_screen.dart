@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -16,6 +19,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
   DateTime? _selectedDateTime;
   bool _isLoading = false;
   late CountdownHelper _countdownHelper;
+  bool _hasPlayedSound = false;
+  bool _userSetDate = false;
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  //late final Timer _timer;
+
 
 
   String get formattedDateTime {
@@ -28,7 +36,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     /// >>> Back Counter Timer Initialize ======================================
-    _countdownHelper = CountdownHelper(onTick: () {if (mounted) setState(() {});},);
+    _countdownHelper = CountdownHelper(onTick: () {if (mounted) setState(() {});  _checkCountdownZero();},);
     /// <<< Back Counter Timer Initialize ======================================
     _loadDateTimeFromFirebase();
   }
@@ -61,6 +69,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   /// >>> Date Time picker =====================================================
   Future<void> _pickDateTime() async {
+    _hasPlayedSound = false;
     DateTime? pickedDate = await showDatePicker(
       context: context,
       firstDate: DateTime(2000),
@@ -68,23 +77,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
       helpText: 'Select a date',
       builder: (context, child) {return Theme(data: Theme.of(context).copyWith(colorScheme: ColorScheme.light(primary: Theme.of(context).colorScheme.primary, onPrimary: Theme.of(context).colorScheme.onSurface, onSurface: Theme.of(context).colorScheme.primary,), dialogTheme: DialogThemeData(backgroundColor: Colors.grey[900]),), child: child!,);},
     );
-
     if (pickedDate == null || !mounted) return;
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: _selectedDateTime != null ? TimeOfDay.fromDateTime(_selectedDateTime!) : TimeOfDay.now(),
-      builder: (context, child) {return Theme(data: Theme.of(context).copyWith(colorScheme: ColorScheme.light(primary: Theme.of(context).colorScheme.primary, onPrimary: Theme.of(context).colorScheme.onSurface, onSurface: Theme.of(context).colorScheme.primary,), timePickerTheme: TimePickerThemeData(backgroundColor: Colors.grey[900],),), child: child!,);},
+      builder: (context, child) {return Theme(data: Theme.of(context).copyWith(colorScheme: ColorScheme.light(primary: Theme.of(context).colorScheme.primary, onPrimary: Theme.of(context).colorScheme.onSurface, onSurface: Theme.of(context).colorScheme.primary,), timePickerTheme: TimePickerThemeData(backgroundColor: Colors.grey[900]),), child: child!,);},
     );
     if (pickedTime == null || !mounted) return;
     final newDateTime = DateTime(pickedDate.year, pickedDate.month, pickedDate.day, pickedTime.hour, pickedTime.minute, DateTime.now().second,);
     if (!mounted) return;
-    setState(() {_isLoading = true;_selectedDateTime = newDateTime;});
-    await _storeDateTimeToFirebase();
-    _countdownHelper.handle(newDateTime);
+    // >>> Only set the countdown if the date is in the future
+    if (newDateTime.isAfter(DateTime.now())) {
+      _userSetDate = true;
+      setState(() {_isLoading = true;_selectedDateTime = newDateTime;});
+      await _storeDateTimeToFirebase();
+      _countdownHelper.handle(newDateTime);
+    } else {
+      // >>>  Old date selected
+      _userSetDate = false;
+      setState(() {_selectedDateTime = newDateTime;});
+    }
     if (!mounted) return;
     setState(() => _isLoading = false);
   }
-
   /// <<< Date Time picker =====================================================
 
 
@@ -97,8 +112,37 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
 
 
+  /// >>> Check if countdown ended && Play Sound ===============================
+  void _checkCountdownZero() {
+    if (_userSetDate && !_countdownHelper.isFuture && !_hasPlayedSound) {
+      _hasPlayedSound = true;
+      _playAlarmSound();
+      _userSetDate = false; // reset so it won't play again automatically
+    }
+  }
+  void _playAlarmSound() async {
+    try {
+      await _audioPlayer.play(AssetSource('sounds/alarm1.mp3'));
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+    } catch (e) {
+      debugPrint("Error playing alarm sound: $e");
+    }
+  }
+  void _stopAlarmSound() async {
+    try {
+      await _audioPlayer.stop();
+      setState(() {_hasPlayedSound = false;});
+    } catch (e) {
+      debugPrint("Error stopping alarm sound: $e");
+    }
+  }
+  /// <<< Check if countdown ended && Play Sound ===============================
+
+
+
   @override
   void dispose() {
+    _audioPlayer.stop();
     _countdownHelper.dispose();
     super.dispose();
   }
@@ -164,8 +208,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       _buildCountdownBlock(parts.seconds.toString().padLeft(2,'0'), 'Seconds'),
                     ],
                   ),
+                ],
+                if (_hasPlayedSound && !uiShow) ...[
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {_stopAlarmSound();},
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),),
+                    child: const Text("Stop Alarm", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),),
+                  ),
                 ]
-
               ],
             ),
 

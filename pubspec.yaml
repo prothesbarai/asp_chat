@@ -62,8 +62,8 @@ dependencies:
   firebase_messaging: ^16.1.0
   flutter_local_notifications: ^19.5.0
   app_settings: ^7.0.0
-  # For Alarm
-  timezone: ^0.10.1
+  # For Alarm Sound
+  audioplayers: ^6.5.1
   # For Google Fonts
   google_fonts: ^6.3.3
   # For Unique ID Generator
@@ -113,6 +113,8 @@ flutter:
     - 'assets/images/placeholder.png'
     - assets/lottie/bird.json
     - assets/lottie/no_internet.json
+    - assets/sounds/alarm1.mp3
+    - assets/sounds/alarm2.mp3
 
 flutter_icons:
   android: true
