@@ -111,19 +111,21 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
                     Row(
                       children: [
                         // Protected History Section
-                        Expanded(
-                          flex: 1,
-                          child: GestureDetector(
-                            onTap: () {_showPasswordDialog();},
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                              decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(30),),
-                              alignment: Alignment.center,
-                              child: Text('💌 Love Story', style: GoogleFonts.pacifico(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,),),
+                        if(!_showHistory)...[
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                              onTap: () {_showPasswordDialog();},
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                                decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(30),),
+                                alignment: Alignment.center,
+                                child: Text('💌 Love Story', style: GoogleFonts.pacifico(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,),),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 10,),
+                          SizedBox(width: 10,),
+                        ],
                         // >>> Send Wishes Button
                         Expanded(
                           flex: 1,
@@ -150,29 +152,6 @@ class _AnniversaryScreenState extends State<AnniversaryScreen> {
     );
   }
 
-  /// >>> Build Anniversary Date Card ==========================================
-/*  Widget _buildSequentialAnniversaryCard() {
-    final data = sequentialAnniversaryHelper();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), gradient: LinearGradient(colors: data["isToday"] ? [Colors.pinkAccent, Colors.purple] : [Colors.white.withValues(alpha : 0.25), Colors.white.withValues(alpha : 0.08),],), border: Border.all(color: Colors.white24),),
-      child: Row(
-        children: [
-          Icon(data["icon"], color: Colors.white, size: 24),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(data["title"], style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white,),),
-              const SizedBox(height: 4),
-              Text("${data["date"]} • ${data["status"]}", style: GoogleFonts.lato(fontSize: 14, color: Colors.white70,),),
-            ],
-          ),
-        ],
-      ),
-    );
-  }*/
-  /// <<< Build Anniversary Date Card ==========================================
 
   /// >>> Memory Card Widget Build =============================================
   Widget _buildMemoryCard({required String title, required String date, required String description, required IconData icon,}) {
