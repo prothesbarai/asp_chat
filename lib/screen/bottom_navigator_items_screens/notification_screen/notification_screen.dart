@@ -22,7 +22,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   bool _hasPlayedSound = false;
   bool _userSetDate = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
-  //late final Timer _timer;
 
 
 
@@ -36,7 +35,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     /// >>> Back Counter Timer Initialize ======================================
-    _countdownHelper = CountdownHelper(onTick: () {if (mounted) setState(() {});  _checkCountdownZero();},);
+    _countdownHelper = CountdownHelper(onTick: () {if (mounted) setState(() {});  /* For Alarm Function*/ _checkCountdownZero();},);
     /// <<< Back Counter Timer Initialize ======================================
     _loadDateTimeFromFirebase();
   }
