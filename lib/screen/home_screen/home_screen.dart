@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/user_info_provider.dart';
 import '../bottom_navigator_items_screens/chat_screens/chat_screen.dart';
+import '../bottom_navigator_items_screens/notification_screen/notification_screen.dart';
 import '../demo.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  List<Widget> pages = [ChatScreen(), Demo(title: "Stories",), Demo(title: "Notifications",), MenuScreen()];
+  List<Widget> pages = [ChatScreen(), Demo(title: "Stories",), NotificationScreen(), MenuScreen()];
   List<String> appBarTitles = ["Chats", "Stories", "Notifications", "Menu",];
   List<List<Widget>> get appBarActions => [
 
