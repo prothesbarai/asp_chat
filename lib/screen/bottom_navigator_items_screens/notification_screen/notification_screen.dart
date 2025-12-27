@@ -103,6 +103,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     } else {
       _userSetDate = false;
       setState(() {_selectedDateTime = newDateTime;});
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Can't set alarm. Old Date-Time selected!"), duration: Duration(seconds: 3), behavior: SnackBarBehavior.floating,),);
     }
     if (!mounted) return;
     setState(() => _isLoading = false);
