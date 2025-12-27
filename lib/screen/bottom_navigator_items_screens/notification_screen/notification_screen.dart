@@ -106,7 +106,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     /// >>> Back Counter Timer UI Show Specific Parts ==========================
     final parts = _countdownHelper.countdownInDays;
     /// <<< Back Counter Timer UI Show Specific Parts ==========================
@@ -193,7 +193,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(8),
           elevation: 6,
-          shadowColor: Colors.blueAccent.withValues(alpha: 0.5),
+          shadowColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
           child: Padding(padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), child: Text(value, style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold,),),),
         ),
         const SizedBox(height: 6),
