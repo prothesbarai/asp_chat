@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../main.dart';
 import '../../screen/global_screen/couple_daily_love/couple_daily_love.dart';
-import '../../screen/global_screen/global_screen_two.dart';
 import 'in_app_dialogue.dart';
 
 
@@ -145,12 +144,9 @@ class PushNotificationService {
     if (anniversary == 'anniversary') {
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => AnniversaryScreen(),),);
     }
-    else if (coupleDailyLove == 'coupleDailyLove') {
-      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => CoupleDailyLove(),),);
-    }
     else {
       // >>> default
-      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => GlobalScreenTwo()),);
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => CoupleDailyLove(),),);
     }
   }
   /// <<< Navigate Page Handled Function =======================================

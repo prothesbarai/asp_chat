@@ -6,7 +6,6 @@ Map<String, dynamic> sequentialAnniversaryHelper() {
 
   // >>> fixed anniversary days (sequential order)
   final List<Map<String, dynamic>> dates = [
-    {"title": "Birthday 💖", "day": 27, "month": 12},
     {"title": "Birthday 💖", "day": 15, "month": 1},
     {"title": "Anniversary 💖", "day": 23, "month": 1},
     {"title": "Kiss Day 💖", "day": 30, "month": 3},
