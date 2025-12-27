@@ -109,6 +109,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     /// >>> Back Counter Timer UI Show Specific Parts ==========================
     final parts = _countdownHelper.countdownInDays;
+    final uiShow = _countdownHelper.isFuture;
     /// <<< Back Counter Timer UI Show Specific Parts ==========================
 
     return Scaffold(
@@ -149,20 +150,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),*/
 
 
-                const SizedBox(height: 30),
+                if(uiShow)...[
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildCountdownBlock(parts.days.toString().padLeft(2,'0'), 'Days'),
+                      const SizedBox(width: 8),
+                      _buildCountdownBlock(parts.hours.toString().padLeft(2,'0'), 'Hours'),
+                      const SizedBox(width: 8),
+                      _buildCountdownBlock(parts.minutes.toString().padLeft(2,'0'), 'Minutes'),
+                      const SizedBox(width: 8),
+                      _buildCountdownBlock(parts.seconds.toString().padLeft(2,'0'), 'Seconds'),
+                    ],
+                  ),
+                ]
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildCountdownBlock(parts.days.toString().padLeft(2,'0'), 'Days'),
-                    const SizedBox(width: 8),
-                    _buildCountdownBlock(parts.hours.toString().padLeft(2,'0'), 'Hours'),
-                    const SizedBox(width: 8),
-                    _buildCountdownBlock(parts.minutes.toString().padLeft(2,'0'), 'Minutes'),
-                    const SizedBox(width: 8),
-                    _buildCountdownBlock(parts.seconds.toString().padLeft(2,'0'), 'Seconds'),
-                  ],
-                ),
               ],
             ),
 

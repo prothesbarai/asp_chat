@@ -1,20 +1,20 @@
 import 'dart:async';
 
-/// A reusable helper for:
-/// - Comparing a target DateTime with current time
-/// - Running countdown if future
-/// - Returning formatted countdown text
+/// ->>> Comparing a target DateTime with current time
+/// ->>> Running countdown if future
+/// ->>> Returning formatted countdown text
 class CountdownHelper {
   Timer? _timer;
   Duration _remainingDuration = Duration.zero;
   bool _isFuture = false;
 
-  /// Callback to notify UI (setState / notifier / stream)
+  /// >>> Callback to notify UI (setState / notifier / stream) =================
   final void Function()? onTick;
-
   CountdownHelper({this.onTick});
+  /// <<< Callback to notify UI (setState / notifier / stream) =================
 
-  /// >>> Compare + Countdown handler
+
+  /// >>> Compare + Countdown handler ==========================================
   void handle(DateTime targetDateTime) {
     _timer?.cancel();
     void update() {
@@ -35,6 +35,7 @@ class CountdownHelper {
     // >>> start timer only if future
     if (targetDateTime.isAfter(DateTime.now())) {_timer = Timer.periodic(const Duration(seconds: 1), (_) => update(),);}
   }
+  /// <<< Compare + Countdown handler ==========================================
 
 
   /// >>> Countdown formatted as string (2-line, for legacy use) [Note : Direct Use so then call UI  Type 1 :  Call UI  : Text(_countdownHelper.formattedCountdown) Directly]
@@ -74,18 +75,20 @@ class CountdownHelper {
 
 
 
-  /// >>> Whether target datetime is in future
+  /// >>> Whether target datetime is in future =================================
   bool get isFuture => _isFuture;
+  /// <<< Whether target datetime is in future =================================
 
-  /// >>> Cleanup
+  /// >>> Cleanup ==============================================================
   void dispose() {
     _timer?.cancel();
   }
+  /// <<< Cleanup ==============================================================
 }
 
 
 
-/// CountdownParts holds individual fields
+/// >>> CountdownParts holds individual fields =================================
 class CountdownParts {
   final int years;
   final int months;
@@ -97,3 +100,4 @@ class CountdownParts {
 
   CountdownParts({required this.years, required this.months, required this.days, required this.hours, required this.minutes, required this.seconds, required this.isFuture,});
 }
+/// <<< CountdownParts holds individual fields =================================
