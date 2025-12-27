@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_info_provider.dart';
-import '../screen/global_screen/anniversary_screen/anniversary_screen.dart';
-import '../screen/global_screen/couple_daily_love/couple_daily_love.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -287,13 +285,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 30),
                         // <<< CREATE ACCOUNT BUTTON ===========================
 
-
-                        ElevatedButton(
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => AnniversaryScreen(),));
-                            },
-                            child: Text("Temp Test Page")
-                        )
                       ],
                     ),
                   ),

@@ -17,13 +17,27 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
 
   late WebViewController controller;
   bool isLoading = true;
+  bool isValidUrl = true;
 
   @override
   void initState() {
     super.initState();
-    controller = WebViewController()..setJavaScriptMode(JavaScriptMode.unrestricted)..setNavigationDelegate(NavigationDelegate(onPageFinished: (url) {
-      setState(() {isLoading = false;});
-    },))..loadRequest(Uri.parse(widget.url));
+
+    String url = widget.url;
+    // >>> URL empty check
+    if (url.isEmpty) {isValidUrl = false;return;}
+    // >>> Missing scheme add
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {url = "https://$url";}
+
+    // >>> Uri parse check
+    final uri = Uri.tryParse(url);
+    if (uri == null || (uri.scheme != "http" && uri.scheme != "https")) {isValidUrl = false;return;}
+
+    // >>> if Valid URL controller set
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(NavigationDelegate(onPageFinished: (url) {setState(() {isLoading = false;});},),)
+      ..loadRequest(uri);
   }
 
 
@@ -33,13 +47,14 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.title,style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),)),),
-      body: Stack(
+      body: isValidUrl ? Stack(
         children: [
           WebViewWidget(controller: controller),
           if (isLoading)
             Center(child: LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,),),
         ],
-      )
+      ) :
+      Center(child: Text("Invalid or empty URL", style: TextStyle(fontSize: 16, color: Colors.red),)),
     );
   }
 }
