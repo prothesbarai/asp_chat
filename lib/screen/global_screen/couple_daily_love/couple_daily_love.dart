@@ -22,6 +22,14 @@ class _CoupleDailyLoveState extends State<CoupleDailyLove> {
   String _prothesImgUrl = "";
   String _messageBoxDate = "";
   String _messageBoxMessage = "";
+  String _imgTitleShreyasi = "";
+  String _imgTitleProthes = "";
+  String _dailyTipsQuoteTitle = "";
+  String _dailyTipsOne = "";
+  String _dailyTipsTwo = "";
+  String _dailyTipsThree = "";
+  String _dailyTipsFour = "";
+  String _footerText = "";
   bool isLoading = false;
 
 
@@ -44,6 +52,14 @@ class _CoupleDailyLoveState extends State<CoupleDailyLove> {
         _prothesImgUrl = doc['prothes_img_url'] ?? '';
         _messageBoxDate = doc['message_box_date'] ?? '';
         _messageBoxMessage = doc['message_box_message'] ?? '';
+        _imgTitleShreyasi = doc['img_title_shreyasi'] ?? '';
+        _imgTitleProthes = doc['img_title_prothes'] ?? '';
+        _dailyTipsQuoteTitle = doc['daily_tips_quote_title'] ?? '';
+        _footerText = doc['footer_text'] ?? '';
+        _dailyTipsOne = doc['daily_tips_one'] ?? '';
+        _dailyTipsTwo = doc['daily_tips_two'] ?? '';
+        _dailyTipsThree = doc['daily_tips_three'] ?? '';
+        _dailyTipsFour = doc['daily_tips_four'] ?? '';
         isLoading = false;
       });
     }
@@ -97,8 +113,8 @@ class _CoupleDailyLoveState extends State<CoupleDailyLove> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _coupleProfile("You", _shreyasiImgUrl),
-                      _coupleProfile("Me", _prothesImgUrl),
+                      _coupleProfile(_imgTitleShreyasi, _shreyasiImgUrl),
+                      _coupleProfile(_imgTitleProthes, _prothesImgUrl),
                     ],
                   ),
 
@@ -110,16 +126,16 @@ class _CoupleDailyLoveState extends State<CoupleDailyLove> {
                     decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20),),
                     child: Column(
                       children: [
-                        Text("Daily Love Tips", style: GoogleFonts.pacifico(fontSize: 24, color: Colors.white,),),
+                        Text(_dailyTipsQuoteTitle, style: GoogleFonts.pacifico(fontSize: 24, color: Colors.white,),),
                         SizedBox(height: 15),
-                        Text("💌 Send a sweet good morning text\n🌹 Surprise your partner once a week\n❤️ Compliment them genuinely every day\n✨ Spend 10 minutes together without phone distractions", style: GoogleFonts.lato(fontSize: 18, color: Colors.white70,), textAlign: TextAlign.center,),
+                        Text("$_dailyTipsOne\n$_dailyTipsTwo\n$_dailyTipsThree\n$_dailyTipsFour", style: GoogleFonts.lato(fontSize: 18, color: Colors.white70,), textAlign: TextAlign.center,),
                       ],
                     ),
                   ),
 
                   SizedBox(height: 60),
                   // >>> Footer
-                  Text("Made with ❤️ for couples", style: GoogleFonts.lato(fontSize: 16, color: Colors.white54, fontStyle: FontStyle.italic,),),
+                  Text(_footerText, style: GoogleFonts.lato(fontSize: 16, color: Colors.white54, fontStyle: FontStyle.italic,),),
                   SizedBox(height: 20),
                 ],
               ),

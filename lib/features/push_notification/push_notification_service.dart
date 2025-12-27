@@ -11,7 +11,6 @@ import '../../screen/global_screen/global_screen_two.dart';
 import 'in_app_dialogue.dart';
 
 
-
 class PushNotificationService {
 
   /// >>> Initialising firebase message plugin =================================
