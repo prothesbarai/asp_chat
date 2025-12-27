@@ -66,7 +66,7 @@ class CountdownHelper {
   CountdownParts get countdownInDays {
     if (!_isFuture) {return CountdownParts(years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, isFuture: false,);}
     int totalSeconds = _remainingDuration.inSeconds;
-    int totalDays = totalSeconds ~/ (24 * 3600); // Total days including years + months
+    int totalDays = totalSeconds ~/ (24 * 3600); // >>> Total days including years + months
     int hours = (_remainingDuration.inHours) % 24;
     int minutes = (_remainingDuration.inMinutes) % 60;
     int seconds = (_remainingDuration.inSeconds) % 60;
