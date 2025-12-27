@@ -68,7 +68,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   /// >>> Date Time picker =====================================================
   Future<void> _pickDateTime() async {
-    _hasPlayedSound = false;
     DateTime? pickedDate = await showDatePicker(
       context: context,
       firstDate: DateTime(2000),
@@ -76,23 +75,32 @@ class _NotificationScreenState extends State<NotificationScreen> {
       helpText: 'Select a date',
       builder: (context, child) {return Theme(data: Theme.of(context).copyWith(colorScheme: ColorScheme.light(primary: Theme.of(context).colorScheme.primary, onPrimary: Theme.of(context).colorScheme.onSurface, onSurface: Theme.of(context).colorScheme.primary,), dialogTheme: DialogThemeData(backgroundColor: Colors.grey[900]),), child: child!,);},
     );
+
     if (pickedDate == null || !mounted) return;
+
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: _selectedDateTime != null ? TimeOfDay.fromDateTime(_selectedDateTime!) : TimeOfDay.now(),
       builder: (context, child) {return Theme(data: Theme.of(context).copyWith(colorScheme: ColorScheme.light(primary: Theme.of(context).colorScheme.primary, onPrimary: Theme.of(context).colorScheme.onSurface, onSurface: Theme.of(context).colorScheme.primary,), timePickerTheme: TimePickerThemeData(backgroundColor: Colors.grey[900]),), child: child!,);},
     );
+
     if (pickedTime == null || !mounted) return;
+
     final newDateTime = DateTime(pickedDate.year, pickedDate.month, pickedDate.day, pickedTime.hour, pickedTime.minute, DateTime.now().second,);
+
     if (!mounted) return;
-    // >>> Only set the countdown if the date is in the future
+
+    // Stop any currently playing alarm
+    if (_hasPlayedSound) {_stopAlarmSound();}
+
     if (newDateTime.isAfter(DateTime.now())) {
       _userSetDate = true;
       setState(() {_isLoading = true;_selectedDateTime = newDateTime;});
+      // Store the new datetime in Firebase
       await _storeDateTimeToFirebase();
+      // Reset countdown for the new datetime
       _countdownHelper.handle(newDateTime);
     } else {
-      // >>>  Old date selected
       _userSetDate = false;
       setState(() {_selectedDateTime = newDateTime;});
     }
