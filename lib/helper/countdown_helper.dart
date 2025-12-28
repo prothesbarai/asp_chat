@@ -13,7 +13,6 @@ class CountdownHelper {
   CountdownHelper({this.onTick});
   /// <<< Callback to notify UI (setState / notifier / stream) =================
 
-
   /// >>> Compare + Countdown handler ==========================================
   void handle(DateTime targetDateTime) {
     _timer?.cancel();
@@ -38,12 +37,12 @@ class CountdownHelper {
   /// <<< Compare + Countdown handler ==========================================
 
 
+
   /// >>> Countdown formatted as string (2-line, for legacy use) [Note : Direct Use so then call UI  Type 1 :  Call UI  : Text(_countdownHelper.formattedCountdown) Directly]
    String get formattedCountdown {
     final parts = countdownParts;
     return parts.isFuture ? "${parts.years.toString().padLeft(2, '0')}Y ${parts.months.toString().padLeft(2, '0')}M ${parts.days.toString().padLeft(2, '0')}D\nHour ${parts.hours.toString().padLeft(2, '0')} : Min ${parts.minutes.toString().padLeft(2, '0')} : Sec ${parts.seconds.toString().padLeft(2, '0')}" : "00Y 00M 00D\nHour 00 : Min 00 : Sec 00";
   }
-
   /// >>> Countdown parts as structured data for UI  [ Note : For Specific Parts UI Call Purpose Type 2 :  Call UI  : final parts = _countdownHelper.countdownParts; Text(parts.years) Only Single Part]
   CountdownParts get countdownParts {
     if (!_isFuture) {return CountdownParts(years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, isFuture: false,);}
@@ -61,7 +60,6 @@ class CountdownHelper {
 
     return CountdownParts(years: years, months: months, days: remainingDays, hours: hours, minutes: minutes, seconds: seconds, isFuture: true,);
   }
-
   /// >>> Extra: Countdown parts in TOTAL Days + HH:MM:SS (Year+Month converted to Days) [ Note : For Specific Parts UI Call Purpose Type 3 :  Call UI  : final parts = _countdownHelper.countdownInDays; Text(parts.days) Only Single Part]
   CountdownParts get countdownInDays {
     if (!_isFuture) {return CountdownParts(years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, isFuture: false,);}
@@ -72,7 +70,6 @@ class CountdownHelper {
     int seconds = (_remainingDuration.inSeconds) % 60;
     return CountdownParts(years: 0, months: 0, days: totalDays, hours: hours, minutes: minutes, seconds: seconds, isFuture: true,);
   }
-
 
 
   /// >>> Whether target datetime is in future =================================
