@@ -18,7 +18,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       onTap: onTap,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.message), label: "Chats"),
-        BottomNavigationBarItem(icon: Icon(Icons.history), label: "Stories"),
+        BottomNavigationBarItem(icon: Icon(Icons.rocket_launch), label: "Gemini"),
         BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notifications"),
         BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
       ],

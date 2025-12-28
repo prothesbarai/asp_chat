@@ -226,7 +226,7 @@ class _AlarmSetScreenState extends State<AlarmSetScreen> {
               ],
             ),
 
-            // Loader Overlay
+            // >>> Loader Overlay
             if (_isLoading)
               Container(
                 decoration: BoxDecoration(
