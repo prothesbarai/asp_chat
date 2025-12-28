@@ -11,6 +11,7 @@ class AppColors {
   static const List<Color> loginGradiant = [Color(0xFFFF5F7E),Color(0xFFC06BD8),Color(0xFF5A77FF)];
   static const List<Color> splashGradient = [Color(0xFF5A77FF), Color(0xFFC06BD8), Color(0xFFFF5F7E),];
   static const List<Color> registrationGradient = [Color(0xFF5A77FF), Color(0xFFC06BD8), Color(0xFFFF5F7E), Color(0xFFFFC542)];
+  static const List<Color> textRepeatBgGradient = [Color(0xFF5A77FF), Color(0xFFC06BD8), Color(0xFF5A77FF), Color(0xFFC06BD8),];
 
   static const List<Color> videoPageGradient = [Color(0xFF0F1023), Color(0xFF1B1D3C), Color(0xFF5A77FF),];
 }
