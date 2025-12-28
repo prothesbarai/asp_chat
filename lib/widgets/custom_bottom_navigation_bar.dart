@@ -19,7 +19,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.message), label: "Chats"),
         BottomNavigationBarItem(icon: Icon(Icons.rocket_launch), label: "Gemini"),
-        BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notifications"),
+        BottomNavigationBarItem(icon: Icon(Icons.rocket_launch), label: "ChatGPT"),
         BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
       ],
     );

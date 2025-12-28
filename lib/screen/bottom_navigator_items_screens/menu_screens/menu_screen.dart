@@ -1,5 +1,6 @@
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment/entertainment_screen.dart';
-import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen.dart';
+import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen/settings_screen.dart';
+import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/tranalator_screen/translator_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 const Divider(thickness: 6),
                 menuItem(icon: Icons.movie_filter_outlined, title: "Entertainment",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => EntertainmentScreen(),));}),
                 menuItem(icon: Icons.message, title: "Message requests",onTap: (){}),
-                menuItem(icon: Icons.archive, title: "Archive",onTap: (){}),
+                menuItem(icon: Icons.translate, title: "Google Translator",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => TranslatorScreen(),));}),
                 const SizedBox(height: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
