@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/alarm_set_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -112,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                   const SizedBox(height: 30),
                   // >>> SECTION: Home icon + name
-                  _menuItem(icon: Icons.home, title: "View security alerts",),
+                  _menuItem(icon: Icons.alarm, title: "View security alerts",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
                   const SizedBox(height: 10),
                   // >>> SECTION TITLE
                   _sectionTitle("Accounts"),
