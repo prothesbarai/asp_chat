@@ -18,7 +18,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
   String _output = '';
   String _repeatType = 'Regular';
   bool isChecked = true;
-  String? _selectedRadioValue;
+  String? _selectedEmoji;
   bool previousEmoji = false;
   bool nextEmoji = false;
 
@@ -28,6 +28,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
     String text = _textController.text;
     int limit = int.tryParse(_limitController.text) ?? 1;
     String separator = '';
+
     if(_repeatType == "Space"){
       separator = ' ';
     }else if(_repeatType == "New Line"){
@@ -35,7 +36,32 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
     }else{
       separator = '';
     }
-    setState(() {_output = List.filled(limit, text).join(separator);});
+
+
+    String emoji = _selectedEmoji ?? '';
+    String repeatedText = '';
+
+    for (int i = 0; i < limit; i++) {
+      String current = text;
+
+      // Add emoji if checkbox is selected
+      if (previousEmoji && nextEmoji) {
+        current = '$emoji$current$emoji';
+      } else if (previousEmoji) {
+        current = '$emoji$current';
+      } else if (nextEmoji) {
+        current = '$current$emoji';
+      }
+
+      repeatedText += current;
+      if (i != limit - 1) repeatedText += separator;
+    }
+
+    setState(() {
+      _output = repeatedText;
+    });
+
+
   }
   /// <<< Generated Text Function Here =========================================
 
@@ -48,7 +74,6 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
     setState(() {
       _output = '';
       _repeatType = 'Regular';
-      _selectedRadioValue = null;
     });
   }
   /// <<< Reset Text Function Here =============================================
@@ -156,7 +181,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                                   SizedBox(width: 10,),
                                   Expanded(
                                     child: DropdownButtonFormField<String>(
-                                      initialValue: _selectedRadioValue,
+                                      initialValue: _selectedEmoji,
                                       dropdownColor: Theme.of(context).colorScheme.surface,
                                       icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
                                       style: const TextStyle(color: Colors.white),
@@ -176,7 +201,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                                       items: AppString.dropdownEmojiList.map((item) {
                                         return DropdownMenuItem<String>(value: item, child: Text(item, style: TextStyle(color: Theme.of(context).colorScheme.onSurface,),),);
                                       }).toList(),
-                                      onChanged: (value) {setState(() {_selectedRadioValue = value;});},
+                                      onChanged: (value) {setState(() {_selectedEmoji = value;});},
                                     ),
                                   )
                                 ],
@@ -217,7 +242,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                                     children: [
                                       Checkbox(
                                         value: previousEmoji,
-                                        onChanged: (newValue) {setState(() {previousEmoji = newValue!; print(previousEmoji);});},
+                                        onChanged: (newValue) {setState(() {previousEmoji = newValue!;});},
                                         activeColor: AppColors.secondaryColor,
                                         focusColor: AppColors.secondaryColor,
                                         side: BorderSide(color: Colors.white),
@@ -229,7 +254,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                                     children: [
                                       Checkbox(
                                         value: nextEmoji,
-                                        onChanged: (newValue) {setState(() {nextEmoji = newValue!; print(previousEmoji);});},
+                                        onChanged: (newValue) {setState(() {nextEmoji = newValue!;});},
                                         activeColor: AppColors.secondaryColor,
                                         focusColor: AppColors.secondaryColor,
                                         side: BorderSide(color: Colors.white),
