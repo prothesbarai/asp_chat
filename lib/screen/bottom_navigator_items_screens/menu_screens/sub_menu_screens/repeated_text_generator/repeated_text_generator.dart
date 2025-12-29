@@ -18,7 +18,9 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
   String _output = '';
   String _repeatType = 'Regular';
   bool isChecked = true;
-  String? _selectedValue;
+  String? _selectedRadioValue;
+  bool previousEmoji = false;
+  bool nextEmoji = false;
 
 
   /// >>> Generated Text Function Here =========================================
@@ -46,7 +48,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
     setState(() {
       _output = '';
       _repeatType = 'Regular';
-      _selectedValue = null;
+      _selectedRadioValue = null;
     });
   }
   /// <<< Reset Text Function Here =============================================
@@ -118,21 +120,22 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                             Container(
                               margin: EdgeInsets.symmetric(horizontal: 40),
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     child: TextFormField(
                                       style: TextStyle(color: Colors.white),
                                       decoration: InputDecoration(
-                                          hintText: "Repetition Limit",
-                                          filled: false,
-                                          hintStyle: TextStyle(color: Colors.white70),
-                                          prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.numbers, color: Colors.white, size: 20,),),
-                                          contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                          counterStyle: TextStyle(color: Colors.white)
+                                        hintText: "Repetition Limit",
+                                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                                        filled: false,
+                                        hintStyle: TextStyle(color: Colors.white70),
+                                        prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.numbers, color: Colors.white, size: 20,),),
+                                        contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                        counterStyle: TextStyle(color: Colors.white),
                                       ),
                                       maxLength: 4,
                                       buildCounter: (context, {required currentLength, required isFocused, maxLength,}) => null,
@@ -141,6 +144,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                                       controller: _limitController,
                                       autovalidateMode: AutovalidateMode.onUserInteraction,
                                       inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+
                                       validator: (value) {
                                         if (value == null || value.trim().isEmpty) {
                                           return "Empty";
@@ -152,34 +156,28 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                                   SizedBox(width: 10,),
                                   Expanded(
                                     child: DropdownButtonFormField<String>(
-                                        initialValue: _selectedValue,
-                                        dropdownColor: Theme.of(context).colorScheme.surface,
-                                        icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-                                        style: const TextStyle(color: Colors.white),
-                                        decoration: InputDecoration(
-                                            hintText: "Emoji",
-                                            hintStyle: const TextStyle(color: Colors.white),
-                                            prefixIcon: const Padding(padding: EdgeInsets.only(left: 15.0), child: Icon(Icons.emoji_emotions_outlined, color: Colors.white, size: 20,),),
-                                            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                                            enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
-                                            focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
-                                            border: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
-                                            fillColor: Colors.transparent
-                                        ),
-                                        items: AppString.dropdownEmojiList.map((item) {
-                                          return DropdownMenuItem<String>(value: item, child: Text(item, style: TextStyle(color: Theme.of(context).colorScheme.onSurface,),),);
-                                        }).toList(),
-                                        onChanged: (value) {
-                                          setState(() {_selectedValue = value;});
-                                        },
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return "Empty";
-                                          }
-                                          return null;
-                                        },
+                                      initialValue: _selectedRadioValue,
+                                      dropdownColor: Theme.of(context).colorScheme.surface,
+                                      icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                                      style: const TextStyle(color: Colors.white),
+                                      alignment: Alignment.center,
+                                      decoration: InputDecoration(
+                                        hintText: "Emoji",
+                                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                                        hintStyle: const TextStyle(color: Colors.white),
+                                        prefixIcon: const Padding(padding: EdgeInsets.only(left: 15.0), child: Icon(Icons.emoji_emotions_outlined, color: Colors.white, size: 20,),),
+                                        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                                        enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                        focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                        border: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                        fillColor: Colors.transparent,
+                                        isDense: true,
                                       ),
+                                      items: AppString.dropdownEmojiList.map((item) {
+                                        return DropdownMenuItem<String>(value: item, child: Text(item, style: TextStyle(color: Theme.of(context).colorScheme.onSurface,),),);
+                                      }).toList(),
+                                      onChanged: (value) {setState(() {_selectedRadioValue = value;});},
+                                    ),
                                   )
                                 ],
                               ),
@@ -198,7 +196,7 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: ['Regular', 'Space', 'New Line'].map((type) {
-                                        return Row(children: [Radio<String>(value: type), Text(type, style: TextStyle(color: Colors.white),),],);
+                                        return Row(children: [Radio<String>(value: type,side: BorderSide(color: Colors.white),), Text(type, style: TextStyle(color: Colors.white),),],);
                                       }).toList(),
                                     ),
                                   ),
@@ -210,10 +208,37 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
 
 
                             // >>> Check Box ===================================
-                            Row(
-                              children: [
-
-                              ],
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 40),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: previousEmoji,
+                                        onChanged: (newValue) {setState(() {previousEmoji = newValue!; print(previousEmoji);});},
+                                        activeColor: AppColors.secondaryColor,
+                                        focusColor: AppColors.secondaryColor,
+                                        side: BorderSide(color: Colors.white),
+                                      ),
+                                      Text("Previous Emoji"),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: nextEmoji,
+                                        onChanged: (newValue) {setState(() {nextEmoji = newValue!; print(previousEmoji);});},
+                                        activeColor: AppColors.secondaryColor,
+                                        focusColor: AppColors.secondaryColor,
+                                        side: BorderSide(color: Colors.white),
+                                      ),
+                                      Text("Next Emoji"),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                             // <<< Check Box ===================================
 
