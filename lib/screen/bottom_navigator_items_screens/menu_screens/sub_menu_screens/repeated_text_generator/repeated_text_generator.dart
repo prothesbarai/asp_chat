@@ -17,14 +17,16 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
   final _formKey = GlobalKey<FormState>();
   String _output = '';
   String _repeatType = 'Regular';
+  bool _isGenerating = false; // >>> When Loop is Running show loader
   bool isChecked = true;
-  String? _selectedEmoji;
+  String? _selectedFirstEmoji;
+  String? _selectedLastEmoji;
   bool previousEmoji = false;
   bool nextEmoji = false;
 
 
   /// >>> Generated Text Function Here =========================================
-  void _generatedText() {
+  void _generatedText() async {
     String text = _textController.text;
     int limit = int.tryParse(_limitController.text) ?? 1;
     String separator = '';
@@ -37,28 +39,34 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
       separator = '';
     }
 
-
-    String emoji = _selectedEmoji ?? '';
+    String firstEmoji = _selectedFirstEmoji ?? '';
+    String lastEmoji = _selectedLastEmoji ?? '';
     String repeatedText = '';
 
-    for (int i = 0; i < limit; i++) {
+    setState(() {
+      _isGenerating = true; // >>> loader start
+      _output = '';
+    });
+
+    for(int i = 0; i < limit; i++){
       String current = text;
-
-      // Add emoji if checkbox is selected
-      if (previousEmoji && nextEmoji) {
-        current = '$emoji$current$emoji';
-      } else if (previousEmoji) {
-        current = '$emoji$current';
-      } else if (nextEmoji) {
-        current = '$current$emoji';
+      if(previousEmoji && nextEmoji){
+        current = '$firstEmoji$current$lastEmoji';
+      }else if(previousEmoji){
+        current = '$firstEmoji$current';
+      }else if(nextEmoji){
+        current = '$current$lastEmoji';
       }
-
       repeatedText += current;
-      if (i != limit - 1) repeatedText += separator;
-    }
+      if(i != limit - 1) repeatedText += separator;
 
+      if (i % 200 == 0) { // >>> After 200 Loop Rest UI 1 sec
+        await Future.delayed(const Duration(milliseconds: 1));
+      }
+    }
     setState(() {
       _output = repeatedText;
+      _isGenerating = false;  // >>> loader stop
     });
 
 
@@ -72,8 +80,12 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
     _textController.clear();
     _limitController.clear();
     setState(() {
+      _selectedFirstEmoji = null;
+      _selectedLastEmoji = null;
       _output = '';
       _repeatType = 'Regular';
+      previousEmoji = false;
+      nextEmoji = false;
     });
   }
   /// <<< Reset Text Function Here =============================================
@@ -99,236 +111,313 @@ class _RepeatedTextGeneratorState extends State<RepeatedTextGenerator> {
                 // >>> Gradient Background =====================================
                 Container(decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: AppColors.textRepeatBgGradient.map((color) => color.withValues(alpha: 0.5)).toList(),),),),
                 // <<< Gradient Background =====================================
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-
-                            // >>> TEXT FIELD ==================================
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 40),
-                              child: TextFormField(
-                                style: TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
-                                  filled: false,
-                                  hintText: "Text",
-                                  hintStyle: TextStyle(color: Colors.white70),
-                                  prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.text_fields, color: Colors.white, size: 20,),),
-                                  contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                  counterStyle: TextStyle(color: Colors.white),
-                                ),
-                                minLines: 1,
-                                maxLines: 4,
-                                keyboardType: TextInputType.text,
-                                cursorColor: Colors.white,
-                                controller: _textController,
-                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                validator: (value){
-                                  if(value == null || value.trim().isEmpty){
-                                    return "Field is Empty";
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            // <<< TEXT FIELD ==================================
-
-                            // >>> Number & Emoji FIELD ========================
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 40),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                      style: TextStyle(color: Colors.white),
-                                      decoration: InputDecoration(
-                                        hintText: "Repetition Limit",
-                                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                                        filled: false,
-                                        hintStyle: TextStyle(color: Colors.white70),
-                                        prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.numbers, color: Colors.white, size: 20,),),
-                                        contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
-                                        counterStyle: TextStyle(color: Colors.white),
-                                      ),
-                                      maxLength: 4,
-                                      buildCounter: (context, {required currentLength, required isFocused, maxLength,}) => null,
-                                      keyboardType: TextInputType.number,
-                                      cursorColor: Colors.white,
-                                      controller: _limitController,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
-
-                                      validator: (value) {
-                                        if (value == null || value.trim().isEmpty) {
-                                          return "Empty";
-                                        }
-                                        return null;
-                                      },
-                                    ),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                  
+                              // >>> TEXT FIELD ================================
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 40),
+                                child: TextFormField(
+                                  style: TextStyle(color: Colors.white),
+                                  decoration: InputDecoration(
+                                    filled: false,
+                                    hintText: "Text",
+                                    hintStyle: TextStyle(color: Colors.white70),
+                                    prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.text_fields, color: Colors.white, size: 20,),),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                    counterStyle: TextStyle(color: Colors.white),
                                   ),
-                                  SizedBox(width: 10,),
-                                  Expanded(
-                                    child: DropdownButtonFormField<String>(
-                                      initialValue: _selectedEmoji,
-                                      dropdownColor: Theme.of(context).colorScheme.surface,
-                                      icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-                                      style: const TextStyle(color: Colors.white),
-                                      alignment: Alignment.center,
-                                      decoration: InputDecoration(
-                                        hintText: "Emoji",
-                                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                                        hintStyle: const TextStyle(color: Colors.white),
-                                        prefixIcon: const Padding(padding: EdgeInsets.only(left: 15.0), child: Icon(Icons.emoji_emotions_outlined, color: Colors.white, size: 20,),),
-                                        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                                        enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
-                                        focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
-                                        border: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
-                                        fillColor: Colors.transparent,
-                                        isDense: true,
-                                      ),
-                                      items: AppString.dropdownEmojiList.map((item) {
-                                        return DropdownMenuItem<String>(value: item, child: Text(item, style: TextStyle(color: Theme.of(context).colorScheme.onSurface,),),);
-                                      }).toList(),
-                                      onChanged: (value) {setState(() {_selectedEmoji = value;});},
-                                    ),
-                                  )
-                                ],
+                                  minLines: 1,
+                                  maxLines: 4,
+                                  keyboardType: TextInputType.text,
+                                  cursorColor: Colors.white,
+                                  controller: _textController,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  validator: (value){
+                                    if(value == null || value.trim().isEmpty){
+                                      return "Field is Empty";
+                                    }
+                                    return null;
+                                  },
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 20),
-                            // <<< Number & Emoji FIELD ========================
+                              SizedBox(height: 20),
+                              // <<< TEXT FIELD ================================
 
 
-                            // >>> Radio Button ================================
-                            Row(
+                              // >>> NUMBER FIELD ==============================
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 40),
+                                child: TextFormField(
+                                  style: TextStyle(color: Colors.white),
+                                  decoration: InputDecoration(
+                                    hintText: "Repetition Limit",
+                                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                                    filled: false,
+                                    hintStyle: TextStyle(color: Colors.white70),
+                                    prefixIcon: Padding(padding: const EdgeInsets.only(left: 15.0), child: Icon(Icons.numbers, color: Colors.white, size: 20,),),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                    counterStyle: TextStyle(color: Colors.white),
+                                  ),
+                                  maxLength: 4,
+                                  buildCounter: (context, {required currentLength, required isFocused, maxLength,}) => null,
+                                  keyboardType: TextInputType.number,
+                                  cursorColor: Colors.white,
+                                  controller: _limitController,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return "Empty";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              // <<< NUMBER FIELD ==============================
+
+
+                              // >>> Number & Emoji FIELD ======================
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 40),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: DropdownButtonFormField<String>(
+                                        initialValue: _selectedFirstEmoji,
+                                        dropdownColor: Theme.of(context).colorScheme.surface,
+                                        icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                                        style: const TextStyle(color: Colors.white),
+                                        alignment: Alignment.center,
+                                        decoration: InputDecoration(
+                                          hintText: "F.E",
+                                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                                          hintStyle: const TextStyle(color: Colors.white),
+                                          prefixIcon: const Padding(padding: EdgeInsets.only(left: 15.0), child: Icon(Icons.emoji_emotions_outlined, color: Colors.white, size: 20,),),
+                                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                                          enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                          focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                          border: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                          fillColor: Colors.transparent,
+                                          isDense: true,
+                                        ),
+                                        items: AppString.dropdownEmojiList.map((item) {
+                                          return DropdownMenuItem<String>(value: item, child: Text(item, style: TextStyle(color: Theme.of(context).colorScheme.onSurface,),),);
+                                        }).toList(),
+                                        onChanged: (value) {setState(() {_selectedFirstEmoji = value;});},
+                                      ),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Expanded(
+                                      child: DropdownButtonFormField<String>(
+                                        initialValue: _selectedLastEmoji,
+                                        dropdownColor: Theme.of(context).colorScheme.surface,
+                                        icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                                        style: const TextStyle(color: Colors.white),
+                                        alignment: Alignment.center,
+                                        decoration: InputDecoration(
+                                          hintText: "L.E",
+                                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                                          hintStyle: const TextStyle(color: Colors.white),
+                                          prefixIcon: const Padding(padding: EdgeInsets.only(left: 15.0), child: Icon(Icons.emoji_emotions_outlined, color: Colors.white, size: 20,),),
+                                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                                          enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                          focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                          border: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(35),),
+                                          fillColor: Colors.transparent,
+                                          isDense: true,
+                                        ),
+                                        items: AppString.dropdownEmojiList.map((item) {
+                                          return DropdownMenuItem<String>(value: item, child: Text(item, style: TextStyle(color: Theme.of(context).colorScheme.onSurface,),),);
+                                        }).toList(),
+                                        onChanged: (value) {setState(() {_selectedLastEmoji = value;});},
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              // <<< Number & Emoji FIELD ========================
+                  
+                  
+                              // >>> Radio Button ================================
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    RadioGroup<String>(
+                                      groupValue: _repeatType,
+                                      onChanged: (value) {setState(() {_repeatType = value!;});},
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: ['Regular', 'Space', 'New Line'].map((type) {
+                                          return Row(children: [Radio<String>(value: type,side: BorderSide(color: Colors.white),), Text(type, style: TextStyle(color: Colors.white),),],);
+                                        }).toList(),
+                                      ),
+                                    ),
+                  
+                                  ]
+                              ),
+                              const SizedBox(height: 16),
+                              // <<< Radio Button ================================
+                  
+                  
+                              // >>> Check Box ===================================
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 40),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Checkbox(
+                                          value: previousEmoji,
+                                          onChanged: (newValue) {
+                                            if(_selectedFirstEmoji != null && _selectedFirstEmoji!.isNotEmpty){
+                                              setState(() {previousEmoji = newValue!;});
+                                            }else{
+                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('F.E Field এ আগে একটি emoji নির্বাচন করুন'), duration: Duration(seconds: 2),),);
+                                            }
+                                          },
+                                          activeColor: AppColors.secondaryColor,
+                                          focusColor: AppColors.secondaryColor,
+                                          side: BorderSide(color: Colors.white),
+                                        ),
+                                        Text("Previous Emoji"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Checkbox(
+                                          value: nextEmoji,
+                                          onChanged: (newValue) {
+                                            if(_selectedLastEmoji != null && _selectedLastEmoji!.isNotEmpty){
+                                              setState(() {nextEmoji = newValue!;});
+                                            }else{
+                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('L.E Field এ আগে একটি emoji নির্বাচন করুন'), duration: Duration(seconds: 2),),);
+                                            }
+                                          },
+                                          activeColor: AppColors.secondaryColor,
+                                          focusColor: AppColors.secondaryColor,
+                                          side: BorderSide(color: Colors.white),
+                                        ),
+                                        Text("Next Emoji"),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // <<< Check Box ===================================
+                  
+                  
+                              // >>> Reset & Generated Two Button ================
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  RadioGroup<String>(
-                                    groupValue: _repeatType,
-                                    onChanged: (value) {setState(() {_repeatType = value!;});},
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: ['Regular', 'Space', 'New Line'].map((type) {
-                                        return Row(children: [Radio<String>(value: type,side: BorderSide(color: Colors.white),), Text(type, style: TextStyle(color: Colors.white),),],);
-                                      }).toList(),
-                                    ),
+                                  ElevatedButton(
+                                    onPressed: (){FocusScope.of(context).unfocus();_resetText();},
+                                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.buttonBgColor, foregroundColor: AppColors.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),padding: EdgeInsets.symmetric(horizontal: 12,vertical: 5)),
+                                    child: const Text('Reset'),
                                   ),
-
-                                ]
-                            ),
-                            const SizedBox(height: 16),
-                            // <<< Radio Button ================================
-
-
-                            // >>> Check Box ===================================
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 40),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                        value: previousEmoji,
-                                        onChanged: (newValue) {setState(() {previousEmoji = newValue!;});},
-                                        activeColor: AppColors.secondaryColor,
-                                        focusColor: AppColors.secondaryColor,
-                                        side: BorderSide(color: Colors.white),
-                                      ),
-                                      Text("Previous Emoji"),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                        value: nextEmoji,
-                                        onChanged: (newValue) {setState(() {nextEmoji = newValue!;});},
-                                        activeColor: AppColors.secondaryColor,
-                                        focusColor: AppColors.secondaryColor,
-                                        side: BorderSide(color: Colors.white),
-                                      ),
-                                      Text("Next Emoji"),
-                                    ],
+                                  ElevatedButton(
+                                    onPressed: _isGenerating? null : (){FocusScope.of(context).unfocus();if(_formKey.currentState!.validate()){_generatedText();}},
+                                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.buttonBgColor, foregroundColor: AppColors.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),padding: EdgeInsets.symmetric(horizontal: 12,vertical: 5)),
+                                    child: const Text('Generate'),
                                   ),
                                 ],
                               ),
-                            ),
-                            // <<< Check Box ===================================
-
-
-                            // >>> Reset & Generated Two Button ================
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: (){FocusScope.of(context).unfocus();if(_formKey.currentState!.validate()){_resetText();}},
-                                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.buttonBgColor, foregroundColor: AppColors.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),padding: EdgeInsets.symmetric(horizontal: 12,vertical: 5)),
-                                  child: const Text('Reset'),
-                                ),
-                                ElevatedButton(
-                                  onPressed: (){FocusScope.of(context).unfocus();if(_formKey.currentState!.validate()){_generatedText();}},
-                                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.buttonBgColor, foregroundColor: AppColors.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),padding: EdgeInsets.symmetric(horizontal: 12,vertical: 5)),
-                                  child: const Text('Generate'),
-                                ),
-                              ],
-                            ),
-                            // <<< Reset & Generated Two Button ================
-
-                          ],
+                              // <<< Reset & Generated Two Button ================
+                  
+                            ],
+                          ),
                         ),
                       ),
+
+
+                      if(_output.isNotEmpty)...[
+                        SizedBox(
+                          height: 220,
+                          child: SingleChildScrollView(
+                            primary: false,
+                            physics: const ClampingScrollPhysics(),
+                            child: Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8),),
+                              child: Text(_output,style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 18),),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+
+                    ],
+                  ),
+                ),
+
+                // >>> For Copy And Share Button ===============================
+                if(_output.isNotEmpty)...[
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: _output));
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')),);
+                          },
+                          icon: const Icon(Icons.copy),
+                          label: const Text('Copy To Clipboard'),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () async{
+                            if(_output.isNotEmpty) await SharePlus.instance.share(ShareParams(text: _output));
+                          },
+                          icon: const Icon(Icons.share),
+                          label: const Text('Share'),
+                        ),
+                      ],
                     ),
+                  ),
+                ],
+                // <<< For Copy And Share Button ===============================
 
 
-                    if(_output.isNotEmpty)...[
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.all(12),
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8),),
-                            child: Text(_output,style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 18),),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // >>> When Generate Text then show loader UI ==================
+                if (_isGenerating)
+                  Container(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    child: const Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: _output));
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')),);
-                            },
-                            icon: const Icon(Icons.copy),
-                            label: const Text('Copy To Clipboard'),
-                          ),
-                          ElevatedButton.icon(
-                            onPressed: () async{
-                              if(_output.isNotEmpty) await SharePlus.instance.share(ShareParams(text: _output));
-                            },
-                            icon: const Icon(Icons.share),
-                            label: const Text('Share'),
-                          ),
+                          CircularProgressIndicator(color: Colors.white),
+                          SizedBox(height: 12),
+                          Text("Generating...", style: TextStyle(color: Colors.white),)
                         ],
                       ),
-                    ],
-
-                  ],
-                ),
+                    ),
+                  ),
+                // <<< When Generate Text then show loader UI ==================
               ],
             )
         )
