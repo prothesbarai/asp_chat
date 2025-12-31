@@ -117,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const SizedBox(height: 10),
                   // >>> SECTION TITLE
                   _sectionTitle("Accounts"),
-                  _menuItem(icon: Icons.switch_account, title: "Switch account",),
+                  //_menuItem(icon: Icons.switch_account, title: "Switch account",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
                   const SizedBox(height: 20),
                   _sectionTitle("Profile"),
                   _menuItem(
