@@ -16,6 +16,14 @@
 
 
 
+    <!--For Three State Alarm Set Purpose-->
+    <!--<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
+
+
+
+
     <!--  THIS LINE IS CRITICAL FOR 16KB FIX
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"

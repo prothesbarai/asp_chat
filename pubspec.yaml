@@ -64,6 +64,7 @@ dependencies:
   app_settings: ^7.0.0
   # For Alarm Sound
   audioplayers: ^6.5.1
+  timezone: ^0.10.1
   # For Google Fonts
   google_fonts: ^6.3.3
   # For Unique ID Generator
