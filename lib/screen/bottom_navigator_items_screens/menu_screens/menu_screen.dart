@@ -69,25 +69,43 @@ class _MenuScreenState extends State<MenuScreen> {
                 menuItem(
                   icon: Icons.logout,
                   title: "Log out",
-                  onTap: () async {
-                    final userProvider =
-                    Provider.of<UserInfoProvider>(context, listen: false);
-                    final FirebaseAuth auth = FirebaseAuth.instance;
-                    try {
-                      // >>> sign out from Firebase
-                      await auth.signOut();
-                      // >>> user data clear From Hive / Provider
-                      await userProvider.clearUser();
-                      if (!mounted) return;
-                      // >>> Login page এ navigate
-                      _navigateLoginPage();
-                    } catch (e) {
-                      debugPrint("Logout error: $e");
-                    }
+                  onTap: () {
+                    // >>> Conformation Message ================================
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          backgroundColor: Theme.of(context).cardColor,
+                          title: Text("Log Out", style: TextStyle(color: Theme.of(context).primaryColor),),
+                          content: Text("Are you sure you want to log out of your account?",style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                          actions: <Widget>[
+                            TextButton(child: const Text("Cancel"), onPressed: ()=>Navigator.of(context).pop(),),
+                            ElevatedButton(
+                              onPressed: () async{
+                                final userProvider = Provider.of<UserInfoProvider>(context, listen: false);
+                                final FirebaseAuth auth = FirebaseAuth.instance;
+                                try {
+                                  // >>> sign out from Firebase
+                                  await auth.signOut();
+                                  // >>> user data clear From Hive / Provider
+                                  await userProvider.clearUser();
+                                  if (!mounted) return;
+                                  // >>> Login page এ navigate
+                                  _navigateLoginPage();
+                                } catch (e) {
+                                  debugPrint("Logout error: $e");
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.red,),
+                              child: const Text("Log Out"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    // <<< Conformation Message ================================
                   },
-
                 ),
-
               ],
             );
           },
