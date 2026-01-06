@@ -1,4 +1,5 @@
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment/entertainment_screen.dart';
+import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/mood_status_screen/mood_status_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/repeated_text_generator/repeated_text_generator.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen/settings_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/tranalator_screen/translator_screen.dart';
@@ -60,12 +61,10 @@ class _MenuScreenState extends State<MenuScreen> {
                 const Divider(thickness: 6),
                 menuItem(icon: Icons.movie_filter_outlined, title: "Entertainment",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => EntertainmentScreen(),));}),
                 menuItem(icon: Icons.repeat, title: "Repeat Text Generator",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => RepeatedTextGenerator(),));}),
+                menuItem(icon: Icons.mood, title: "Mood Status Share",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MoodStatusScreen(),));}),
                 menuItem(icon: Icons.translate, title: "Google Translator",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => TranslatorScreen(),));}),
                 const SizedBox(height: 16),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text("More", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey,),),
-                ),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text("More", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey,),),),
                 menuItem(
                   icon: Icons.logout,
                   title: "Log out",

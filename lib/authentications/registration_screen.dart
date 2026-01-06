@@ -362,10 +362,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   await userCrendetial.user!.updateDisplayName(name);
                                   // >>> Save phone & other info in Firestore
                                   await FirebaseFirestore.instance.collection("users").doc(userCrendetial.user!.uid).set({
+                                    "uid": userCrendetial.user!.uid,
                                     "name": name,
                                     "email": email,
                                     "phone": phone,
+                                    // >>> Account
                                     "status": "Unavailable",
+                                    "isPremium": false,
+                                    // >>> Relationship Info
+                                    "relationship": {
+                                      "partnerUid": null,
+                                      "role": null,
+                                      "connectedAt": null,
+                                      "requestStatus": "none"
+                                    },
+                                    // >>> Mood System
+                                    "mood": {
+                                      "currentMood": "neutral",
+                                      "emoji": "😐",
+                                      "note": "",
+                                      "updatedAt": FieldValue.serverTimestamp()
+                                    },
                                     "entertainment": {
                                       "video1" : {
                                         "thumbnail": "",
@@ -373,7 +390,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         "url" : ""
                                       }
                                     },
-                                    "uid": userCrendetial.user!.uid,
                                     "createdAt": FieldValue.serverTimestamp(),
                                   });
 

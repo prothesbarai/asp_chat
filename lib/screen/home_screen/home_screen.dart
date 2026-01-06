@@ -8,7 +8,6 @@ import '../../providers/user_info_provider.dart';
 import '../bottom_navigator_items_screens/chat_gpt_screen/chat_gpt_screen.dart';
 import '../bottom_navigator_items_screens/chat_screens/chat_screen.dart';
 import '../bottom_navigator_items_screens/gemini_screen/gemini_screen.dart';
-import '../global_screen/couple_daily_love/couple_daily_love.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  List<Widget> pages = [CoupleDailyLove(), GeminiScreen(), ChatGptScreen(), MenuScreen()];
+  List<Widget> pages = [ChatScreen(), GeminiScreen(), ChatGptScreen(), MenuScreen()];
   List<String> appBarTitles = ["Chats", "Gemini", "ChatGPT", "Menu",];
   List<List<Widget>> get appBarActions => [
 
