@@ -64,16 +64,33 @@ class PushNotificationService {
     });
   }
   /// <<< Notification Initialization ==========================================
+  
+
+  /// >>> FCM Token / Device Token =============================================
+  Future<String> getDeviceToken() async {
+    String? token = await messaging.getToken();
+    return token!;
+  }
+  void isTokenRefresh()async{messaging.onTokenRefresh.listen((event) {event.toString();});}
+  /// <<< FCM Token / Device Token =============================================
+
+
+  /// >>> Subscribe all users to global topic ==================================
+  Future<void> subscribeAllUsersTopic() async {
+    await FirebaseMessaging.instance.subscribeToTopic("all_users");
+    if (kDebugMode) {debugPrint("Subscribed to topic: all_users");}
+  }
+  /// <<< Subscribe all users to global topic ==================================
 
 
   /// >>> Set Notification Permission ==========================================
   void requestNotificationPermission() async {
     NotificationSettings settings = await messaging.requestPermission(alert: true, announcement: true, badge: true, carPlay: true, criticalAlert: true, provisional: true, sound: true,);
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      debugPrint('user granted permission');
-    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      debugPrint('user granted provisional permission');
-    } else {
+    if (settings.authorizationStatus == AuthorizationStatus.authorized || settings.authorizationStatus == AuthorizationStatus.provisional) {
+      debugPrint('Notification permission granted');
+      // >>> HERE topic subscribe
+      await subscribeAllUsersTopic();
+    }else {
       // >>> If User Denied Notification
       AppSettings.openAppSettings(type: AppSettingsType.notification);
       debugPrint('user denied permission');
@@ -109,15 +126,6 @@ class PushNotificationService {
     Future.delayed(Duration.zero , (){_flutterLocalNotificationsPlugin.show(message.hashCode, message.notification!.title.toString(), message.notification!.body.toString(), notificationDetails ,);});
   }
   /// <<< Function to show visible notification when app is active =============
-
-
-  /// >>> FCM Token / Device Token =============================================
-  Future<String> getDeviceToken() async {
-    String? token = await messaging.getToken();
-    return token!;
-  }
-  void isTokenRefresh()async{messaging.onTokenRefresh.listen((event) {event.toString();});}
-  /// <<< FCM Token / Device Token =============================================
 
 
   /// >>> Handle tap on notification when app is in background or terminated ===
