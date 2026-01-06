@@ -64,7 +64,7 @@ class PushNotificationService {
     });
   }
   /// <<< Notification Initialization ==========================================
-  
+
 
   /// >>> FCM Token / Device Token =============================================
   Future<String> getDeviceToken() async {
