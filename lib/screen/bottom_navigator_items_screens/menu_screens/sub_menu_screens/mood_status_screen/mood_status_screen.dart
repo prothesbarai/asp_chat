@@ -87,6 +87,8 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
                   const SizedBox(height: 24),
                   const Divider(),
                   const SizedBox(height: 16),
+                  Text("My Partner Mood" ,style: TextStyle(color: AppColors.primaryColor,fontSize: 20, fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 16),
                   partnerUid != null ? _partnerMoodCard(partnerUid!) :Text("No partner connected", style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                   SizedBox(height: kBottomNavigationBarHeight,),
                 ],
@@ -109,7 +111,6 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
         )
     );
   }
-
 
   /// >>> ================= MY MOOD CARD =======================================
   Widget _myMoodCard(bool isPremium){
@@ -217,6 +218,7 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
           // >>> Check if document exists
           if(!data.exists) return Text("Partner data not found",style: TextStyle(color: Theme.of(context).colorScheme.onSurface),);
           final mood = data["mood"];
+          final relationShipStatus = data["relationship"];
           return Card(
             elevation: 4,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -225,6 +227,8 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
               child: Column(
                 children: [
                   Text(data["name"] ?? "Partner", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface)),
+                  const SizedBox(height: 8),
+                  Text(relationShipStatus["role"] ?? "Partner", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: AppColors.primaryColor)),
                   const SizedBox(height: 12),
                   Text(mood?["emoji"] ?? "😐", style: const TextStyle(fontSize: 64)),
                   const SizedBox(height: 8),
