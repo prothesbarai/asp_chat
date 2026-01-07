@@ -122,7 +122,7 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("My Mood", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface),),
+            Text("My Mood", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: AppColors.primaryColor),),
             const SizedBox(height: 12),
             // >>> Selected Emoji
             Center(child: Text(selectedMood?["emoji"] ?? "😐", style: TextStyle(fontSize: 64, color: Theme.of(context).colorScheme.onSurface ),),),
