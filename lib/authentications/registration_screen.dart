@@ -390,6 +390,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         "url" : ""
                                       }
                                     },
+                                    /*"autoMessage": {
+                                      "enabled": true,
+                                      "schedules": {
+                                        "morning": {
+                                          "hour": 7,
+                                          "minute": 0,
+                                          "text": "Good Morning ❤️"
+                                        },
+                                        "take_care": {
+                                          "hour": 15,
+                                          "minute": 0,
+                                          "text": "Take Care 💕"
+                                        },
+                                        "night": {
+                                          "hour": 22,
+                                          "minute": 30,
+                                          "text": "Good Night 🌙"
+                                        }
+                                      },
+                                      "lastSent": {
+                                        "morning": "2026-01-06",
+                                        "take_care": "2026-01-06",
+                                        "night": "2026-01-06"
+                                      }
+                                    },*/
                                     "createdAt": FieldValue.serverTimestamp(),
                                   });
 
