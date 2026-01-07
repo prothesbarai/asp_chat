@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import '../../../../../helper/date_time_helper.dart';
 import '../../../../../utils/constant/app_string.dart';
 
 class MoodStatusScreen extends StatefulWidget {
@@ -86,7 +87,8 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
                   const SizedBox(height: 24),
                   const Divider(),
                   const SizedBox(height: 16),
-                  partnerUid == null ? Text("No partner connected", style: TextStyle(color: Theme.of(context).colorScheme.onSurface),) : Text("_partnerMoodCard(partnerUid)",style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  partnerUid != null ? _partnerMoodCard(partnerUid!) :Text("No partner connected", style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  SizedBox(height: kBottomNavigationBarHeight,),
                 ],
               ),
             ),
@@ -188,7 +190,6 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
   }
   /// <<< ================= PREMIUM DROPDOWN ===================================
 
-
   /// >>> ================= UPDATE BUTTON ======================================
   Future<void> _updateMood() async {
     setState(() {isLoading = true;});
@@ -206,5 +207,43 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
   }
   /// <<< ================= UPDATE BUTTON ======================================
 
+  /// >>> ================= PARTNER MOOD CARD ==================================
+  Widget _partnerMoodCard(String partnerUid) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("users").doc(partnerUid).snapshots(),
+        builder: (context, snapshot) {
+          if(!snapshot.hasData) return Center(child: LoadingAnimationWidget.staggeredDotsWave(color: Colors.white, size: 36,),);
+          final data = snapshot.data!;
+          // >>> Check if document exists
+          if(!data.exists) return Text("Partner data not found",style: TextStyle(color: Theme.of(context).colorScheme.onSurface),);
+          final mood = data["mood"];
+          return Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(data["name"] ?? "Partner", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface)),
+                  const SizedBox(height: 12),
+                  Text(mood?["emoji"] ?? "😐", style: const TextStyle(fontSize: 64)),
+                  const SizedBox(height: 8),
+                  Text(mood?["currentMood"] ?? "Neutral", style: TextStyle(fontSize: 16,color: Theme.of(context).colorScheme.onSurface)),
+                  if ((mood?["note"] ?? "").toString().isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Divider(color: Theme.of(context).dividerColor,),
+                    Text("${mood["note"]}", textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                    Divider(color: Theme.of(context).dividerColor,),
+                  ],
+                  const SizedBox(height: 8),
+                  Text(DateTimeHelper.formatDateTime(mood?["updatedAt"].toDate()), style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface),),
+                ],
+              ),
+            ),
+          );
+        },
+    );
+  }
+  /// <<< ================= PARTNER MOOD CARD ==================================
 }
 
