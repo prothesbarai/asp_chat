@@ -1,4 +1,49 @@
 class AppString {
+  static const List<Map<String, String>> freeMoods = [
+    {"emoji": "😊", "title": "Happy"},
+    {"emoji": "😔", "title": "Sad"},
+    {"emoji": "😡", "title": "Angry"},
+    {"emoji": "😴", "title": "Tired"},
+    {"emoji": "😍", "title": "Loved"},
+  ];
+
+  static const List<Map<String, String>> premiumMoods = [
+    {"emoji": "🥰", "title": "Affectionate"},
+    {"emoji": "😤", "title": "Frustrated"},
+    {"emoji": "🤯", "title": "Overwhelmed"},
+    {"emoji": "😌", "title": "Peaceful"},
+    {"emoji": "🥺", "title": "Needy"},
+    {"emoji": "🤍", "title": "Missing Someone"},
+    {"emoji": "😇", "title": "Grateful"},
+    {"emoji": "😶‍🌫️", "title": "Emotionally Numb"},
+    {"emoji": "😵‍💫", "title": "Mentally Drained"},
+    {"emoji": "😬", "title": "Nervous"},
+    {"emoji": "😮‍💨", "title": "Exhausted"},
+    {"emoji": "😔", "title": "Heart Heavy"},
+    {"emoji": "🤝", "title": "Supported"},
+    {"emoji": "🧠", "title": "Focused"},
+    {"emoji": "🔥", "title": "Motivated"},
+    {"emoji": "🌈", "title": "Hopeful"},
+    {"emoji": "🌙", "title": "Calm Night Mood"},
+    {"emoji": "❤️", "title": "In Love"},
+    {"emoji": "💕", "title": "Romantic"},
+    {"emoji": "💞", "title": "Emotionally Attached"},
+    {"emoji": "💖", "title": "Deep Affection"},
+    {"emoji": "💓", "title": "Heart Racing"},
+    {"emoji": "🥰", "title": "Feeling Loved"},
+    {"emoji": "😍", "title": "Adoring"},
+    {"emoji": "😘", "title": "Sending Love"},
+    {"emoji": "🤍", "title": "Pure Love"},
+    {"emoji": "🌹", "title": "Romantic Gesture"},
+    {"emoji": "💌", "title": "Love Message"},
+    {"emoji": "💑", "title": "Togetherness"},
+    {"emoji": "👩‍❤️‍👨", "title": "Committed"},
+    {"emoji": "🌙", "title": "Missing You Tonight"},
+    {"emoji": "☁️", "title": "Dreaming About You"},
+    {"emoji": "🎶", "title": "Love Vibes"},
+    {"emoji": "✨", "title": "Magical Feeling"},
+  ];
+
   static const List<String> dropdownEmojiList = [
 
     // 😀 Faces
