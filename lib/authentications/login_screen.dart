@@ -59,6 +59,58 @@ class _LoginScreenState extends State<LoginScreen> {
   /// <<< Login Successfully Popup Dialogue ====================================
 
 
+  /// >>> Forgot Password Popup Dialogue =======================================
+  void showForgotPasswordDialog() {
+    final TextEditingController resetEmailController = TextEditingController();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+            title:  Text("Reset Password", textAlign: TextAlign.center,style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+            content: TextFormField(
+              controller: resetEmailController,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: "Enter your registered email",
+                border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.primaryColor)),
+                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.primaryColor)),
+                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.primaryColor)),
+              ),
+            ),
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel"),),
+              ElevatedButton(
+                onPressed: () async{
+                  final email = resetEmailController.text.trim();
+                  final navigator = Navigator.of(context);
+                  if (email.isEmpty) {showSuccessDialog("Email field is empty!", false);return;}
+                  try{
+                    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+                    if (!mounted) return;
+                    navigator.pop();
+                    showSuccessDialog("Password reset email sent!\nCheck your inbox 📧 spam folder", true,);
+                  }on FirebaseAuthException catch (e){
+                    String message = "Something went wrong!";
+                    if (e.code == 'user-not-found') {
+                      message = "No account found with this email!";
+                    } else if (e.code == 'invalid-email') {
+                      message = "Invalid email address!";
+                    }
+                    showSuccessDialog(message, false);
+                  }
+                },
+                child: const Text("Send"),
+              ),
+            ],
+          );
+        },
+    );
+  }
+  /// <<< Forgot Password Popup Dialogue =======================================
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,7 +257,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               Expanded(
                                 child: TextButton(
                                   onPressed: (){
-
+                                    FocusScope.of(context).unfocus();
+                                    showForgotPasswordDialog();
                                   },
                                   child: Text("Forgot password?",style: TextStyle(color: AppColors.buttonBgColor,fontSize: 13),),
                                 ),

@@ -98,39 +98,41 @@ class _EntertainmentScreenState extends State<EntertainmentScreen> {
     return Scaffold(
         appBar: AppBar(title: Text("Entertainment",style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),)),
         body: isLoading ? Center(child: LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,),) : videos.isEmpty ? Center(child: Text("No videos found"),) :
-        GridView.builder(
-          padding: EdgeInsets.symmetric(vertical:  10,horizontal: 10),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 8,mainAxisSpacing: 8,childAspectRatio: 16/9),
-          itemCount: videos.length,
-          itemBuilder: (context, index) {
-            final video = videos[index];
-            final thumbnail = video['thumbnail'] != null && video['thumbnail'] != "" ? video['thumbnail'] : defaultPlaceholder;
-            return GestureDetector(
-              onTap: ()=> openMedia(video['url'],video['title']),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                      child: CachedNetworkImage(
-                        imageUrl: thumbnail,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Center(child: NetworkStatusWidgets.loader(context, url),),
-                        errorWidget: (context, url, error) => NetworkStatusWidgets.error(context, url, error),
-                      )
-                  ),
-                  Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        color: Colors.black54,
-                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-                        child: Text(video['title'],style: TextStyle(color: Colors.white, fontSize: 14),maxLines: 2, overflow: TextOverflow.ellipsis,),
-                      )
-                  ),
-                ],
-              ),
-            );
-          },
+        SafeArea(
+          child: GridView.builder(
+            padding: EdgeInsets.symmetric(vertical:  10,horizontal: 10),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 8,mainAxisSpacing: 8,childAspectRatio: 16/9),
+            itemCount: videos.length,
+            itemBuilder: (context, index) {
+              final video = videos[index];
+              final thumbnail = video['thumbnail'] != null && video['thumbnail'] != "" ? video['thumbnail'] : defaultPlaceholder;
+              return GestureDetector(
+                onTap: ()=> openMedia(video['url'],video['title']),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                        child: CachedNetworkImage(
+                          imageUrl: thumbnail,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Center(child: NetworkStatusWidgets.loader(context, url),),
+                          errorWidget: (context, url, error) => NetworkStatusWidgets.error(context, url, error),
+                        )
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          color: Colors.black54,
+                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                          child: Text(video['title'],style: TextStyle(color: Colors.white, fontSize: 14),maxLines: 2, overflow: TextOverflow.ellipsis,),
+                        )
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         )
     );
   }

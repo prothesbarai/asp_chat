@@ -61,144 +61,146 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(elevation: 0, title: Text("Settings",style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),),),),
-      body: FutureBuilder<Map<String,dynamic>?>(
-          future: userProvider.getUserData(), 
-          builder: (context, snapshot) {
-
-            if(snapshot.connectionState == ConnectionState.waiting) {return  Center(child: LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,),);}
-            if(!snapshot.hasData || snapshot.data == null){return const Center(child: Text("User data not found"),);}
-            
-            final userData = snapshot.data!;
-            final name = userData['name'];
-            final email = userData['email'];
-            final username = email != null ? email.split('@').first : 'prothesbarai';
-            
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  // >>> PROFILE PHOTO + NAME + USERNAME =============================
-                  Column(
-                    children: [
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundColor: (imageProvider.profileImage == null && profileImages == null) ? Color(0xff1f2b3b) : null,
-                            backgroundImage: (imageProvider.profileImage != null) ? FileImage(imageProvider.profileImage!) : (profileImages != null) ? FileImage(profileImages!) : null,
-                            child: (imageProvider.profileImage == null && profileImages == null) ? Icon(Icons.person, size: 60,) : null,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: -10,
-                            child: IconButton(
-                              onPressed: () async{
-                                await showCameraGalleryDialogue(context,pickImage);
-                              },
-                              icon: Icon(Icons.camera_alt_outlined),
+      body: SafeArea(
+        child: FutureBuilder<Map<String,dynamic>?>(
+            future: userProvider.getUserData(), 
+            builder: (context, snapshot) {
+        
+              if(snapshot.connectionState == ConnectionState.waiting) {return  Center(child: LoadingAnimationWidget.staggeredDotsWave(color: AppColors.primaryColor, size: 50,),);}
+              if(!snapshot.hasData || snapshot.data == null){return const Center(child: Text("User data not found"),);}
+              
+              final userData = snapshot.data!;
+              final name = userData['name'];
+              final email = userData['email'];
+              final username = email != null ? email.split('@').first : 'prothesbarai';
+              
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    // >>> PROFILE PHOTO + NAME + USERNAME =============================
+                    Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundColor: (imageProvider.profileImage == null && profileImages == null) ? Color(0xff1f2b3b) : null,
+                              backgroundImage: (imageProvider.profileImage != null) ? FileImage(imageProvider.profileImage!) : (profileImages != null) ? FileImage(profileImages!) : null,
+                              child: (imageProvider.profileImage == null && profileImages == null) ? Icon(Icons.person, size: 60,) : null,
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text(name ?? "Prothes Barai", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface,),),
-                      const SizedBox(height: 4),
-                      Text("@$username", style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface,),),
-
-                    ],
-                  ),
-                  // <<< PROFILE PHOTO + NAME + USERNAME =============================
-
-                  const SizedBox(height: 30),
-                  // >>> SECTION: Home icon + name
-                  _menuItem(icon: Icons.alarm, title: "View security alerts",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
-                  const SizedBox(height: 10),
-                  // >>> SECTION TITLE
-                  _sectionTitle("Accounts"),
-                  //_menuItem(icon: Icons.switch_account, title: "Switch account",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
-                  const SizedBox(height: 20),
-                  _sectionTitle("Profile"),
-                  _menuItem(
-                    icon: Icons.dark_mode,
-                    title: "Select Theme",
-                    subtitle: _getDisplayThemeItemsName(themeProvider.selectedTheme),
-                    onTap: (){
-                      AppThemeEnum tempTheme = themeProvider.selectedTheme;
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return StatefulBuilder(
-                            builder: (context, setState) {
-                              return AlertDialog(
-                                title: Text("Select Theme", style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                                content: RadioGroup<AppThemeEnum>(
-                                  groupValue: tempTheme,
-                                  onChanged: (value) {
-                                    setState(() {tempTheme = value!;});
-                                  },
+                            Positioned(
+                              bottom: 0,
+                              right: -10,
+                              child: IconButton(
+                                onPressed: () async{
+                                  await showCameraGalleryDialogue(context,pickImage);
+                                },
+                                icon: Icon(Icons.camera_alt_outlined),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(name ?? "Prothes Barai", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface,),),
+                        const SizedBox(height: 4),
+                        Text("@$username", style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface,),),
+        
+                      ],
+                    ),
+                    // <<< PROFILE PHOTO + NAME + USERNAME =============================
+        
+                    const SizedBox(height: 30),
+                    // >>> SECTION: Home icon + name
+                    _menuItem(icon: Icons.alarm, title: "View security alerts",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
+                    const SizedBox(height: 10),
+                    // >>> SECTION TITLE
+                    _sectionTitle("Accounts"),
+                    //_menuItem(icon: Icons.switch_account, title: "Switch account",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
+                    const SizedBox(height: 20),
+                    _sectionTitle("Profile"),
+                    _menuItem(
+                      icon: Icons.dark_mode,
+                      title: "Select Theme",
+                      subtitle: _getDisplayThemeItemsName(themeProvider.selectedTheme),
+                      onTap: (){
+                        AppThemeEnum tempTheme = themeProvider.selectedTheme;
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return AlertDialog(
+                                  title: Text("Select Theme", style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                  content: RadioGroup<AppThemeEnum>(
+                                    groupValue: tempTheme,
+                                    onChanged: (value) {
+                                      setState(() {tempTheme = value!;});
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        RadioListTile<AppThemeEnum>(value: AppThemeEnum.system,title: const Text("System Default"), activeColor: Colors.blue,),
+                                        RadioListTile<AppThemeEnum>(value: AppThemeEnum.light,title: const Text("Light Mode"), activeColor: Colors.blue,),
+                                        RadioListTile<AppThemeEnum>(value: AppThemeEnum.dark,title: const Text("Dark Mode"), activeColor: Colors.blue,)
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [ElevatedButton(onPressed: () {themeProvider.updateTheme(tempTheme);Navigator.pop(context);}, child: const Text("Apply"),),],
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    _menuItem(
+                      icon: Icons.font_download,
+                      title: "Select Font",
+                      subtitle: _getFontItemsName(fontProvider.selectedFont),
+                      onTap: (){
+                        AppFont fontTheme = fontProvider.selectedFont;
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return Center(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      RadioListTile<AppThemeEnum>(value: AppThemeEnum.system,title: const Text("System Default"), activeColor: Colors.blue,),
-                                      RadioListTile<AppThemeEnum>(value: AppThemeEnum.light,title: const Text("Light Mode"), activeColor: Colors.blue,),
-                                      RadioListTile<AppThemeEnum>(value: AppThemeEnum.dark,title: const Text("Dark Mode"), activeColor: Colors.blue,)
+                                      AlertDialog(
+                                        title: Text("Select Font", style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                        content: RadioGroup<AppFont>(
+                                          groupValue: fontTheme,
+                                          onChanged: (value) {
+                                            setState(() {fontTheme = value!;});
+                                            Navigator.pop(context);
+                                          },
+                                          child: FontSelectorWidget(),
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                ),
-                                actions: [ElevatedButton(onPressed: () {themeProvider.updateTheme(tempTheme);Navigator.pop(context);}, child: const Text("Apply"),),],
-                              );
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  _menuItem(
-                    icon: Icons.font_download,
-                    title: "Select Font",
-                    subtitle: _getFontItemsName(fontProvider.selectedFont),
-                    onTap: (){
-                      AppFont fontTheme = fontProvider.selectedFont;
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return StatefulBuilder(
-                            builder: (context, setState) {
-                              return Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    AlertDialog(
-                                      title: Text("Select Font", style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                                      content: RadioGroup<AppFont>(
-                                        groupValue: fontTheme,
-                                        onChanged: (value) {
-                                          setState(() {fontTheme = value!;});
-                                          Navigator.pop(context);
-                                        },
-                                        child: FontSelectorWidget(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  _menuItem(icon: Icons.circle, title: "Active Status", subtitle: "On",),
-                  _menuItem(icon: Icons.alternate_email, title: "Username", subtitle: "a.sp/$username",),
-                  const SizedBox(height: 20),
-                  _sectionTitle("For families"),
-                  _menuItem(icon: Icons.family_restroom, title: "Family Centre",),
-                ],
-              ),
-            );
-          },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    _menuItem(icon: Icons.circle, title: "Active Status", subtitle: "On",),
+                    _menuItem(icon: Icons.alternate_email, title: "Username", subtitle: "a.sp/$username",),
+                    const SizedBox(height: 20),
+                    _sectionTitle("For families"),
+                    _menuItem(icon: Icons.family_restroom, title: "Family Centre",),
+                  ],
+                ),
+              );
+            },
+        ),
       )
     );
   }
