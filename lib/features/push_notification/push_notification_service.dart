@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
-import 'package:asp_chat/screen/global_screen/anniversary_screen/anniversary_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../main.dart';
-import '../../screen/global_screen/couple_daily_love/couple_daily_love.dart';
+import '../../screen/global_screen/push_notification_screens/anniversary_screen/anniversary_screen.dart';
+import '../../screen/global_screen/push_notification_screens/couple_daily_love/couple_daily_love.dart';
 import 'in_app_dialogue.dart';
 
 

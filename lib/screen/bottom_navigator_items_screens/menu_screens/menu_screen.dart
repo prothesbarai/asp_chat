@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 import '../../../authentications/login_screen.dart';
 import '../../../features/set_user_image/user_image_provider/user_image_provider.dart';
 import '../../../providers/user_info_provider.dart';
+import '../../global_screen/profile_card/profile_card.dart';
+import '../../global_screen/riddle_screen/riddle_screen.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -63,6 +65,8 @@ class _MenuScreenState extends State<MenuScreen> {
                 menuItem(icon: Icons.repeat, title: "Repeat Text Generator",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => RepeatedTextGenerator(),));}),
                 menuItem(icon: Icons.mood, title: "Mood Status Share",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MoodStatusScreen(),));}),
                 menuItem(icon: Icons.translate, title: "Google Translator",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => TranslatorScreen(),));}),
+                menuItem(icon: Icons.quiz, title: "Riddle",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => RiddleScreen(),));}),
+                menuItem(icon: Icons.person_pin_outlined, title: "Profile Card",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileCard(),));}),
                 const SizedBox(height: 16),
                 const Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text("More", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey,),),),
                 menuItem(

@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pinput/pinput.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../../utils/constant/app_colors.dart';
+import '../../../../utils/constant/app_colors.dart';
 import 'anniversary_date_helper.dart';
 
 class AnniversaryScreen extends StatefulWidget {
