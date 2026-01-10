@@ -17,8 +17,12 @@ class _ProfileCardState extends State<ProfileCard> {
   /// >>> BG Change Functions ==================================================
   int _bgBlobIndex = 0;
   int _bgIndex = 0;
+  // >>> BG Blob Styles
   final List<List<Color>> _bgBlobStyles = [[Colors.orange, Colors.redAccent], [Colors.blue, Colors.purple], [Colors.green, Colors.teal], [Colors.pink, Colors.deepOrange],];
-  final List<Color> _bgStyles = [Colors.black, Colors.brown, Colors.brown];
+
+  // >>> BG Color Behind the Card
+  final List<Color> _bgStyles = [Colors.black, Colors.blue.shade900, Colors.green.shade900, Colors.pink.shade900,];
+
   void _changeBg() {
     setState(() {
       _bgBlobIndex = (_bgBlobIndex + 1) % _bgBlobStyles.length;
