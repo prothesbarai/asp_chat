@@ -3,23 +3,46 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../features/set_user_image/user_image_provider/user_image_provider.dart';
 
-class ProfileCard extends StatelessWidget {
+class ProfileCard extends StatefulWidget {
   final String name;
   const ProfileCard({super.key, required this.name});
 
   @override
+  State<ProfileCard> createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends State<ProfileCard> {
+
+
+  /// >>> BG Change Functions ==================================================
+  int _bgBlobIndex = 0;
+  int _bgIndex = 0;
+  final List<List<Color>> _bgBlobStyles = [[Colors.orange, Colors.redAccent], [Colors.blue, Colors.purple], [Colors.green, Colors.teal], [Colors.pink, Colors.deepOrange],];
+  final List<Color> _bgStyles = [Colors.black, Colors.brown, Colors.brown];
+  void _changeBg() {
+    setState(() {
+      _bgBlobIndex = (_bgBlobIndex + 1) % _bgBlobStyles.length;
+      _bgIndex = (_bgIndex + 1) % _bgStyles.length;
+    });
+  }
+  /// <<< BG Change Functions ==================================================
+
+
+  @override
   Widget build(BuildContext context) {
     final imageProvider = Provider.of<UserImageProvider>(context);
+    final bgBlobColors = _bgBlobStyles[_bgBlobIndex];
+    final bgColors = _bgStyles[_bgIndex];
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: bgColors,
       body: SafeArea(
         child: Center(
           child: Stack(
             children: [
 
               // >>> Background Gradient Blobs Style Here ======================
-              Positioned(left: -40, top: 80, child: _blob(Colors.orange),),
-              Positioned(right: -40, bottom: 60, child: _blob(Colors.redAccent),),
+              Positioned(left: -40, top: 80, child: _blob(bgBlobColors[0]),),
+              Positioned(right: -40, bottom: 60, child: _blob(bgBlobColors[1]),),
               // <<< Background Gradient Blobs Style Here ======================
 
               // >>> Glass Card Start Here =====================================
@@ -53,7 +76,7 @@ class ProfileCard extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(name, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),
+                            Text(widget.name, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),
                             const SizedBox(width: 6),
                             const Icon(Icons.verified, color: Colors.orange, size: 16),
                           ],
@@ -78,8 +101,8 @@ class ProfileCard extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14),),),
-                            onPressed: () {},
-                            child: const Text("Follow"),
+                            onPressed: _changeBg,
+                            child: const Text("Change Bg"),
                           ),
                         ),
                       ],
@@ -95,9 +118,9 @@ class ProfileCard extends StatelessWidget {
     );
   }
 
-
   /// >>> Background Gradiant Blob =============================================
   Widget _blob(Color color){return Container(width: 160, height: 160, decoration: BoxDecoration(shape: BoxShape.circle, gradient: RadialGradient(colors: [color.withValues(alpha: 0.8), color.withValues(alpha: 0.1),],),),);}
+
   /// <<< Background Gradiant Blob =============================================
 
 
@@ -111,6 +134,4 @@ class ProfileCard extends StatelessWidget {
       ],
     );
   }
-  /// <<< Widget StatItem Start Here ===========================================
-
 }
