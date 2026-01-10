@@ -1,12 +1,15 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../features/set_user_image/user_image_provider/user_image_provider.dart';
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({super.key});
+  final String name;
+  const ProfileCard({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
+    final imageProvider = Provider.of<UserImageProvider>(context);
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -31,23 +34,28 @@ class ProfileCard extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text("Social Media", style: TextStyle(color: Colors.white70, fontSize: 14,),),
+                        const Text("Profile Card", style: TextStyle(color: Colors.white70, fontSize: 14,),),
                         const SizedBox(height: 16),
                         // >>> Profile Image
                         Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.red, width: 2),),
-                          child: const CircleAvatar(radius: 40, backgroundImage: AssetImage("assets/profile.jpg"),),
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundColor: (imageProvider.profileImage == null) ? Color(0xff1f2b3b) : null,
+                            backgroundImage: (imageProvider.profileImage != null) ? FileImage(imageProvider.profileImage!) : null,
+                            child: (imageProvider.profileImage == null) ? Icon(Icons.person, size: 34,) : null,
+                          )
                         ),
                         const SizedBox(height: 12),
 
                         // >>> Name
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text("Prothes Barai", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),
-                            SizedBox(width: 6),
-                            Icon(Icons.verified, color: Colors.orange, size: 16),
+                          children: [
+                            Text(name, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),
+                            const SizedBox(width: 6),
+                            const Icon(Icons.verified, color: Colors.orange, size: 16),
                           ],
                         ),
 
@@ -64,6 +72,16 @@ class ProfileCard extends StatelessWidget {
                         ),
 
                         const SizedBox(height: 20),
+
+                        // >>> Follow Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14),),),
+                            onPressed: () {},
+                            child: const Text("Follow"),
+                          ),
+                        ),
                       ],
                     ),
                   ),

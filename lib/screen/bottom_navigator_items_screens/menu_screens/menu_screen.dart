@@ -54,7 +54,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                   title: Text(name ?? "Prothes Barai", style: TextStyle(fontWeight: FontWeight.bold),),
                   subtitle: Text("@$username"),
-                  onTap: () {},
+                  onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileCard(name: name,),)),
                 ),
                 // <<< Profile Section ===============================================
 
@@ -66,7 +66,6 @@ class _MenuScreenState extends State<MenuScreen> {
                 menuItem(icon: Icons.mood, title: "Mood Status Share",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MoodStatusScreen(),));}),
                 menuItem(icon: Icons.translate, title: "Google Translator",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => TranslatorScreen(),));}),
                 menuItem(icon: Icons.quiz, title: "Riddle",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => RiddleScreen(),));}),
-                menuItem(icon: Icons.person_pin_outlined, title: "Profile Card",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileCard(),));}),
                 const SizedBox(height: 16),
                 const Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text("More", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey,),),),
                 menuItem(
