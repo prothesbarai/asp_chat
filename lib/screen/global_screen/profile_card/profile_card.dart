@@ -104,7 +104,7 @@ class _ProfileCardState extends State<ProfileCard> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14),),),
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.white.withValues(alpha: 0.15), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14),),),
                             onPressed: _changeBg,
                             child: const Text("Change Bg"),
                           ),

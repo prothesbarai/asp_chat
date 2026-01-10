@@ -81,38 +81,38 @@ class _RiddleScreenState extends State<RiddleScreen> {
       builder: (context, setLocalState) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-          child: GestureDetector(
-            onTap: () => setLocalState(() => showAnswer = !showAnswer),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 350),
-              curve: Curves.easeOutCubic,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: showAnswer ? [Colors.greenAccent.shade400, Colors.teal.shade700] : [Colors.deepPurple.shade600, Colors.indigo.shade800],),
-                borderRadius: BorderRadius.circular(6), 
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.25), blurRadius: 14, offset: const Offset(0, 6),),],
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.07), borderRadius: BorderRadius.circular(6),),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 34,
-                          width: 34,
-                          decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2),borderRadius: BorderRadius.circular(50)),
-                          child: const Icon(Icons.psychology, color: Colors.white, size: 20,),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("ধাঁধা #$index", style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w600,),),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    Text(question, style: const TextStyle(fontSize: 16, height: 1.4, color: Colors.white, fontWeight: FontWeight.w500,),),
-                    const SizedBox(height: 10),
-                    AnimatedSwitcher(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeOutCubic,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: showAnswer ? [Colors.greenAccent.shade400, Colors.teal.shade700] : [Colors.deepPurple.shade600, Colors.indigo.shade800],),
+              borderRadius: BorderRadius.circular(6),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.25), blurRadius: 14, offset: const Offset(0, 6),),],
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.07), borderRadius: BorderRadius.circular(6),),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        height: 34,
+                        width: 34,
+                        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2),borderRadius: BorderRadius.circular(50)),
+                        child: const Icon(Icons.psychology, color: Colors.white, size: 20,),
+                      ),
+                      const SizedBox(width: 10),
+                      Text("ধাঁধা #$index", style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w600,),),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Text(question, style: const TextStyle(fontSize: 16, height: 1.4, color: Colors.white, fontWeight: FontWeight.w500,),),
+                  const SizedBox(height: 10),
+                  InkWell(
+                    onTap: () {setLocalState(() {showAnswer = !showAnswer;});},
+                    child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       child: showAnswer ?
                       Container(
@@ -137,8 +137,8 @@ class _RiddleScreenState extends State<RiddleScreen> {
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
