@@ -59,7 +59,6 @@ class _PremiumPeriodTrackerPageState extends State<PremiumPeriodTrackerPage> {
             const SizedBox(height: 16),
             _todayLogCard(),
             const SizedBox(height: 16),
-            _guidelineCard(),
           ],
         ),
       ),
@@ -244,35 +243,5 @@ class _PremiumPeriodTrackerPageState extends State<PremiumPeriodTrackerPage> {
     );
   }
 
-  // 📘 GUIDELINES (BANGLA)
-  Widget _guidelineCard() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Period চলাকালীন করণীয় ও বর্জনীয়',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 12),
-          Text(
-            '❌ অতিরিক্ত ঠান্ডা খাবার\n'
-                '❌ ভারী ব্যায়াম\n'
-                '❌ কম ঘুম\n'
-                '❌ মানসিক চাপ\n\n'
-                '✅ গরম পানি পান\n'
-                '✅ বিশ্রাম নিন\n'
-                '✅ হালকা ও পুষ্টিকর খাবার খান\n'
-                '✅ পরিষ্কার-পরিচ্ছন্ন থাকুন\n'
-                '✅ প্রয়োজন হলে চিকিৎসকের পরামর্শ নিন',
-          ),
-        ],
-      ),
-    );
-  }
+
 }

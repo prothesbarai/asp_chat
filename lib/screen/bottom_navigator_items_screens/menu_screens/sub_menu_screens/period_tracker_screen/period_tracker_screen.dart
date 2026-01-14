@@ -22,10 +22,12 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   DateTime? afterDate;
   DateTime? currentDate;
   DateTime? previousDate;
+  DateTime? afterRangeDate;
 
   String moods = '';
   int cycleLength = 0;
   int periodLength = 0;
+  int periodRange = 0;
   int painLevel = 0;
   String rules1 = '';
   String rules2 = '';
@@ -57,9 +59,11 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
           afterDate = (data['afterdate'] as Timestamp?)?.toDate();
           currentDate = (data['currentdate'] as Timestamp?)?.toDate();
           previousDate = (data['previousdate'] as Timestamp?)?.toDate();
+          afterRangeDate = (data['afterrangedate'] as Timestamp?)?.toDate();
           moods = data['moods'] ?? '';
           cycleLength = data['cyclelength'] ?? 0;
           periodLength = data['periodlength'] ?? 0;
+          periodRange = (data['periodrange'] is int) ? data['periodrange'] : int.tryParse(data['periodrange'].toString()) ?? 0;
           painLevel = data['painlevel'] ?? 0;
           rules1 = periodInfo?['rules_1'] ?? '';
           rules2 = periodInfo?['rules_2'] ?? '';
@@ -95,13 +99,17 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
 
       final data = doc.data()!;
       final Timestamp? fbCurrentDate = data['currentdate'] as Timestamp?;
-      final int fbCycleLength = data['cyclelength'] ?? 30;
+      final int cycleLength = data['cyclelength'] ?? 30;
+      final int rangeLength = data['periodlength'] ?? 5;
 
       // >>> Convert DateTime
       final DateTime currentFbDate = fbCurrentDate?.toDate() ?? DateTime.now();
       // >>> New Current Date
       final DateTime newCurrentDate = _currentDay;
 
+      // >>> Update Other Section Previously =================
+      await docRef.update({'periodrange' : '$periodRange'});
+      // <<< Update Other Section Previously =================
 
       // >>> Check if current month is already updated
       if (currentFbDate.year == newCurrentDate.year && currentFbDate.month == newCurrentDate.month) {
@@ -113,12 +121,14 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
       // >>> Update Previous Date
       final DateTime newPreviousDate = currentFbDate;
       // >>> Calculate After Date
-      final DateTime newAfterDate = newCurrentDate.add(Duration(days: fbCycleLength));
+      final DateTime newAfterDate = newCurrentDate.add(Duration(days: cycleLength));
+      final DateTime newAfterRangeDate = newCurrentDate.add(Duration(days: rangeLength));
       // >>> Update Firebase
       await docRef.update({
         'previousdate': Timestamp.fromDate(newPreviousDate),
         'currentdate': Timestamp.fromDate(newCurrentDate),
         'afterdate': Timestamp.fromDate(newAfterDate),
+        'afterrangedate': Timestamp.fromDate(newAfterRangeDate),
       });
       // >>> Local state update
       setState(() {
@@ -157,6 +167,10 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
                   const SizedBox(height: 16),
                   _calendarCard(),
                   const SizedBox(height: 16),
+                  _periodLengthCard(),
+                  const SizedBox(height: 16),
+                  _guidelineCard(),
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
@@ -175,7 +189,8 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
                       style: ElevatedButton.styleFrom(),
                       child: Text("Update All")
                     ),
-                  )
+                  ),
+                  SizedBox(height: kBottomNavigationBarHeight),
                 ],
               ),
             ),
@@ -215,17 +230,16 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
         children: [
           const Text('Period Cycle Overview', style: TextStyle(color: Colors.white54,fontSize: 20, fontWeight: FontWeight.bold,)),
           const SizedBox(height: 16),
-          Text("Last Month Date : ${DateTimeHelper.formatDateOnly(previousDate!)}", style: const TextStyle(color: Colors.white70,fontSize: 15,fontWeight: FontWeight.w500),),
+          Text("Last Date : ${DateTimeHelper.formatDateOnly(previousDate!)}", style: const TextStyle(color: Colors.white70,fontSize: 15,fontWeight: FontWeight.w500),),
           const SizedBox(height: 8),
-          Text("Current Month Date : ${DateTimeHelper.formatDateOnly(currentDate!)}", style: const TextStyle(color: Colors.white70,fontSize: 15,fontWeight: FontWeight.w500),),
+          Text("Current Date : ${DateTimeHelper.formatDateOnly(currentDate!)}", style: const TextStyle(color: Colors.white70,fontSize: 15,fontWeight: FontWeight.w500),),
           const SizedBox(height: 8),
-          Text("After Month Date : ${DateTimeHelper.formatDateOnly(afterDate!)}", style: const TextStyle(color: Colors.white70,fontSize: 15,fontWeight: FontWeight.w500),),
+          Text("After Date : ${DateTimeHelper.formatDateOnly(afterDate!)} To ${DateTimeHelper.formatDateOnly(afterRangeDate!)}", style: const TextStyle(color: Colors.white70,fontSize: 15,fontWeight: FontWeight.w500),),
         ],
       ),
     );
   }
   /// <<< TOP CARD DESIGN HERE =================================================
-
 
   /// >>> CALENDAR DESIGN AND SELECT DATE HERE =================================
   Widget _calendarCard() {
@@ -267,4 +281,52 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
 
   }
   /// <<< CALENDAR DESIGN AND SELECT DATE HERE =================================
+
+  /// >>>  PERIOD LENGTH HERE ==================================================
+  Widget _periodLengthCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.circular(24),),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('এই মাসে কয়দিন Period হয়েছে?', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface),),
+          SizedBox(height: 10,),
+          if(periodLength == 0 && periodRange == 0)...[
+            Center(child: LoadingAnimationWidget.staggeredDotsWave(color: Theme.of(context).colorScheme.onSurface, size: 36,)),
+          ]else...[
+            Slider(
+              value: periodRange.clamp(0, periodLength).toDouble(),
+              min: 0,
+              max: periodLength.toDouble(),
+              divisions: periodLength,
+              label: '${periodRange.clamp(0, periodLength)} দিন',
+              activeColor: const Color(0xFFFF4D6D),
+              onChanged: (value) {setState(() {periodRange = value.toInt();});},
+            ),
+          ],
+
+        ],
+      )
+    );
+  }
+  /// <<<  PERIOD LENGTH HERE ==================================================
+
+
+  /// >>> GUIDELINES (BANGLA) ==================================================
+  Widget _guidelineCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.circular(24),),
+      child: Column(
+        children: [
+          Text('Period চলাকালীন করণীয় ও বর্জনীয়', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface,),),
+          SizedBox(height: 12),
+          Text('$rules1\n$rules2\n$rules3\n$rules4\n$rules5\n$rules6\n$rules7\n$rules8\n$rules9',style: TextStyle(color: Theme.of(context).colorScheme.onSurface,),),
+        ],
+      ),
+    );
+  }
+  /// <<< GUIDELINES (BANGLA) ==================================================
+
 }
