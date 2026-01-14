@@ -83,13 +83,52 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   /// >>>> Update Button Logic Here ============================================
   Future<void> updateInformation() async {
     try {
-      setState(() {isLoading = true;});
-      await FirebaseFirestore.instance.collection('periodtracker').doc('pt').update({'currentdate': Timestamp.fromDate(_currentDay),});
-      setState(() {currentDate = _currentDay;isLoading = false;});
-      if(!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Current date updated successfully")),);
+      setState(() {
+        isLoading = true;
+      });
+
+      // >>> First get the previous information from Firebase
+      final docRef = FirebaseFirestore.instance.collection('periodtracker').doc('pt');
+      final doc = await docRef.get();
+      if (!doc.exists) return;
+
+      final data = doc.data()!;
+      final Timestamp? fbCurrentDate = data['currentdate'] as Timestamp?;
+      final int fbCycleLength = data['cyclelength'] ?? 30;
+
+      // >>> Convert DateTime
+      final DateTime currentFbDate = fbCurrentDate?.toDate() ?? DateTime.now();
+
+      // >>> New Current Date
+      final DateTime newCurrentDate = _currentDay;
+
+      // >>> Update Previous Date
+      final DateTime newPreviousDate = currentFbDate;
+
+      // >>> Calculate After Date
+      final DateTime newAfterDate = newCurrentDate.add(Duration(days: fbCycleLength));
+
+      // >>> Update Firebase
+      await docRef.update({
+        'previousdate': Timestamp.fromDate(newPreviousDate),
+        'currentdate': Timestamp.fromDate(newCurrentDate),
+        'afterdate': Timestamp.fromDate(newAfterDate),
+      });
+
+      // >>> Local state update
+      setState(() {
+        previousDate = newPreviousDate;
+        currentDate = newCurrentDate;
+        afterDate = newAfterDate;
+        isLoading = false;
+      });
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Dates updated successfully")),);
+
     } catch (e) {
-      setState(() {isLoading = false;});
+      setState(() {
+        isLoading = false;
+      });
       debugPrint(e.toString());
     }
   }
