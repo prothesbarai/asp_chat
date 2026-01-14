@@ -68,7 +68,7 @@ class _PremiumPeriodTrackerPageState extends State<PremiumPeriodTrackerPage> {
 
   // 🌸 TOP CARD
   Widget _cycleOverviewCard() {
-    String subtitle = 'আপনার শেষ Period তারিখ নির্বাচন করুন';
+    String subtitle = 'আপনার present Period তারিখ নির্বাচন করুন';
 
     if (lastPeriodDate != null) {
       final next = lastPeriodDate!.add(Duration(days: cycleLength));
