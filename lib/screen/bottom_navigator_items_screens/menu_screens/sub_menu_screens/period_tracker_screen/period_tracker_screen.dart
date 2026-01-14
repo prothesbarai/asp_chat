@@ -80,6 +80,7 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   }
   /// <<<< Fetch Data And Set Initialization ===================================
 
+
   /// >>>> Update Button Logic Here ============================================
   Future<void> updateInformation() async {
     try {
@@ -98,23 +99,27 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
 
       // >>> Convert DateTime
       final DateTime currentFbDate = fbCurrentDate?.toDate() ?? DateTime.now();
-
       // >>> New Current Date
       final DateTime newCurrentDate = _currentDay;
 
+
+      // >>> Check if current month is already updated
+      if (currentFbDate.year == newCurrentDate.year && currentFbDate.month == newCurrentDate.month) {
+        if(!mounted) return;
+        setState(() {isLoading = false;});
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Already Date Update for this month, So Skip Date Update")),);
+        return;
+      }
       // >>> Update Previous Date
       final DateTime newPreviousDate = currentFbDate;
-
       // >>> Calculate After Date
       final DateTime newAfterDate = newCurrentDate.add(Duration(days: fbCycleLength));
-
       // >>> Update Firebase
       await docRef.update({
         'previousdate': Timestamp.fromDate(newPreviousDate),
         'currentdate': Timestamp.fromDate(newCurrentDate),
         'afterdate': Timestamp.fromDate(newAfterDate),
       });
-
       // >>> Local state update
       setState(() {
         previousDate = newPreviousDate;
@@ -124,7 +129,6 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
       });
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Dates updated successfully")),);
-
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -156,7 +160,18 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                      onPressed: updateInformation,
+                      onPressed: (){
+                        showDialog(
+                          context: context, 
+                          builder: (context) => AlertDialog(
+                            title: Text("Alert!",style: TextStyle(color:Theme.of(context).colorScheme.onSurface),),
+                            content: Text("Are you sure update date ?",style: TextStyle(color:Theme.of(context).colorScheme.onSurface),),
+                            actions: [
+                              ElevatedButton(onPressed: (){Navigator.pop(context);updateInformation();}, child: Text("OK"))
+                            ],
+                          ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(),
                       child: Text("Update All")
                     ),
