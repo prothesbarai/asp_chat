@@ -218,8 +218,8 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.circular(24),),
       child: TableCalendar(
-        firstDay: DateTime.utc(2010, 10, 16),
-        lastDay: DateTime.utc(2030, 3, 14),
+        firstDay: DateTime.utc(2010, 1, 23),
+        lastDay: DateTime.utc(2130, 1, 23),
         focusedDay: _currentDay,
         // >>> Month / Week header style
         headerStyle: HeaderStyle(
