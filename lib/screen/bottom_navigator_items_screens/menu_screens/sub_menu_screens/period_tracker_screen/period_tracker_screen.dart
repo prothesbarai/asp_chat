@@ -14,7 +14,7 @@ class PeriodTrackerScreen extends StatefulWidget {
 class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
 
   bool isLoading = true;
-
+  final moods = ['😊', '😐', '😢', '😡', '🥱'];
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _currentDay = DateTime.now();
 
@@ -24,7 +24,7 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   DateTime? previousDate;
   DateTime? afterRangeDate;
 
-  String moods = '';
+  String selectedMood = '';
   int cycleLength = 0;
   int periodLength = 0;
   int periodRange = 0;
@@ -60,7 +60,7 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
           currentDate = (data['currentdate'] as Timestamp?)?.toDate();
           previousDate = (data['previousdate'] as Timestamp?)?.toDate();
           afterRangeDate = (data['afterrangedate'] as Timestamp?)?.toDate();
-          moods = data['moods'] ?? '';
+          selectedMood = data['moods'] ?? '';
           cycleLength = data['cyclelength'] ?? 0;
           periodLength = data['periodlength'] ?? 0;
           periodRange = (data['periodrange'] is int) ? data['periodrange'] : int.tryParse(data['periodrange'].toString()) ?? 0;
@@ -108,7 +108,7 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
       final DateTime newCurrentDate = _currentDay;
 
       // >>> Update Other Section Previously =================
-      await docRef.update({'periodrange' : '$periodRange'});
+      await docRef.update({'periodrange' : '$periodRange', 'moods' : selectedMood, 'painlevel' : painLevel});
       // <<< Update Other Section Previously =================
 
       // >>> Check if current month is already updated
@@ -168,6 +168,8 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
                   _calendarCard(),
                   const SizedBox(height: 16),
                   _periodLengthCard(),
+                  const SizedBox(height: 16),
+                  _todayLogCard(),
                   const SizedBox(height: 16),
                   _guidelineCard(),
                   const SizedBox(height: 16),
@@ -312,6 +314,46 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   }
   /// <<<  PERIOD LENGTH HERE ==================================================
 
+  /// >>> MOOD + PAIN Status ===================================================
+  Widget _todayLogCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.circular(24),),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('আজ কেমন অনুভব করছো?', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface)),
+          SizedBox(height: 25,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: moods.map((mood) {
+              return GestureDetector(
+                onTap: () => setState(() => selectedMood = mood),
+                child: Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: selectedMood == mood ? const Color(0xFFFF7AA2) : Colors.grey.shade200,),
+                  child: Text(mood, style: const TextStyle(fontSize: 20)),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 65),
+          Text('Pain Level',style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onSurface)),
+          Slider(
+            value: painLevel.toDouble(),
+            min: 0,
+            max: 10,
+            divisions: 10,
+            activeColor: const Color(0xFFFF4D6D),
+            label: '${painLevel.clamp(0, painLevel)} Del',
+            onChanged: (v) => setState(() => painLevel = v.toInt()),
+          ),
+        ],
+      ),
+    );
+  }
+  /// <<< MOOD + PAIN Status ===================================================
 
   /// >>> GUIDELINES (BANGLA) ==================================================
   Widget _guidelineCard() {
