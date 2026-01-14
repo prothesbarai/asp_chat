@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 import '../../../../../utils/constant/app_colors.dart';
 
 class RiddleScreen extends StatefulWidget {

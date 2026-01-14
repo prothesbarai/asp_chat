@@ -1,5 +1,6 @@
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment/entertainment_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/mood_status_screen/mood_status_screen.dart';
+import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/period_tracker_screen/period_tracker_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/repeated_text_generator/repeated_text_generator.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/riddle_screen/riddle_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen/settings_screen.dart';
@@ -65,6 +66,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 menuItem(icon: Icons.mood, title: "Mood Status Share",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MoodStatusScreen(),));}),
                 menuItem(icon: Icons.translate, title: "Google Translator",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => TranslatorScreen(),));}),
                 menuItem(icon: Icons.quiz, title: "Riddle",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => RiddleScreen(),));}),
+                menuItem(icon: Icons.quiz, title: "PremiumPeriodTrackerPage",onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => PeriodTrackerScreen(),));}),
                 const SizedBox(height: 16),
                 const Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text("More", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey,),),),
                 menuItem(
