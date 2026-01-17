@@ -4,6 +4,7 @@ import 'package:asp_chat/widgets/custom_bottom_navigation_bar.dart';
 import 'package:asp_chat/widgets/qr_code_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../dialogue/exit_app_alert_dialogue.dart';
 import '../../providers/user_info_provider.dart';
 import '../bottom_navigator_items_screens/chat_gpt_screen/chat_gpt_screen.dart';
 import '../bottom_navigator_items_screens/chat_screens/chat_screen.dart';
@@ -80,10 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppbar(title: appBarTitles[_currentIndex], actions: appBarActions[_currentIndex],),
-      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: _currentIndex, onTap: (index) {setState(() {_currentIndex = index;});},),
-      body: pages[_currentIndex],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, dynamic) {  if (didPop) {return;}  ExitAppAlertDialogue.willPopScope(context);},
+      child: Scaffold(
+        appBar: CustomAppbar(title: appBarTitles[_currentIndex], actions: appBarActions[_currentIndex],),
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: _currentIndex, onTap: (index) {setState(() {_currentIndex = index;});},),
+        body: pages[_currentIndex],
+      ),
     );
   }
 }
