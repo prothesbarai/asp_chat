@@ -1,9 +1,4 @@
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/entertainment/entertainment_screen.dart';
-import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/mood_status_screen/mood_status_screen.dart';
-import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/period_tracker_screen/period_tracker_screen.dart';
-import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/pill_tracker_screen/pill_tracker_screen.dart';
-import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/repeated_text_generator/repeated_text_generator.dart';
-import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/riddle_screen/riddle_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/settings_screen/settings_screen.dart';
 import 'package:asp_chat/screen/bottom_navigator_items_screens/menu_screens/sub_menu_screens/tranalator_screen/translator_screen.dart';
 import 'package:asp_chat/utils/constant/app_colors.dart';
@@ -14,6 +9,11 @@ import 'package:provider/provider.dart';
 import '../../../authentications/login_screen.dart';
 import '../../../features/set_user_image/user_image_provider/user_image_provider.dart';
 import '../../../providers/user_info_provider.dart';
+import '../../features_screen/girl_features/period_tracker_screen/period_tracker_screen.dart';
+import '../../features_screen/girl_features/pill_tracker_screen/pill_tracker_screen.dart';
+import '../../features_screen/mood_status_features/mood_status_screen.dart';
+import '../../features_screen/repeated_text_features/repeated_text_generator.dart';
+import '../../features_screen/riddle_features/riddle_screen.dart';
 import '../../global_screen/profile_card/profile_card.dart';
 
 class MenuScreen extends StatefulWidget {
