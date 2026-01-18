@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:asp_chat/features/alarm_features/alarm_set_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import '../../../../../dialogue/image_pop_up_dialogue.dart';
 import '../../../../../features/display_theme/theme_provider/theme_provider.dart';
 import '../../../../../features/display_theme/theme_selected_model/theme_selected_model.dart';
 import '../../../../../features/font_theme/font_selector_widget.dart';
@@ -12,7 +14,6 @@ import '../../../../../features/set_user_image/user_image_picker.dart';
 import '../../../../../features/set_user_image/user_image_provider/user_image_provider.dart';
 import '../../../../../providers/user_info_provider.dart';
 import '../../../../../utils/constant/app_colors.dart';
-import 'alarm_set_screen/alarm_set_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -114,11 +115,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         
                     const SizedBox(height: 30),
                     // >>> SECTION: Home icon + name
-                    _menuItem(icon: Icons.alarm, title: "View security alerts",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
+                    _menuItem(icon: Icons.alarm, title: "View security alerts",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetUi(),))),
                     const SizedBox(height: 10),
                     // >>> SECTION TITLE
                     _sectionTitle("Accounts"),
                     //_menuItem(icon: Icons.switch_account, title: "Switch account",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
+                    //_menuItem(icon: Icons.switch_account, title: "Dialogue",onTap: (){ imagePopUpDialogue(context, "https://fdn2.gsmarena.com/vv/pics/oneplus/oneplus-8t-1.jpg"); }),
                     const SizedBox(height: 20),
                     _sectionTitle("Profile"),
                     _menuItem(
