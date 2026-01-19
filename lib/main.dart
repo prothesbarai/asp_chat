@@ -28,8 +28,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await AlarmService.instance.init();
   await Firebase.initializeApp();
+  // >>>  Alarm service
+  // 2. Alarm service initialize (Firebase এর পরেই)
+  try {
+    await AlarmService.instance.init();
+    print('AlarmService initialized in main');
+  } catch (e) {
+    print('Error initializing AlarmService in main: $e');
+  }
   /// >>> For Only Terminate Push Notification =================================
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   /// <<< For Only Terminate Push Notification =================================
