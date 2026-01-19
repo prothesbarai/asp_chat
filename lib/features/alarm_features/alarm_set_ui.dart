@@ -10,27 +10,28 @@ class AlarmSetUi extends StatefulWidget {
 }
 
 class _AlarmSetUiState extends State<AlarmSetUi> {
+
+  // >>> Alarm Function Here ===================================================
   Future<void> _testAlarm(BuildContext context) async {
     try {
-      // 1. Check and request notification permission
+      // >>>  Check and request notification permission ========================
       final notificationStatus = await Permission.notification.status;
       if (!notificationStatus.isGranted) {
         final requestedStatus = await Permission.notification.request();
-        if (!requestedStatus.isGranted && !mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enable notification permission'), duration: Duration(seconds: 3),),);
-          return;
-        }
+        if (!requestedStatus.isGranted && !mounted) {return;}
       }
-      // 2. Fire alarm immediately
-      await AlarmService.instance.fireImmediateAlarm();
+      // <<<  Check and request notification permission ========================
 
-      // 3. Show success message
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Alarm fired! Check your notification 🔔'), duration: Duration(seconds: 2), backgroundColor: Colors.green,),);
+
+      // >>> Fire alarm immediately ============================================
+      await AlarmService.instance.fireImmediateAlarm();
+      // <<< Fire alarm immediately ============================================
 
     } catch (e) {
       debugPrint("Error $e");
     }
   }
+  // <<< Alarm Function Here ===================================================
 
   @override
   Widget build(BuildContext context) {
