@@ -12,7 +12,7 @@ import 'package:asp_chat/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+    // Build our apps and trigger a frame.
     await tester.pumpWidget(const AspChatApp());
 
     // Verify that our counter starts at 0.

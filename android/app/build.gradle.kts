@@ -87,6 +87,4 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("com.google.firebase:firebase-crashlytics:18.6.3")
     implementation("com.google.firebase:firebase-analytics:21.6.2")
-    // REQUIRED for Flutter engine
-    implementation("com.google.android.play:core:1.10.3")
 }

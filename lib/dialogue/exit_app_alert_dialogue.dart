@@ -25,7 +25,7 @@ class ExitAppAlertDialogue extends StatelessWidget {
               SizedBox(height: 10,),
               Text("Exit App",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: AppColors.dangerColor),),
               SizedBox(height: 10,),
-              Text("Do you want to exit this app?",style: TextStyle(color: Colors.grey,fontSize: 16),textAlign: TextAlign.center,),
+              Text("Do you want to exit this apps?",style: TextStyle(color: Colors.grey,fontSize: 16),textAlign: TextAlign.center,),
               SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

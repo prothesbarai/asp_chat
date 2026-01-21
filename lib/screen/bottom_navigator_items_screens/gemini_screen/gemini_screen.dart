@@ -24,7 +24,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
           onPageFinished: (url) {setState(() {_isLoading = false;});},
         ),
       )
-      ..loadRequest(Uri.parse('https://gemini.google.com/app'));
+      ..loadRequest(Uri.parse('https://gemini.google.com/apps'));
   }
 
   @override

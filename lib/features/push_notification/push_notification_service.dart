@@ -18,7 +18,7 @@ class PushNotificationService {
   /// <<< Initialising firebase message plugin =================================
 
 
-  /// >>> Show notifications for android when app is active ====================
+  /// >>> Show notifications for android when apps is active ====================
   void initLocalNotifications(RemoteMessage message)async{
     var androidInitializationSettings = const AndroidInitializationSettings('@mipmap/ic_launcher');
     var iosInitializationSettings = const DarwinInitializationSettings();
@@ -26,12 +26,12 @@ class PushNotificationService {
     await _flutterLocalNotificationsPlugin.initialize(
         initializationSetting,
         onDidReceiveNotificationResponse: (payload){
-          // >>> handle interaction when app is active for android
+          // >>> handle interaction when apps is active for android
           handleMessage(message);
         }
     );
   }
-  /// <<< Show notifications for android when app is active ====================
+  /// <<< Show notifications for android when apps is active ====================
 
 
   /// >>> Notification Initialization ==========================================
@@ -99,7 +99,7 @@ class PushNotificationService {
   /// <<< Set Notification Permission ==========================================
 
 
-  /// >>> Function to show visible notification when app is active =============
+  /// >>> Function to show visible notification when apps is active =============
   Future<void> showNotification(RemoteMessage message)async{
     AndroidNotificationChannel channel = AndroidNotificationChannel(
         message.notification!.android!.channelId.toString(),
@@ -125,18 +125,18 @@ class PushNotificationService {
     NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: darwinNotificationDetails);
     Future.delayed(Duration.zero , (){_flutterLocalNotificationsPlugin.show(message.hashCode, message.notification!.title.toString(), message.notification!.body.toString(), notificationDetails ,);});
   }
-  /// <<< Function to show visible notification when app is active =============
+  /// <<< Function to show visible notification when apps is active =============
 
 
-  /// >>> Handle tap on notification when app is in background or terminated ===
+  /// >>> Handle tap on notification when apps is in background or terminated ===
   Future<void> setupInteractMessage(BuildContext context)async{
-    // >>> when app is terminated
+    // >>> when apps is terminated
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if(initialMessage != null){handleMessage(initialMessage);}
-    // >>> when app ins background
+    // >>> when apps ins background
     FirebaseMessaging.onMessageOpenedApp.listen((event) {handleMessage(event);});
   }
-  /// <<< Handle tap on notification when app is in background or terminated ===
+  /// <<< Handle tap on notification when apps is in background or terminated ===
 
 
   /// >>> Navigate Page Handled Function =======================================
