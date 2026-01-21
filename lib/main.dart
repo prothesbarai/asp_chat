@@ -30,7 +30,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // >>>  Alarm service
-  await AlarmService.instance.init();
+  // await AlarmService.instance.init();
   /// >>> For Only Terminate Push Notification =================================
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   /// <<< For Only Terminate Push Notification =================================
