@@ -84,9 +84,6 @@ dependencies:
   webview_flutter: ^4.13.0
   # Cached Network Image For Cached Internet Image
   cached_network_image: ^3.4.1
-  # For Alarm
-  timezone: ^0.10.1
-  permission_handler: ^12.0.1
   # For Loading Animation
   loading_animation_widget:
 

@@ -24,6 +24,9 @@ rootProject.layout.buildDirectory.value(newBuildDir)
 
 subprojects {
     project.layout.buildDirectory.value(newBuildDir.dir(project.name))
+    configurations.all {
+        exclude(group = "com.google.android.play", module = "core-common")
+    }
 }
 
 tasks.register<Delete>("clean") {
