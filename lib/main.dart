@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'features/alarm_features/alarm_service.dart';
 import 'features/display_theme/custom_app_theme.dart';
 import 'features/display_theme/theme_provider/theme_provider.dart';
 import 'features/font_theme/build_font_text_theme.dart';
@@ -29,8 +28,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // >>>  Alarm service
-  // await AlarmService.instance.init();
   /// >>> For Only Terminate Push Notification =================================
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   /// <<< For Only Terminate Push Notification =================================

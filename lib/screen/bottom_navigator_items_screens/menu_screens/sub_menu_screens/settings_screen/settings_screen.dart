@@ -1,10 +1,8 @@
 import 'dart:io';
-import 'package:asp_chat/features/alarm_features/alarm_set_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import '../../../../../dialogue/image_pop_up_dialogue.dart';
 import '../../../../../features/display_theme/theme_provider/theme_provider.dart';
 import '../../../../../features/display_theme/theme_selected_model/theme_selected_model.dart';
 import '../../../../../features/font_theme/font_selector_widget.dart';
@@ -115,8 +113,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         
                     const SizedBox(height: 30),
                     // >>> SECTION: Home icon + name
-                    _menuItem(icon: Icons.alarm, title: "View security alerts",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetUi(),))),
-                    const SizedBox(height: 10),
                     // >>> SECTION TITLE
                     _sectionTitle("Accounts"),
                     //_menuItem(icon: Icons.switch_account, title: "Switch account",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmSetScreen(),))),
