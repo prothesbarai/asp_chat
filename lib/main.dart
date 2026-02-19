@@ -13,6 +13,7 @@ import 'features/hive_service/hive_service.dart';
 import 'features/network_connection_check/network_checker_provider.dart';
 import 'features/network_connection_check/network_checker_ui.dart';
 import 'features/set_user_image/user_image_provider/user_image_provider.dart';
+import 'firebase_analytics_service/analytics_service.dart';
 
 
 /// >>> Push Notification Background Message Purpose ===========================
@@ -74,6 +75,10 @@ class AspChatApp extends StatelessWidget {
           title: 'ASPChat',
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
+          // >>> For All Page automatic track purpose ==========================
+          navigatorObservers: [AnalyticsService.observer,],
+          // <<< For All Page automatic track purpose ==========================
+
           // >>> Font With Light Dark Mode =====================================
           theme: CustomAppTheme.lightTheme.copyWith(textTheme: buildFontTextTheme(fontProvider),),
           darkTheme: CustomAppTheme.darkTheme.copyWith(textTheme: buildFontTextTheme(fontProvider, darkMode: true),),

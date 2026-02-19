@@ -5,6 +5,7 @@ import 'package:asp_chat/widgets/qr_code_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../dialogue/exit_app_alert_dialogue.dart';
+import '../../firebase_analytics_service/analytics_service.dart';
 import '../../providers/user_info_provider.dart';
 import '../bottom_navigator_items_screens/chat_gpt_screen/chat_gpt_screen.dart';
 import '../bottom_navigator_items_screens/chat_screens/chat_screen.dart';
@@ -18,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
   int _currentIndex = 0;
   List<Widget> pages = [ChatScreen(), GeminiScreen(), ChatGptScreen(), MenuScreen()];
   List<String> appBarTitles = ["Chats", "Gemini", "ChatGPT", "Menu",];
@@ -59,6 +62,12 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
 
+  @override
+  void initState() {
+    super.initState();
+    AnalyticsService.logPageView("home_page");
+  }
+
 
   Future<void> _openQrBottomSheet() async {
     final userProvider = context.read<UserInfoProvider>();
@@ -75,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (_) {return QrCodeBottomSheet(qrData: email ?? "", userName: name ?? "", userHandle: username,);},
     );
   }
+
 
 
 

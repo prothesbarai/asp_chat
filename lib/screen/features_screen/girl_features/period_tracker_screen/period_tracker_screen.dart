@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../../firebase_analytics_service/analytics_service.dart';
+
 class PeriodTrackerScreen extends StatefulWidget {
   const PeriodTrackerScreen({super.key});
 
@@ -44,6 +46,7 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   @override
   void initState() {
     super.initState();
+    AnalyticsService.logPageView("period_tracker_page");
     fetchPeriodData();
   }
 

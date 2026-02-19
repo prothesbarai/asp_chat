@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../../../firebase_analytics_service/analytics_service.dart';
+
 class PillTrackerScreen extends StatefulWidget {
   const PillTrackerScreen({super.key});
 
@@ -68,6 +70,7 @@ class _PillTrackerScreenState extends State<PillTrackerScreen> {
   @override
   void initState() {
     super.initState();
+    AnalyticsService.logPageView("pill_tracker_page");
     loadMonthData();
   }
 

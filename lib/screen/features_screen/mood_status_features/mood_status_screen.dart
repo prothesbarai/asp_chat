@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../../../helper/date_time_helper.dart';
 import '../../../../../utils/constant/app_string.dart';
+import '../../../firebase_analytics_service/analytics_service.dart';
 
 class MoodStatusScreen extends StatefulWidget {
   const MoodStatusScreen({super.key});
@@ -27,6 +28,7 @@ class _MoodStatusScreenState extends State<MoodStatusScreen> {
   @override
   void initState() {
     super.initState();
+    AnalyticsService.logPageView("mood_status_page");
     fetchPremiumStatus();
   }
 
