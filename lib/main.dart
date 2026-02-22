@@ -75,6 +75,7 @@ class AspChatApp extends StatelessWidget {
           title: 'ASPChat',
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
+
           // >>> For All Page automatic track purpose ==========================
           navigatorObservers: [AnalyticsService.observer,],
           // <<< For All Page automatic track purpose ==========================
