@@ -1,5 +1,6 @@
 import 'package:asp_chat/providers/user_info_provider.dart';
 import 'package:asp_chat/screen/splash_screen/splash_screen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   /// >>> For Only Terminate Push Notification =================================
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   /// <<< For Only Terminate Push Notification =================================
