@@ -2,6 +2,7 @@ import 'package:asp_chat/authentications/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../utils/constant/app_colors.dart';
 
@@ -14,23 +15,30 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
 
+  List<String> dropdownType = ["Personal", "Business", "Admin", "Moderator", "Bot"];
+
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _dropDownController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool dropDownBorderColor = false;
   int currentField = 1;
 
+
+  String dropDownHelperText = "Select Store Type";
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _dropDownController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -227,8 +235,54 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ],
                         // <<< PHONE FIELD =====================================
 
-                        // >>> PASSWORD FIELD ==================================
+                        // >>> Demo DropDown Field =============================
                         if (currentField >= 4)...[
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            child: DropdownMenu<String>(
+                              controller: _dropDownController,
+                              hintText: "Select Type",
+                              leadingIcon: Icon(Icons.person_outline),
+                              trailingIcon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                              width: double.infinity,
+                              enableFilter: true,
+                              requestFocusOnTap: true,
+                              enabled: true,
+                              enableSearch: true,
+                              menuStyle: MenuStyle(elevation: WidgetStateProperty.all(8.0), backgroundColor: WidgetStateProperty.all(Colors.white), surfaceTintColor: WidgetStateProperty.all(Colors.transparent), fixedSize: WidgetStateProperty.all(Size(double.infinity, MediaQuery.of(context).size.height * 0.2,),),),
+                              inputDecorationTheme: InputDecorationTheme(
+                                border: OutlineInputBorder(borderSide: BorderSide(color: _dropDownController.text.isEmpty && dropDownBorderColor ? Colors.red : Colors.white),borderRadius: BorderRadius.circular(35)),
+                                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),borderRadius: BorderRadius.circular(35)),
+                                labelStyle: TextStyle(color: Colors.white),
+                                hintStyle: TextStyle(color: Colors.white70),
+                                fillColor: Colors.white.withValues(alpha: 0.15),
+                                filled: false,
+                                prefixIconColor: Colors.white,
+                                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: _dropDownController.text.isEmpty && dropDownBorderColor ? Colors.red : Colors.white),borderRadius: BorderRadius.circular(35)),
+                                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                                constraints: BoxConstraints(minHeight: 45, maxHeight: 48,),
+                              ),
+                              textStyle: TextStyle(color: Colors.white,),
+                              onSelected: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    _dropDownController.text = value;
+                                    dropDownHelperText = "Valid Type";
+                                    dropDownBorderColor = false;
+                                    currentField = 5;
+                                  });
+                                }
+                              },
+                              inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),],
+                              dropdownMenuEntries: dropdownType.map((item) {return DropdownMenuEntry<String>(value: item, label: item,);}).toList(),
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                        ],
+                        // <<< Demo DropDown Field =============================
+
+                        // >>> PASSWORD FIELD ==================================
+                        if (currentField >= 5)...[
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 40),
                             child: TextFormField(
@@ -259,7 +313,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               onChanged: (value){
                                 setState(() {
                                   if (value.length >= 8 && RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*{}()\\.+=?/_-]).{8,}$').hasMatch(value)){
-                                    currentField = 5;
+                                    currentField = 6;
                                   }
                                 });
                               },
@@ -291,7 +345,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         // <<< PASSWORD FIELD ==================================
 
                         // >>> CONFIRM PASSWORD FIELD ==========================
-                        if (currentField >= 5)...[
+                        if (currentField >= 6)...[
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 40),
                             child: TextFormField(
@@ -322,7 +376,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               onChanged: (value){
                                 setState(() {
                                   if (value == _passwordController.text){
-                                    currentField = 6;
+                                    currentField = 7;
                                   }
                                 });
                               },
@@ -347,7 +401,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: 48,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(backgroundColor: AppColors.buttonBgColor, foregroundColor: AppColors.primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),),
-                            onPressed: isLoading || currentField != 6 ? null :() async{
+                            onPressed: isLoading || currentField != 7 ? null :() async{
                               FocusScope.of(context).unfocus();
                               if(currentField == 6 &&_formKey.currentState!.validate()){
                                 String name = _nameController.text.trim();
