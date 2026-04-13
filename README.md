@@ -1,6 +1,6 @@
 # 💬 ASP Chat Application
 
-🚀 একটি আধুনিক ASP.NET ভিত্তিক Chat Application, যেখানে real-time messaging এবং clean UI ব্যবহার করে efficient communication করা যায়।
+🚀 একটি আধুনিক FLUTTER + FIREBASE ভিত্তিক Chat Application, যেখানে real-time messaging এবং clean UI ব্যবহার করে efficient communication করা যায়।
 
 ---
 
