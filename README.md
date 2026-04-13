@@ -1,16 +1,69 @@
-# asp_chat
+# 💬 ASP Chat Application
 
-ASP Chat Application
+🚀 একটি আধুনিক ASP.NET ভিত্তিক Chat Application, যেখানে real-time messaging এবং clean UI ব্যবহার করে efficient communication করা যায়।
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📸 Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+<p align="center">
+  <img src="assets/images/screenshot/img.png" width="30%" />
+  <img src="assets/images/screenshot/img_1.png" width="30%" />
+  <img src="assets/images/screenshot/img_2.png" width="30%" />
+</p>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🧠 Project Overview
+
+এই প্রজেক্টটি একটি chat system, যেখানে users সহজে message পাঠাতে এবং receive করতে পারে।
+
+---
+
+## ⚙️ Features
+
+- 💬 Real-time Chat System
+- 🔐 Secure Authentication
+- 📡 API Integration Ready
+- 📱 Responsive Design
+- 🚀 Easy Deployment
+
+---
+
+## 🛠️ Tech Stack
+
+- ASP.NET
+- SQL Server
+- HTML/CSS
+- JavaScript
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/prothesbarai/asp_chat.git
+cd asp_chat
+dotnet run
+```
+
+---
+
+## 🔧 Configuration
+
+appsettings.json ফাইলে database setup করতে হবে:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "your_connection_string"
+}
+```
+
+---
+
+## 👨‍💻 Author
+
+Prothes Barai  
+Software Engineer
+
+---
